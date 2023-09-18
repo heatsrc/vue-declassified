@@ -1,0 +1,12 @@
+{
+  "name": "@heatsrc/vexus",
+  "version": "1.0.0",
+  "description": "Transform Vue Class Components to Vue 3 script setup",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ['vexus', 'vue', 'vue 3', 'transform'],
+  "author": "Jared McAteer <jared.mcateer@heatsrc.com>",
+  "license": "ISC"
+}

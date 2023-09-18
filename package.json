@@ -1,0 +1,16 @@
+{
+  "name": "vexus",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "packageMananger": "pnpm@8.7.5",
+  "engines": ">=16.14.0",
+  "scripts": { },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.6.2",
+    "typescript": "^5.2.2"
+  }
+}
