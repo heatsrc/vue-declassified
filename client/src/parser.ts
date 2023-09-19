@@ -1,29 +1,39 @@
-import ts from 'typescript';
+import ts from "typescript";
 
 const compilerOptions: ts.CompilerOptions = {
-    allowNonTsExtensions: true,
-    allowJs: true,
-    checkJs: true,
-    noEmit: true,
+  allowNonTsExtensions: true,
+  allowJs: true,
+  checkJs: true,
+  noEmit: true,
 };
 
+/**
+ * Convert string to TypeScript AST
+ * @param content Vue script content
+ * @returns AST and TS Program
+ */
 export function getSingleFileProgram(content: string) {
-    const filename = 'ast.ts';
-    const compilerHost: ts.CompilerHost = {
-        fileExists: (path: string) => path.includes(filename),
-        getCanonicalFileName: () => filename,
-        getCurrentDirectory: () => '',
-        getDirectories: () => ([]),
-        getDefaultLibFileName: () => 'lib.d.ts',
-        getNewLine: () => "\n",
-        getSourceFile: (file: string) => ts.createSourceFile(file, content, ts.ScriptTarget.Latest, true),
-        readFile: () => undefined,
-        useCaseSensitiveFileNames: () => true,
-        writeFile: () => null,
-    };
+  const filename = "ast.ts";
+  const compilerHost: ts.CompilerHost = {
+    fileExists: (path: string) => path.includes(filename),
+    getCanonicalFileName: () => filename,
+    getCurrentDirectory: () => "",
+    getDirectories: () => [],
+    getDefaultLibFileName: () => "lib.d.ts",
+    getNewLine: () => "\n",
+    getSourceFile: (file: string) =>
+      ts.createSourceFile(file, content, ts.ScriptTarget.Latest, true),
+    readFile: () => undefined,
+    useCaseSensitiveFileNames: () => true,
+    writeFile: () => null,
+  };
 
-    const program = ts.createProgram([filename], { noResolve: true, target: ts.ScriptTarget.Latest, ...compilerOptions }, compilerHost);
-    const ast = program.getSourceFile(filename);
-    if (!ast) throw new Error("Can't convert code to TypeScript AST.");
-    return { ast, program };
-} 
+  const program = ts.createProgram(
+    [filename],
+    { noResolve: true, target: ts.ScriptTarget.Latest, ...compilerOptions },
+    compilerHost,
+  );
+  const ast = program.getSourceFile(filename);
+  if (!ast) throw new Error("Can't convert code to TypeScript AST.");
+  return { ast, program };
+}

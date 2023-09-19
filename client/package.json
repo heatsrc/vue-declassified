@@ -15,7 +15,7 @@
   },
   "description": "Transform Vue Class Components to Vue 3 script setup",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest"
   },
   "keywords": [
     "vexus",
