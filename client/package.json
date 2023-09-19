@@ -1,12 +1,36 @@
 {
   "name": "@heatsrc/vexus",
   "version": "1.0.0",
-  "description": "Transform Vue Class Components to Vue 3 script setup",
+  "type": "module",
   "main": "index.js",
+  "exports": {
+    ".": "./dist/src/main.js"
+  },
+  "typesVersions": {
+    ".": {
+      "*": [
+        "dist/src/*"
+      ]
+    }
+  },
+  "description": "Transform Vue Class Components to Vue 3 script setup",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ['vexus', 'vue', 'vue 3', 'transform'],
+  "keywords": [
+    "vexus",
+    "vue",
+    "vue 3",
+    "transform"
+  ],
   "author": "Jared McAteer <jared.mcateer@heatsrc.com>",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "typescript": "^5.2.2",
+    "vue": "^3.3.4"
+  },
+  "devDependencies": {
+    "prettier": "^3.0.3",
+    "vitest": "^0.34.4"
+  }
 }
