@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ['vexus', 'vue', 'vue 3', 'transform', 'cli'],
+  "keywords": ["vexus", "vue", "vue 3", "transform", "cli"],
   "author": "Jared McAteer <jared.mcateer@heatsrc.com>",
   "license": "ISC"
 }
