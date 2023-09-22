@@ -15,3 +15,7 @@ export function shouldBeTypeOf<T>(val: unknown, type: string): asserts val is T 
 export function shouldBeDefined(val: unknown): asserts val {
   expect(val).toBeDefined();
 }
+
+export function shouldBeTruthy(val: unknown): asserts val {
+  expect(val).toBeTruthy();
+}
