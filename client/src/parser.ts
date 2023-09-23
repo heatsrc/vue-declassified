@@ -34,6 +34,7 @@ export function getSingleFileProgram(content: string) {
     compilerHost,
   );
   const ast = program.getSourceFile(filename);
+  /* c8 ignore next */
   if (!ast) throw new Error("Can't convert code to TypeScript AST.");
   return { ast, program };
 }

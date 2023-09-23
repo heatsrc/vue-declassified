@@ -16,6 +16,7 @@
   "description": "Transform Vue Class Components to Vue 3 script setup",
   "scripts": {
     "test": "vitest",
+    "test:ui": "vitest --ui",
     "coverage": "vitest --coverage"
   },
   "keywords": [
