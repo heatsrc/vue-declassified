@@ -1,24 +1,5 @@
 import ts from "typescript";
 
-export function copySyntheticComments<T extends ts.Node>(node: T, copyNode: ts.Node): T {
-  const fullText = copyNode.getSourceFile().getFullText();
-  const leadingComments = getLeadingComments(fullText, copyNode.pos);
-  const trailingComments = getTrailingComments(fullText, copyNode.end);
-
-  let result = node;
-  for (const { pos, end, kind, hasTrailingNewLine } of leadingComments) {
-    const text = getCommentText(fullText, { pos, end });
-    result = ts.addSyntheticLeadingComment(result, kind, text, hasTrailingNewLine);
-  }
-
-  for (const { pos, end, kind, hasTrailingNewLine } of trailingComments) {
-    const text = getCommentText(fullText, { pos, end });
-    result = ts.addSyntheticTrailingComment(result, kind, text, hasTrailingNewLine);
-  }
-
-  return node;
-}
-
 export function addTodoComment(node: ts.Node, comment: string, multiline: boolean) {
   const kind = multiline
     ? ts.SyntaxKind.MultiLineCommentTrivia
@@ -37,6 +18,25 @@ export function prependSyntheticComments<T extends ts.Node>(node: T, copyNode: t
     const comment = getCommentText(fullText, { pos, end });
     ts.addSyntheticLeadingComment(node, kind, comment, hasTrailingNewLine);
   });
+
+  return node;
+}
+
+export function copySyntheticComments<T extends ts.Node>(node: T, copyNode: ts.Node): T {
+  const fullText = copyNode.getSourceFile().getFullText();
+  const leadingComments = getLeadingComments(fullText, copyNode.pos);
+  const trailingComments = getTrailingComments(fullText, copyNode.end);
+
+  let result = node;
+  for (const { pos, end, kind, hasTrailingNewLine } of leadingComments) {
+    const text = getCommentText(fullText, { pos, end });
+    result = ts.addSyntheticLeadingComment(result, kind, text, hasTrailingNewLine);
+  }
+
+  for (const { pos, end, kind, hasTrailingNewLine } of trailingComments) {
+    const text = getCommentText(fullText, { pos, end });
+    result = ts.addSyntheticTrailingComment(result, kind, text, hasTrailingNewLine);
+  }
 
   return node;
 }
