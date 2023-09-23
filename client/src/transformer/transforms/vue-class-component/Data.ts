@@ -32,7 +32,7 @@ export const transformData: VxTransform<ts.PropertyDeclaration> = (node, program
     tag,
     kind: VxResultKind.COMPOSITION,
     imports: callName ? namedImports([callName]) : [],
-    reference: isRef ? VxReferenceKind.REF_VARIABLE : VxReferenceKind.VARIABLE,
+    reference: isRef ? VxReferenceKind.VARIABLE_VALUE : VxReferenceKind.VARIABLE,
     outputVariables: [variableName],
     nodes: [copySyntheticComments(variableAssignment, node)],
   };

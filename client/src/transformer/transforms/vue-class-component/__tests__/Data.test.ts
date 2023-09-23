@@ -14,7 +14,7 @@ describe("Data", () => {
 
     shouldBeTruthy(output);
     expect(output.tag).toBe("Data-ref");
-    expect(output.reference).toBe(VxReferenceKind.REF_VARIABLE);
+    expect(output.reference).toBe(VxReferenceKind.VARIABLE_VALUE);
     expect(output.kind).toBe(VxResultKind.COMPOSITION);
     expect(output.nodes.length).toBe(1);
     const decList = (output.nodes[0] as ts.VariableStatement).declarationList;

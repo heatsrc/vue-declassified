@@ -16,10 +16,13 @@ export enum VxMacro {
 }
 
 export enum VxReferenceKind {
+  /** component props */
   PROPS,
-  REF_VARIABLE,
+  /** reactive variables that require .value */
+  VARIABLE_VALUE,
+  /** variables not requiring .value (may or may not be reactive) */
   VARIABLE,
-  TEMPLATE_REF,
+  /** no variable assignment */
   NONE,
 }
 
