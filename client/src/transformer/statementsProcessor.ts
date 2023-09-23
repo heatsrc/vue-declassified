@@ -67,7 +67,7 @@ function processUnknownOption(node: ts.Node) {
     imports: [],
     kind: VxResultKind.OPTIONS,
     reference: VxReferenceKind.NONE,
-    attributes: [],
+    outputVariables: [],
     tag: "InheritOptions",
     nodes: [addTodoComment(node, `Could not convert unknown option`, false)],
     composables: [],
