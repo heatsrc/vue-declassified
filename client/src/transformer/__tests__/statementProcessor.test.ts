@@ -173,7 +173,7 @@ describe("statementProcessor", () => {
 
       shouldBeTruthy(result);
       expect(result.length).toBe(1);
-      expect(result[0].kind).toBe(VxResultKind.OPTIONS);
+      expect(result[0].kind).toBe(VxResultKind.MACRO);
       expect(result[0].tag).toBe("InheritOptions");
       expect(result[0].nodes.length).toBe(1);
       expect(propertyAssignmentTransform).not.toHaveBeenCalled();

@@ -1,8 +1,9 @@
 import type ts from "typescript";
 
 export enum VxResultKind {
+  /** Goes in the body of script setup */
   COMPOSITION,
-  OPTIONS,
+  /** values are defined by a macro (e.g., `defineProps`) */
   MACRO,
 }
 
@@ -18,9 +19,9 @@ export enum VxMacro {
 export enum VxReferenceKind {
   /** component props */
   PROPS,
-  /** reactive variables that require .value */
+  /** reactive variables that require `.value` */
   VARIABLE_VALUE,
-  /** variables not requiring .value (may or may not be reactive) */
+  /** variables not requiring `.value` (may or may not be reactive) */
   VARIABLE,
   /** no variable assignment */
   NONE,
@@ -67,11 +68,6 @@ export interface VxResultBase {
   composables?: VxComposableStatement[];
 }
 
-export interface VxResultToOptions<N = ts.PropertyAssignment> extends VxResultBase {
-  kind: VxResultKind.OPTIONS;
-  nodes: N[];
-}
-
 export interface VxResultToComposition<N = ts.Statement> extends VxResultBase {
   kind: VxResultKind.COMPOSITION;
   nodes: N[];
@@ -82,7 +78,7 @@ export interface VxResultToMacro<N = ts.Statement> extends VxResultBase {
   macro: VxMacro;
   nodes: N[];
 }
-export type VxTransformResult<N> = VxResultToComposition<N> | VxResultToOptions<N>;
+export type VxTransformResult<N> = VxResultToComposition<N>;
 
 export type VxTransform<T extends ts.Node> = (
   node: T,

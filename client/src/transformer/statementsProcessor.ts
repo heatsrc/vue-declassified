@@ -65,7 +65,7 @@ export function processClassDecorator(
 function processUnknownOption(node: ts.Node) {
   return {
     imports: [],
-    kind: VxResultKind.OPTIONS,
+    kind: VxResultKind.MACRO,
     reference: VxReferenceKind.NONE,
     outputVariables: [],
     tag: "InheritOptions",
