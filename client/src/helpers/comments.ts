@@ -1,9 +1,10 @@
 import ts from "typescript";
 
-export function addTodoComment(node: ts.Node, comment: string, multiline: boolean) {
+export function addTodoComment(node: ts.Node, comment: string, multiline?: boolean) {
   const kind = multiline
     ? ts.SyntaxKind.MultiLineCommentTrivia
     : ts.SyntaxKind.SingleLineCommentTrivia;
+  const todo = `VEXUS_TODO: ${comment}`;
   return ts.addSyntheticLeadingComment(node, kind, comment, true);
 }
 
@@ -39,6 +40,16 @@ export function copySyntheticComments<T extends ts.Node>(node: T, copyNode: ts.N
   }
 
   return node;
+}
+
+export function setSyntheticComments<T extends ts.Node>(
+  node: T,
+  leading: ts.SynthesizedComment[] | undefined,
+  trailing: ts.SynthesizedComment[] | undefined,
+) {
+  let nodeWithComments = ts.setSyntheticLeadingComments(node, leading);
+  nodeWithComments = ts.setSyntheticTrailingComments(node, trailing);
+  return nodeWithComments;
 }
 
 export function removeComments<T extends ts.Node>(node: T): T | ts.StringLiteral {

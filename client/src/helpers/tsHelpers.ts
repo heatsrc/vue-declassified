@@ -1,6 +1,5 @@
 import ts, { factory } from "typescript";
 import { isString } from "./utils.js";
-import { VxImportModule } from "@/types.js";
 
 export function getDecoratorNames(node: ts.Node) {
   if (!ts.canHaveDecorators(node)) return [];
@@ -36,6 +35,46 @@ export function createCallExpression(
     ? [ts.factory.createTypeReferenceNode(createIdentifier(type.getText()))]
     : undefined;
   return factory.createCallExpression(expr, typeRef, args);
+}
+
+export function createArrowFunction(
+  node: ts.MethodDeclaration | ts.AccessorDeclaration,
+  statements?: ts.Statement[],
+  multiline?: boolean,
+) {
+  const { body, parameters, type, typeParameters } = node;
+  const modifiers = ts.getModifiers(node);
+  const rocket = factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken);
+  const fnBody = statements
+    ? factory.createBlock(statements, multiline)
+    : body ?? factory.createBlock([], multiline);
+
+  return factory.createArrowFunction(modifiers, typeParameters, parameters, type, rocket, fnBody);
+}
+
+export function createObjectLiteral(
+  props: [key: string, value: string | boolean | number | RegExp | bigint | ts.Expression][],
+) {
+  const propAssignment = props.reduce((acc, [key, val]) => {
+    let value: ts.Expression;
+    if (typeof val === "object" && "kind" in val) value = val;
+    else value = getLiteralFromValue(val);
+
+    const propertyAssignment = factory.createPropertyAssignment(key, value);
+    acc.push(propertyAssignment);
+    return acc;
+  }, [] as ts.PropertyAssignment[]);
+
+  return factory.createObjectLiteralExpression(propAssignment, true);
+}
+
+export function getLiteralFromValue(val: string | boolean | number | RegExp | bigint) {
+  if (typeof val === "string") return factory.createStringLiteral(val);
+  if (typeof val === "boolean") return val ? factory.createTrue() : factory.createFalse();
+  if (typeof val === "number") return factory.createNumericLiteral(val);
+  if (typeof val === "bigint") return factory.createBigIntLiteral(val + "");
+  if (val instanceof RegExp) return factory.createRegularExpressionLiteral(val + "");
+  throw new Error(`Unknown value type: ${typeof val}`);
 }
 
 export function isPrimitiveType({ flags }: ts.Type) {
