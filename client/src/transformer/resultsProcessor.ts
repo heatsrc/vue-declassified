@@ -21,7 +21,8 @@ export function getImports(results: VxTransformResult<ts.Node>[]) {
     const importElements = [...clause.named].map((named) =>
       ts.factory.createImportSpecifier(false, undefined, ts.factory.createIdentifier(named)),
     );
-    const namedImports = ts.factory.createNamedImports(importElements);
+    const namedImports =
+      importElements.length > 0 ? ts.factory.createNamedImports(importElements) : undefined;
 
     return ts.factory.createImportDeclaration(
       undefined,
