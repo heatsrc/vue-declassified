@@ -3,16 +3,24 @@ import type ts from "typescript";
 export enum VxResultKind {
   COMPOSITION,
   OPTIONS,
+  MACRO,
+}
+
+export enum VxMacro {
+  DEFINE_EMITS,
+  DEFINE_EXPOSE,
+  DEFINE_OPTIONS,
+  DEFINE_PROPS,
+  DEFINE_SLOTS,
+  WITH_DEFAULT,
 }
 
 export enum VxReferenceKind {
   PROPS,
-  VARIABLE_VALUE,
-  VARIABLE_NON_NULL_VALUE,
+  REF_VARIABLE,
   VARIABLE,
-  CONTEXT,
-  NONE,
   TEMPLATE_REF,
+  NONE,
 }
 
 export interface VxImportClause {
@@ -48,8 +56,11 @@ export interface VxResultBase {
   imports: VxImportModule[];
   kind: VxResultKind;
   reference: VxReferenceKind;
-  attributes: string[];
+  /** List of variables output */
+  outputVariables: string[];
+  /** Unique id for grouping and merging (e.g., computed getter/setter, props, etc) */
   tag: string;
+  /** Composables that need to be used */
   composables?: VxComposableStatement[];
 }
 
@@ -63,6 +74,11 @@ export interface VxResultToComposition<N = ts.Statement> extends VxResultBase {
   nodes: N[];
 }
 
+export interface VxResultToMacro<N = ts.Statement> extends VxResultBase {
+  kind: VxResultKind.MACRO;
+  macro: VxMacro;
+  nodes: N[];
+}
 export type VxTransformResult<N> = VxResultToComposition<N> | VxResultToOptions<N>;
 
 export type VxTransform<T extends ts.Node> = (
