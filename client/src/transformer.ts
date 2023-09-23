@@ -36,5 +36,9 @@ function getAstResults(node: ts.ClassDeclaration, program: ts.Program) {
     results.push(...res);
   });
 
+  for (const postProcessor of classTransforms.after) {
+    results = postProcessor(results, program);
+  }
+
   return results;
 }

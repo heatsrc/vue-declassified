@@ -71,9 +71,22 @@ describe("convert", () => {
     let content = `
     import { Component, Prop } from "vue-class-component";
     import { bar } from "./bar.js";
+
     @Component
     export default class Test {
       @Prop() hello!: string;
+      world = "world";
+
+      get foo() {
+        return this.hello + this.world;
+      }
+      set foo(value) {
+        this.hello = value;
+      }
+
+      set bar(value) {
+        this.world = value;
+      }
     }
     import foo from "foo";`;
 
@@ -84,6 +97,24 @@ describe("convert", () => {
     expect(result).toMatchInlineSnapshot(`
       "import { bar } from \\"./bar.js\\";
       import foo from \\"foo\\";
+      import { computed, ref } from \\"vue\\";
+      const foo = computed({
+          get: () => {
+              return this.hello + this.world;
+          },
+          set: (value) => {
+              this.hello = value;
+          }
+      });
+      // VEXUS_TODO: setter with no getter is suspicious...
+      const bar = computed({
+          set: (value) => {
+              this.world = value;
+          }
+      });
+      // VEXUS_TODO: Encountered unsupported Decorator(s): \\"@Prop() hello!: string;\\")
+      let hello: string;
+      const world = ref(\\"world\\");
       "
     `);
   });

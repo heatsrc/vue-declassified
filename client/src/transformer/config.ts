@@ -1,5 +1,11 @@
 import ts from "typescript";
 import { VxClassTransforms } from "../types.js";
+import {
+  mergeComputed,
+  transformGetter,
+  transformSetter,
+} from "./transforms/vue-class-component/Computed.js";
+import { transformData } from "./transforms/vue-class-component/Data.js";
 
 export const classTransforms: VxClassTransforms = {
   /** Primary decorate: @Options or Component */
@@ -15,13 +21,13 @@ export const classTransforms: VxClassTransforms = {
   /** extends Vue | Mixins */
   [ts.SyntaxKind.HeritageClause]: [],
   /** Data properties, @Model, @Prop, @Watch, @Provide, @Inject, @Ref, @State, @Getter, @Action, @Mutation */
-  [ts.SyntaxKind.PropertyDeclaration]: [],
+  [ts.SyntaxKind.PropertyDeclaration]: [transformData],
   /** Class computed getters via get */
-  [ts.SyntaxKind.GetAccessor]: [],
+  [ts.SyntaxKind.GetAccessor]: [transformGetter],
   /** Class computed setters via set */
-  [ts.SyntaxKind.SetAccessor]: [],
+  [ts.SyntaxKind.SetAccessor]: [transformSetter],
   /** Class methods, lifecycle hooks, watch, emits, render and interval hook */
   [ts.SyntaxKind.MethodDeclaration]: [],
   /** Post processing transforms */
-  after: [],
+  after: [mergeComputed],
 };

@@ -1,5 +1,6 @@
 import ts from "typescript";
 import { getDecoratorNames, getPackageName } from "./helpers/tsHelpers.js";
+import { runTransforms } from "./transformer.js";
 
 const vccPackages = ["vue-class-component", "vue-property-decorator", "vuex-class"];
 
@@ -9,7 +10,10 @@ export function convertAst(source: ts.SourceFile, program: ts.Program) {
   const defaultExportNode = getDefaultExportNode(source);
   if (!defaultExportNode) throw new Error("No default export found in this file");
 
-  let resultStatements = [...getOtherStatements(source) /** runTransforms */];
+  let resultStatements = [
+    ...getOtherStatements(source),
+    ...runTransforms(defaultExportNode, program),
+  ];
 
   // Group imports at start
   resultStatements = [

@@ -1,8 +1,9 @@
-import { copySyntheticComments, removeComments } from "@/helpers/comments.js";
+import { addTodoComment, copySyntheticComments, removeComments } from "@/helpers/comments.js";
 import {
   createCallExpression,
   createConstStatement,
   createLetStatement,
+  getDecoratorNames,
   isPrimitiveType,
 } from "@/helpers/tsHelpers.js";
 import { namedImports } from "@/helpers/utils.js";
@@ -26,6 +27,16 @@ export const transformData: VxTransform<ts.PropertyDeclaration> = (node, program
     callName = isRef ? "ref" : "reactive";
     const callExpr = createCallExpression(callName, node.type, [removeComments(node.initializer)]);
     variableAssignment = createConstStatement(variableName, callExpr);
+  }
+
+  // If we got here and there are decorators, it means we couldn't transform
+  // this node, we need to add a todo comment
+  const decorators = getDecoratorNames(node);
+  if (decorators.length > 0) {
+    variableAssignment = addTodoComment(
+      variableAssignment,
+      `Encountered unsupported Decorator(s): "${node.getText()}")`,
+    );
   }
 
   return {
