@@ -74,8 +74,14 @@ describe("convert", () => {
 
     @Component
     export default class Test {
-      @Prop() hello!: string;
+      // Properties
       world = "world";
+      @Prop() hello!: string;
+
+      // Accessors
+      get hello() {
+        return this.hello;
+      }
 
       get foo() {
         return this.hello + this.world;
@@ -86,6 +92,17 @@ describe("convert", () => {
 
       set bar(value) {
         this.world = value;
+      }
+
+      // Methods
+      getFoo() {
+        return this.foo;
+      }
+
+      @Emit("foo")
+      handleFoo(value) {
+        this.foo = value;
+        return this.foo;
       }
     }
     import foo from "foo";`;
@@ -98,6 +115,10 @@ describe("convert", () => {
       "import { bar } from \\"./bar.js\\";
       import foo from \\"foo\\";
       import { computed, ref } from \\"vue\\";
+      // Accessors
+      const hello = computed(() => {
+          return this.hello;
+      });
       const foo = computed({
           get: () => {
               return this.hello + this.world;
@@ -112,9 +133,19 @@ describe("convert", () => {
               this.world = value;
           }
       });
+      // Properties
+      const world = ref(\\"world\\");
       // VEXUS_TODO: Encountered unsupported Decorator(s): \\"@Prop() hello!: string;\\")
       let hello: string;
-      const world = ref(\\"world\\");
+      // Methods
+      const getFoo = () => {
+          return this.foo;
+      };
+      // VEXUS_TODO: Encountered unsupported decorator(s): \\"@Emit\\"
+      const handleFoo = (value) => {
+          this.foo = value;
+          return this.foo;
+      };
       "
     `);
   });

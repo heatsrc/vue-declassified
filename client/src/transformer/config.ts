@@ -6,6 +6,7 @@ import {
   transformSetter,
 } from "./transforms/vue-class-component/Computed.js";
 import { transformData } from "./transforms/vue-class-component/Data.js";
+import { transformMethod } from "./transforms/vue-class-component/Method.js";
 
 export const classTransforms: VxClassTransforms = {
   /** Primary decorate: @Options or Component */
@@ -27,7 +28,7 @@ export const classTransforms: VxClassTransforms = {
   /** Class computed setters via set */
   [ts.SyntaxKind.SetAccessor]: [transformSetter],
   /** Class methods, lifecycle hooks, watch, emits, render and interval hook */
-  [ts.SyntaxKind.MethodDeclaration]: [],
+  [ts.SyntaxKind.MethodDeclaration]: [transformMethod],
   /** Post processing transforms */
   after: [mergeComputed],
 };
