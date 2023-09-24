@@ -3,9 +3,11 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "packageMananger": "pnpm@8.7.5",
-  "engines": ">=16.14.0",
-  "scripts": { },
+  "packageManager": "pnpm@8.7.5",
+  "engines": {
+    "node": ">=18.18.0"
+  },
+  "scripts": {},
   "keywords": [],
   "author": "",
   "license": "ISC",
