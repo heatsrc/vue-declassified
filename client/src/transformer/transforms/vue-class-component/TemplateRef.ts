@@ -18,6 +18,8 @@ export const transformTemplateRef: VxTransform<ts.PropertyDeclaration> = (node) 
     [[], []] as [string[], ts.Statement[]],
   );
 
+  if (refs.length > 0) copySyntheticComments(refs[0], node);
+
   return {
     tag: "TemplateRef",
     kind: VxResultKind.COMPOSITION,

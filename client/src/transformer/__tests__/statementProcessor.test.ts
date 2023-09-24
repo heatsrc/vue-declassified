@@ -93,10 +93,10 @@ describe("statementProcessor", () => {
         const result = processClassMember(node, {} as any, memberTransforms);
 
         shouldBeDefined(result);
-        expect(result).toEqual([name]);
+        expect(result).toEqual(name);
         expect(memberTransforms[syntaxKind][0]).toHaveBeenCalledWith(node, expect.anything());
         Object.values(memberTransforms).forEach((transform) => {
-          if ((result[0] as any) !== name) expect(transform[0]).not.toHaveBeenCalled();
+          if ((result as any) !== name) expect(transform[0]).not.toHaveBeenCalled();
         });
       },
     );
@@ -173,7 +173,7 @@ describe("statementProcessor", () => {
 
       shouldBeTruthy(result);
       expect(result.length).toBe(1);
-      expect(result[0].kind).toBe(VxResultKind.MACRO);
+      expect(result[0].kind).toBe(VxResultKind.OPTIONS);
       expect(result[0].tag).toBe("InheritOptions");
       expect(result[0].nodes.length).toBe(1);
       expect(propertyAssignmentTransform).not.toHaveBeenCalled();

@@ -26,14 +26,13 @@ function getAstResults(node: ts.ClassDeclaration, program: ts.Program) {
   let results: VxTransformResult<ts.Node>[] = [];
 
   node.forEachChild((child) => {
-    let res: VxTransformResult<ts.Node>[] | false = false;
     if (ts.isDecorator(child)) {
-      res = processClassDecorator(child, program);
+      const res = processClassDecorator(child, program);
+      if (res) results.push(...res);
     } else if (child.kind in classTransforms) {
-      res = processClassMember(child, program);
+      const member = processClassMember(child, program);
+      if (member) results.push(member);
     }
-    if (!res) return;
-    results.push(...res);
   });
 
   for (const postProcessor of classTransforms.after) {

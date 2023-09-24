@@ -106,7 +106,7 @@ describe("convert", () => {
       }
 
       // Template Refs
-      $refs: { a: HTMLDivElement };
+      $refs: { a: HTMLDivElement; b; };
     }
     import foo from "foo";`;
 
@@ -149,6 +149,11 @@ describe("convert", () => {
           this.foo = value;
           return this.foo;
       };
+      // VEXUS_TODO: Check for potential naming collisions from \`$refs\` conversion.
+      // Template Refs
+      const a = ref<HTMLDivElement>();
+      // VEXUS_TODO: Check for potential naming collisions from \`$refs\` conversion.
+      const b = ref();
       "
     `);
   });
