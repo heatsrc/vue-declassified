@@ -5,6 +5,8 @@ export enum VxResultKind {
   COMPOSITION,
   /** values are defined by a macro (e.g., `defineProps`) */
   MACRO,
+  /** values that need to be in `defineOptions` macro */
+  OPTIONS,
 }
 
 export enum VxMacro {
@@ -72,13 +74,20 @@ export interface VxResultToComposition<N = ts.Statement> extends VxResultBase {
   kind: VxResultKind.COMPOSITION;
   nodes: N[];
 }
+export interface VxResultToOptions<N = ts.Statement> extends VxResultBase {
+  kind: VxResultKind.OPTIONS;
+  nodes: N[];
+}
 
 export interface VxResultToMacro<N = ts.Statement> extends VxResultBase {
   kind: VxResultKind.MACRO;
   macro: VxMacro;
   nodes: N[];
 }
-export type VxTransformResult<N> = VxResultToComposition<N>;
+export type VxTransformResult<N> =
+  | VxResultToComposition<N>
+  | VxResultToMacro<N>
+  | VxResultToOptions<N>;
 
 export type VxTransform<T extends ts.Node> = (
   node: T,
