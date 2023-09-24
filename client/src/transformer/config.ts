@@ -7,6 +7,7 @@ import {
 } from "./transforms/vue-class-component/Computed.js";
 import { transformData } from "./transforms/vue-class-component/Data.js";
 import { transformMethod } from "./transforms/vue-class-component/Method.js";
+import { transformTemplateRef } from "./transforms/vue-class-component/TemplateRef.js";
 
 export const classTransforms: VxClassTransforms = {
   /** Primary decorate: @Options or Component */
@@ -22,7 +23,7 @@ export const classTransforms: VxClassTransforms = {
   /** extends Vue | Mixins */
   [ts.SyntaxKind.HeritageClause]: [],
   /** Data properties, @Model, @Prop, @Watch, @Provide, @Inject, @Ref, @State, @Getter, @Action, @Mutation */
-  [ts.SyntaxKind.PropertyDeclaration]: [transformData],
+  [ts.SyntaxKind.PropertyDeclaration]: [transformTemplateRef, transformData],
   /** Class computed getters via get */
   [ts.SyntaxKind.GetAccessor]: [transformGetter],
   /** Class computed setters via set */

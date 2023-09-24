@@ -104,6 +104,9 @@ describe("convert", () => {
         this.foo = value;
         return this.foo;
       }
+
+      // Template Refs
+      $refs: { a: HTMLDivElement };
     }
     import foo from "foo";`;
 
