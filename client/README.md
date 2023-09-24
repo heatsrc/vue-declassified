@@ -20,15 +20,15 @@ These decisions are made arbitrarily, mostly for sanity and convenience.
 - `@Options` / `@Component`
   - [ ] props
     - [ ] `PropType<...>`
-  - [ ] data
-  - [ ] computed
-  - [ ] methods
+  - [x] data
+  - [x] computed
+  - [x] methods
+  - [x] `$refs`
   - [ ] watch
   - [ ] lifecycle hooks
   - [ ] provide / inject
   - [ ] mixins
   - [ ] extends
-  - [ ] render
 - Class
   - [ ] methods
   - [ ] data properties
