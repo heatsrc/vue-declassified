@@ -9,7 +9,7 @@ Vexus is an opinionated tool that will format Vue class components to script set
 These decisions are made arbitrarily, mostly for sanity and convenience.
 
 - Will only support TS
-- Won't support esoteric `@Component` options (e.g., render, intervalHooks, etc)
+- Won't support esoteric `@Component` options
   - Will consider accepting PRs
 - Will order files `script` -> `template` -> `style`
 - Will be formatted by prettier with default config
