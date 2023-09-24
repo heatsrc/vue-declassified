@@ -15,7 +15,13 @@ import {
 } from "@/types.js";
 import ts from "typescript";
 
+/**
+ * Transforms get accessors in an arrow function to be merged with corresponding setter, if found, later.
+ */
 export const transformGetter: VxTransform<ts.GetAccessorDeclaration> = transformAccessor("getter");
+/**
+ * Transforms set accessors in an arrow function to be merged with corresponding getter, if found, later.
+ */
 export const transformSetter: VxTransform<ts.SetAccessorDeclaration> = transformAccessor("setter");
 
 function transformAccessor(type: "getter" | "setter"): VxTransform<ts.AccessorDeclaration> {
@@ -36,6 +42,11 @@ function transformAccessor(type: "getter" | "setter"): VxTransform<ts.AccessorDe
   };
 }
 
+/**
+ * Merges corresponding transformed getters and setters into a single `computed` call.
+ * @param astResult
+ * @returns
+ */
 export const mergeComputed: VxPostProcessor = (astResult) => {
   const getters = astResult.filter((r) => r.tag === "Computed-getter");
   const setters = astResult.filter((r) => r.tag === "Computed-setter");

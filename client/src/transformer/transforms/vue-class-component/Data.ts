@@ -10,6 +10,16 @@ import { namedImports } from "@/helpers/utils.js";
 import { VxReferenceKind, VxResultKind, VxTransform } from "@/types.js";
 import ts from "typescript";
 
+/**
+ * Transforms basic data initialized properties into `reactive` or `ref`
+ * variables. Uninitialized properties will be converted to `let` with no
+ * assignment. This should be considered the default transform for data
+ * properties and if any decorator is present a todo comment will be added.
+ *
+ * @param node
+ * @param program
+ * @returns
+ */
 export const transformData: VxTransform<ts.PropertyDeclaration> = (node, program) => {
   const variableName = node.name.getText();
   const checker = program.getTypeChecker();

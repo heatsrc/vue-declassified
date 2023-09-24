@@ -7,6 +7,13 @@ import {
 import { VxReferenceKind, VxResultKind, VxTransform } from "@/types.js";
 import ts from "typescript";
 
+/**
+ * Transforms basic class methods into arrow functions.
+ *
+ * @param node
+ * @param program
+ * @returns
+ */
 export const transformMethod: VxTransform<ts.MethodDeclaration> = (node, program) => {
   const methodName = node.name.getText();
   const outputMethod = createArrowFunction(node);

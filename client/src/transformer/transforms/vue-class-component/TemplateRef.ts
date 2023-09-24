@@ -4,6 +4,14 @@ import { namedImports } from "@/helpers/utils.js";
 import { VxReferenceKind, VxResultKind, VxTransform } from "@/types.js";
 import ts from "typescript";
 
+/**
+ * Transforms `$refs` properties into `ref` variables. Because this is
+ * extracting properties from a type literal and creating variables on the
+ * script setup body it is possible this will cause naming collisions.
+ *
+ * @param node
+ * @returns
+ */
 export const transformTemplateRef: VxTransform<ts.PropertyDeclaration> = (node) => {
   const signatures = getPropertySignatures(node);
   if (!signatures) return false;

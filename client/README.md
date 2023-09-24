@@ -9,9 +9,14 @@ Vexus is an opinionated tool that will format Vue class components to script set
 These decisions are made arbitrarily, mostly for sanity and convenience.
 
 - Will only support TS
+- Won't support esoteric `@Component` options (e.g., render, intervalHooks, etc)
+  - Will consider accepting PRs
 - Will order files `script` -> `template` -> `style`
 - Will be formatted by prettier with default config
   - exception `printWidth` increased to 100 characters
+- Will attempt to preserve untransformed code
+  - Won't guarantee correctness though
+  - Will try to flag with comments
 
 ### Supported Features
 
@@ -20,25 +25,24 @@ These decisions are made arbitrarily, mostly for sanity and convenience.
 - `@Options` / `@Component`
   - [ ] props
     - [ ] `PropType<...>`
-  - [x] data
-  - [x] computed
-  - [x] methods
-  - [x] `$refs`
+  - [ ] data
+  - [ ] computed
+  - [ ] methods
+  - [ ] `$refs`
   - [ ] watch
   - [ ] lifecycle hooks
   - [ ] provide / inject
   - [ ] mixins
   - [ ] extends
 - Class
-  - [ ] methods
-  - [ ] data properties
-  - [ ] getters
+  - [x] methods
+  - [x] data properties
+  - [x] getters/setters
   - [ ] lifecycle hooks
   - [ ] Mixins
-  - [ ] `$refs`
+  - [x] `$refs`
   - [ ] `this` -> props or variables
   - [ ] sort by dependency
-  - [ ] render
 
 ### vue-property-decorator
 
