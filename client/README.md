@@ -22,26 +22,78 @@ These decisions are made arbitrarily, mostly for sanity and convenience.
 
 ### vue-class-component
 
+:zzz: - denotes support is not prioritized, either because these would be rarely used as there is a class component analogue, or it doesn't make sense in script setup
+
 - `@Options` / `@Component`
-  - [ ] props
-    - [ ] `PropType<...>`
-  - [ ] data
-  - [ ] computed
-  - [ ] methods
-  - [ ] `$refs`
-  - [ ] watch
-  - [ ] lifecycle hooks
-  - [ ] provide / inject
-  - [ ] mixins
-  - [ ] extends
+  - Data
+    - [ ] data :zzz:
+    - [ ] props
+    - [ ] propsData :zzz:
+    - [ ] computed :zzz:
+    - [ ] methods :zzz:
+    - [ ] watch
+  - DOM :zzz:
+    - [ ] el
+    - [ ] template
+    - [ ] render
+    - [ ] renderError
+  - Lifecycle hooks :zzz:
+    - [ ] beforeCreate
+    - [ ] created
+    - [ ] beforeMount
+    - [ ] mounted
+    - [ ] beforeUpdate
+    - [ ] updated
+    - [ ] activated
+    - [ ] deactivated
+    - [ ] beforeDestroy
+    - [ ] destroyed
+    - [ ] errorCaptured
+  - Assets
+    - [ ] directives
+    - [ ] filters
+    - [ ] components :zzz:
+  - Composition
+    - [ ] parent :zzz:
+    - [ ] mixins :zzz:
+    - [ ] extends :zzz:
+    - [ ] provide / inject
+  - Misc
+    - [ ] name :zzz:
+    - [ ] delimiters :zzz:
+    - [ ] functional :zzz:
+    - [ ] model
+    - [ ] inheritAttrs
+    - [ ] comments :zzz:
 - Class
   - [x] methods
   - [x] data properties
   - [x] getters/setters
-  - [ ] lifecycle hooks
+  - Lifecycle hooks
+    - [x] beforeCreate
+    - [x] created
+    - [x] beforeMount
+    - [x] mounted
+    - [x] beforeUpdate
+    - [x] updated
+    - [x] activated
+    - [x] deactivated
+    - [x] beforeDestroy
+    - [x] destroyed
+    - [x] errorCaptured
   - [ ] Mixins
   - [x] `$refs`
   - [ ] `this` -> props or variables
+    - [ ] `$attrs`
+    - [ ] `$data`
+    - [ ] `$emit`
+    - [ ] `$nextTick`
+    - [ ] `$props`
+    - [ ] `$route`
+    - [ ] `$router`
+    - [ ] `$slots`
+    - [ ] `$store`
+    - [ ] `$watch`
   - [ ] sort by dependency
 
 ### vue-property-decorator

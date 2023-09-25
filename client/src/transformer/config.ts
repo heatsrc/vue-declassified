@@ -8,6 +8,7 @@ import {
 import { transformData } from "./transforms/vue-class-component/Data.js";
 import { transformMethod } from "./transforms/vue-class-component/Method.js";
 import { transformTemplateRef } from "./transforms/vue-class-component/TemplateRef.js";
+import { transformLifecycleHooks } from "./transforms/vue-class-component/LifecycleHooks.js";
 
 export const classTransforms: VxClassTransforms = {
   /** Primary decorate: @Options or Component */
@@ -29,7 +30,7 @@ export const classTransforms: VxClassTransforms = {
   /** Class computed setters via set */
   [ts.SyntaxKind.SetAccessor]: [transformSetter],
   /** Class methods, lifecycle hooks, watch, emits, render and interval hook */
-  [ts.SyntaxKind.MethodDeclaration]: [transformMethod],
+  [ts.SyntaxKind.MethodDeclaration]: [transformLifecycleHooks, transformMethod],
   /** Post processing transforms */
   after: [mergeComputed],
 };

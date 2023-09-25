@@ -107,6 +107,40 @@ describe("convert", () => {
 
       // Template Refs
       $refs: { a: HTMLDivElement; b; };
+
+      beforeCreate() {
+        console.log('beforeCreate');
+      }
+      created() {
+        console.log('created');
+      }
+      beforeMount() {
+        console.log('beforeMounted');
+      }
+      mounted() {
+        console.log('onMounted');
+      }
+      beforeUpdate() {
+        console.log('beforeUpdate');
+      }
+      updated() {
+        console.log('updated');
+      }
+      beforeDestroy() {
+        console.log('beforeDestroy');
+      }
+      destroyed() {
+        console.log('destroyed');
+      }
+      activated() {
+        console.log('activated');
+      }
+      deactivated() {
+        console.log('deactivated');
+      }
+      errorCaptured() {
+        console.log('errorCaptured');
+      }
     }
     import foo from "foo";`;
 
@@ -117,7 +151,7 @@ describe("convert", () => {
     expect(result).toMatchInlineSnapshot(`
       "import { bar } from \\"./bar.js\\";
       import foo from \\"foo\\";
-      import { computed, ref } from \\"vue\\";
+      import { computed, ref, onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted, onActivated, onDeactivated, onErrorCaptured } from \\"vue\\";
       // Accessors
       const hello = computed(() => {
           return this.hello;
@@ -154,6 +188,35 @@ describe("convert", () => {
       const a = ref<HTMLDivElement>();
       // VEXUS_TODO: Check for potential naming collisions from \`$refs\` conversion.
       const b = ref();
+      console.log('beforeCreate');
+      console.log('created');
+      onBeforeMount(() => {
+          console.log('beforeMounted');
+      });
+      onMounted(() => {
+          console.log('onMounted');
+      });
+      onBeforeUpdate(() => {
+          console.log('beforeUpdate');
+      });
+      onUpdated(() => {
+          console.log('updated');
+      });
+      onBeforeUnmount(() => {
+          console.log('beforeDestroy');
+      });
+      onUnmounted(() => {
+          console.log('destroyed');
+      });
+      onActivated(() => {
+          console.log('activated');
+      });
+      onDeactivated(() => {
+          console.log('deactivated');
+      });
+      onErrorCaptured(() => {
+          console.log('errorCaptured');
+      });
       "
     `);
   });

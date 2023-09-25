@@ -87,6 +87,29 @@ export function isPrimitiveType({ flags }: ts.Type) {
   );
 }
 
+export function createExpressionStatement(expression: ts.Expression): ts.ExpressionStatement;
+/**
+ * Create a call expression and wrap in an expression statement
+ * @param expression
+ * @param typeArguments
+ * @param argumentsArray
+ */
+export function createExpressionStatement(
+  expression: string | ts.Identifier,
+  typeArguments?: ts.TypeNode,
+  argumentsArray?: ts.Expression[],
+): ts.ExpressionStatement;
+export function createExpressionStatement(
+  expression: string | ts.Identifier | ts.Expression,
+  typeArguments?: ts.TypeNode,
+  argumentsArray?: ts.Expression[],
+): ts.ExpressionStatement {
+  if (isString(expression) || ts.isIdentifier(expression)) {
+    expression = createCallExpression(expression, typeArguments, argumentsArray);
+  }
+  return factory.createExpressionStatement(expression);
+}
+
 export function createConstStatement(
   name: string | ts.BindingName,
   expression?: ts.Expression,
