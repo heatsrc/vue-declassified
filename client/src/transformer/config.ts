@@ -9,6 +9,7 @@ import { transformData } from "./transforms/vue-class-component/Data.js";
 import { transformMethod } from "./transforms/vue-class-component/Method.js";
 import { transformTemplateRef } from "./transforms/vue-class-component/TemplateRef.js";
 import { transformLifecycleHooks } from "./transforms/vue-class-component/LifecycleHooks.js";
+import { processPropertyAccessAndSort } from "./transforms/processPropertyAccessAndSort.js";
 
 export const classTransforms: VxClassTransforms = {
   /** Primary decorate: @Options or Component */
@@ -32,5 +33,5 @@ export const classTransforms: VxClassTransforms = {
   /** Class methods, lifecycle hooks, watch, emits, render and interval hook */
   [ts.SyntaxKind.MethodDeclaration]: [transformLifecycleHooks, transformMethod],
   /** Post processing transforms */
-  after: [mergeComputed],
+  after: [mergeComputed, processPropertyAccessAndSort],
 };

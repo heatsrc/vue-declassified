@@ -87,6 +87,7 @@ describe("convert", () => {
         return this.hello + this.world;
       }
       set foo(value) {
+        this.divElement.innerText = value;
         this.hello = value;
       }
 
@@ -101,13 +102,15 @@ describe("convert", () => {
 
       @Emit("foo")
       handleFoo(value) {
-        this.foo = value;
+        this.undefinedProperty = value;
         return this.foo;
       }
 
       // Template Refs
-      $refs: { a: HTMLDivElement; b; };
+      $refs: { divElement: HTMLDivElement; b; };
 
+
+      // Lifecycle hooks
       beforeCreate() {
         console.log('beforeCreate');
       }
@@ -151,41 +154,14 @@ describe("convert", () => {
     expect(result).toMatchInlineSnapshot(`
       "import { bar } from \\"./bar.js\\";
       import foo from \\"foo\\";
-      import { computed, ref, onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted, onActivated, onDeactivated, onErrorCaptured } from \\"vue\\";
-      // Accessors
-      const hello = computed(() => {
-          return this.hello;
-      });
-      const foo = computed({
-          get: () => {
-              return this.hello + this.world;
-          },
-          set: (value) => {
-              this.hello = value;
-          }
-      });
-      // VEXUS_TODO: setter with no getter is suspicious...
-      const bar = computed({
-          set: (value) => {
-              this.world = value;
-          }
-      });
+      import { ref, onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted, onActivated, onDeactivated, onErrorCaptured, computed } from \\"vue\\";
       // Properties
       const world = ref(\\"world\\");
       // VEXUS_TODO: Encountered unsupported Decorator(s): \\"@Prop() hello!: string;\\")
       let hello: string;
-      // Methods
-      const getFoo = () => {
-          return this.foo;
-      };
-      // VEXUS_TODO: Encountered unsupported decorator(s): \\"@Emit\\"
-      const handleFoo = (value) => {
-          this.foo = value;
-          return this.foo;
-      };
       // VEXUS_TODO: Check for potential naming collisions from \`$refs\` conversion.
       // Template Refs
-      const a = ref<HTMLDivElement>();
+      const divElement = ref<HTMLDivElement>();
       // VEXUS_TODO: Check for potential naming collisions from \`$refs\` conversion.
       const b = ref();
       console.log('beforeCreate');
@@ -217,6 +193,35 @@ describe("convert", () => {
       onErrorCaptured(() => {
           console.log('errorCaptured');
       });
+      // Accessors
+      const hello = computed(() => {
+          return hello.value;
+      });
+      const foo = computed({
+          get: () => {
+              return hello.value + world.value;
+          },
+          set: (value) => {
+              divElement.value.innerText = value;
+              hello.value = value;
+          }
+      });
+      // VEXUS_TODO: setter with no getter is suspicious...
+      const bar = computed({
+          set: (value) => {
+              world.value = value;
+          }
+      });
+      // Methods
+      const getFoo = () => {
+          return foo.value;
+      };
+      // VEXUS_TODO: Encountered unsupported decorator(s): \\"@Emit\\"
+      const handleFoo = (value) => {
+          // VEXUS_TODO: Unknown variable source for \\"this.undefinedProperty\\"
+          this.undefinedProperty = value;
+          return foo.value;
+      };
       "
     `);
   });

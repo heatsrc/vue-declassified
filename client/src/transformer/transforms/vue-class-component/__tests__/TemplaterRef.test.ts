@@ -18,7 +18,7 @@ describe("TemplateRef", () => {
 
     shouldBeTruthy(output);
     expect(output.tag).toBe("TemplateRef");
-    expect(output.reference).toBe(VxReferenceKind.VARIABLE);
+    expect(output.reference).toBe(VxReferenceKind.VARIABLE_VALUE);
     expect(output.kind).toBe(VxResultKind.COMPOSITION);
     expect(output.nodes.length).toBe(1);
     expect(output.outputVariables).toEqual(["a"]);

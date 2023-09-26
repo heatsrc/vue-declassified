@@ -25,6 +25,15 @@ export function createIdentifier(name: string) {
   return factory.createIdentifier(name);
 }
 
+export function createPropertyAccess(
+  expr: ts.Expression | string,
+  name: ts.MemberName | string,
+): ts.PropertyAccessExpression {
+  const eIdentifier = isString(expr) ? createIdentifier(expr) : expr;
+  const nIdentifier = isString(name) ? createIdentifier(name) : name;
+  return ts.factory.createPropertyAccessExpression(eIdentifier, nIdentifier);
+}
+
 export function createCallExpression(
   expression: string | ts.Identifier | ts.PropertyAccessExpression,
   type?: ts.TypeNode,

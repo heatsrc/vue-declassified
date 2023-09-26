@@ -12,6 +12,7 @@ These decisions are made arbitrarily, mostly for sanity and convenience.
 - Won't support esoteric `@Component` options
   - Will consider accepting PRs
 - Will order files `script` -> `template` -> `style`
+- Will reference Props by `props` variable
 - Will be formatted by prettier with default config
   - exception `printWidth` increased to 100 characters
 - Will attempt to preserve untransformed code
@@ -24,7 +25,7 @@ These decisions are made arbitrarily, mostly for sanity and convenience.
 
 :zzz: - denotes support is not prioritized, either because these would be rarely used as there is a class component analogue, or it doesn't make sense in script setup
 
-- `@Options` / `@Component`
+- `@Component` / `@Options` (RC)
   - Data
     - [ ] data :zzz:
     - [ ] props
@@ -32,6 +33,8 @@ These decisions are made arbitrarily, mostly for sanity and convenience.
     - [ ] computed :zzz:
     - [ ] methods :zzz:
     - [ ] watch
+    - [ ] emits (RC)
+    - [ ] exposes (RC)
   - DOM :zzz:
     - [ ] el
     - [ ] template
@@ -82,13 +85,17 @@ These decisions are made arbitrarily, mostly for sanity and convenience.
     - [x] destroyed
     - [x] errorCaptured
   - [ ] Mixins
+  - [ ] Extend
   - [x] `$refs`
   - [ ] `this` -> props or variables
     - [ ] `$attrs`
     - [ ] `$data`
     - [ ] `$emit`
     - [ ] `$nextTick`
+    - [ ] `$parent` (error)
+      - [ ] https://stackoverflow.com/questions/50942544/emit-event-from-content-in-slot-to-parent
     - [ ] `$props`
+    - [ ] `$refs`
     - [ ] `$route`
     - [ ] `$router`
     - [ ] `$slots`

@@ -22,6 +22,9 @@ devDependencies:
   prettier:
     specifier: ^3.0.3
     version: 3.0.3
+  ts-clone-node:
+    specifier: ^3.0.0
+    version: 3.0.0(typescript@5.2.2)
   vite:
     specifier: ^4.4.9
     version: 4.4.9(@types/node@20.6.4)
@@ -573,6 +576,16 @@ packages:
     resolution: {integrity: sha512-BrgHpW9NURQgzoNyjfq0Wu6VFO6D7IZEmJNdtgNqpzGG8RuNFHt2jQxWlAs4HMe119chBnv+34syEZtc6IhLtA==}
     dev: true
 
+  /compatfactory@3.0.0(typescript@5.2.2):
+    resolution: {integrity: sha512-WD5kF7koPwVoyKL8p0LlrmIZtilrD46sQStyzzxzTFinMKN2Dxk1hN+sddLSQU1mGIZvQfU8c+ONSghvvM40jg==}
+    engines: {node: '>=14.9.0'}
+    peerDependencies:
+      typescript: '>=3.x || >= 4.x || >= 5.x'
+    dependencies:
+      helpertypes: 0.0.19
+      typescript: 5.2.2
+    dev: true
+
   /concat-map@0.0.1:
     resolution: {integrity: sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=}
     dev: true
@@ -712,6 +725,11 @@ packages:
   /has-flag@4.0.0:
     resolution: {integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==}
     engines: {node: '>=8'}
+    dev: true
+
+  /helpertypes@0.0.19:
+    resolution: {integrity: sha512-J00e55zffgi3yVnUp0UdbMztNkr2PnizEkOe9URNohnrNhW5X0QpegkuLpOmFQInpi93Nb8MCjQRHAiCDF42NQ==}
+    engines: {node: '>=10.0.0'}
     dev: true
 
   /html-escaper@2.0.2:
@@ -1039,6 +1057,16 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
+  /ts-clone-node@3.0.0(typescript@5.2.2):
+    resolution: {integrity: sha512-egavvyHbIoelkgh1IC2agNB1uMNjB8VJgh0g/cn0bg2XXTcrtjrGMzEk4OD3Fi2hocICjP3vMa56nkzIzq0FRg==}
+    engines: {node: '>=14.9.0'}
+    peerDependencies:
+      typescript: ^3.x || ^4.x || ^5.x
+    dependencies:
+      compatfactory: 3.0.0(typescript@5.2.2)
+      typescript: 5.2.2
+    dev: true
+
   /type-detect@4.0.8:
     resolution: {integrity: sha512-0fr/mIH1dlO+x7TlcMy+bIDqKPsw/70tVyeHW787goQjhmqaZe10uwLujubK9q9Lg6Fiho1KUKDYz0Z7k7g5/g==}
     engines: {node: '>=4'}
@@ -1048,7 +1076,6 @@ packages:
     resolution: {integrity: sha512-mI4WrpHsbCIcwT9cF4FZvr80QUeKvsUsUvKDoR+X/7XHQH98xYD8YHZg7ANtz2GtZt/CBq2QJ0thkGJMHfqc1w==}
     engines: {node: '>=14.17'}
     hasBin: true
-    dev: false
 
   /ufo@1.3.0:
     resolution: {integrity: sha512-bRn3CsoojyNStCZe0BG0Mt4Nr/4KF+rhFlnNXybgqt5pXHNFRlqinSoQaTrGyzE4X8aHplSb+TorH+COin9Yxw==}

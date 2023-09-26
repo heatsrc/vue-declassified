@@ -38,7 +38,7 @@ export const transformLifecycleHooks: VxTransform<ts.MethodDeclaration> = (node)
     if (!node.body) return false;
     // get the body of the method and return it
     outputNodes = node.body?.statements.map((stmt, index) => {
-      if (index === 1) copySyntheticComments(stmt, node);
+      if (index === 0) copySyntheticComments(stmt, node);
       return stmt;
     });
   } else {

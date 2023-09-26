@@ -31,7 +31,7 @@ export const transformTemplateRef: VxTransform<ts.PropertyDeclaration> = (node) 
   return {
     tag: "TemplateRef",
     kind: VxResultKind.COMPOSITION,
-    reference: VxReferenceKind.VARIABLE,
+    reference: VxReferenceKind.VARIABLE_VALUE,
     imports: namedImports(["ref"]),
     outputVariables: names,
     nodes: refs,
