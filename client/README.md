@@ -28,7 +28,7 @@ Vexus is an opinionated tool that will format Vue class components to script set
 
 ### vue-class-component
 
-#### `@Component` / `@Options` (v8.0.0-rc.1)j
+#### `@Component` / `@Options` (v8.0.0-rc.1)
 
 These are options provided in the decorator call, e.g., `@Component({ components: { MyIcon } })`. All Options API fields are _technically_ supported in Vue Class Components (e.g., data, computed, methods, etc) but many of them don't make sense and will not be actively developed but PRs may be accepted.
 
