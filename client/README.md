@@ -96,7 +96,7 @@ These decisions are made arbitrarily, mostly for sanity and convenience.
     - [ ] `$parent` (error)
       - [ ] https://stackoverflow.com/questions/50942544/emit-event-from-content-in-slot-to-parent
     - [ ] `$props`
-    - [ ] `$refs`
+    - [x] `$refs`
     - [ ] `$route`
     - [ ] `$router`
     - [ ] `$slots`
