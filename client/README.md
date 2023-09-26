@@ -87,7 +87,8 @@ These decisions are made arbitrarily, mostly for sanity and convenience.
   - [ ] Mixins
   - [ ] Extend
   - [x] `$refs`
-  - [ ] `this` -> props or variables
+  - `this`
+    - [x] variables & methods
     - [ ] `$attrs`
     - [ ] `$data`
     - [ ] `$emit`
@@ -101,7 +102,7 @@ These decisions are made arbitrarily, mostly for sanity and convenience.
     - [ ] `$slots`
     - [ ] `$store`
     - [ ] `$watch`
-  - [ ] sort by dependency
+  - [x] sort by dependency
 
 ### vue-property-decorator
 
