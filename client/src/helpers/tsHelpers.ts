@@ -1,3 +1,4 @@
+import { cloneNode } from "ts-clone-node";
 import ts, { factory } from "typescript";
 import { isString } from "./utils.js";
 
@@ -36,13 +37,16 @@ export function createPropertyAccess(
 
 export function createCallExpression(
   expression: string | ts.Identifier | ts.PropertyAccessExpression,
-  type?: ts.TypeNode,
+  type?: ts.TypeNode | string,
   args?: ts.Expression[],
 ) {
   const expr = isString(expression) ? createIdentifier(expression) : expression;
-  const typeRef = type
-    ? [ts.factory.createTypeReferenceNode(createIdentifier(type.getText()))]
-    : undefined;
+  let typeRef: ts.TypeNode[] | undefined;
+  if (typeof type === "string") {
+    typeRef = [ts.factory.createTypeReferenceNode(createIdentifier(type))];
+  } else if (type && ts.isTypeNode(type)) {
+    typeRef = [cloneNode(type)];
+  }
   return factory.createCallExpression(expr, typeRef, args);
 }
 

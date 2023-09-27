@@ -64,7 +64,7 @@ function getVarStatement(signature: ts.PropertySignature) {
 
   refConstStatement = addTodoComment(
     refConstStatement,
-    "Check for potential naming collisions from `$refs` conversion.",
+    `Check for potential naming collisions from '$refs.${name}' conversion.`,
   );
 
   return [name, copySyntheticComments(refConstStatement, signature)] as const;

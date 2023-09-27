@@ -21,3 +21,13 @@ export function namedImports(names: string[], external?: string): VxImportModule
     },
   ];
 }
+
+export function traverseNode<N extends ts.Node>(
+  node: N,
+  callback: <T extends ts.Node>(node: T) => void,
+) {
+  ts.forEachChild(node, (child) => {
+    callback(child);
+    return traverseNode(child, callback);
+  });
+}
