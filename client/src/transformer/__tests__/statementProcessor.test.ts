@@ -29,13 +29,25 @@ describe("statementProcessor", () => {
     f.createCallExpression(name, u, args);
 
   beforeEach(() => {
-    propertyAssignmentTransform = vi.fn().mockReturnValue("PropertyAssignment");
-    methodDeclarationTransform = vi.fn().mockReturnValue("MethodDeclaration");
-    identifierTransform = vi.fn().mockReturnValue("Identifier");
-    heritageClauseTransform = vi.fn().mockReturnValue("HeritageClause");
-    propertyDeclarationTransform = vi.fn().mockReturnValue("PropertyDeclaration");
-    getAccessorTransform = vi.fn().mockReturnValue("GetAccessor");
-    setAccessorTransform = vi.fn().mockReturnValue("SetAccessor");
+    propertyAssignmentTransform = vi
+      .fn()
+      .mockReturnValue({ shouldContinue: false, result: "PropertyAssignment" });
+    methodDeclarationTransform = vi
+      .fn()
+      .mockReturnValue({ shouldContinue: false, result: "MethodDeclaration" });
+    identifierTransform = vi.fn().mockReturnValue({ shouldContinue: false, result: "Identifier" });
+    heritageClauseTransform = vi
+      .fn()
+      .mockReturnValue({ shouldContinue: false, result: "HeritageClause" });
+    propertyDeclarationTransform = vi
+      .fn()
+      .mockReturnValue({ shouldContinue: false, result: "PropertyDeclaration" });
+    getAccessorTransform = vi
+      .fn()
+      .mockReturnValue({ shouldContinue: false, result: "GetAccessor" });
+    setAccessorTransform = vi
+      .fn()
+      .mockReturnValue({ shouldContinue: false, result: "SetAccessor" });
 
     memberTransforms = {
       [ts.SyntaxKind.Identifier]: [identifierTransform],
@@ -93,10 +105,10 @@ describe("statementProcessor", () => {
         const result = processClassMember(node, {} as any, memberTransforms);
 
         shouldBeDefined(result);
-        expect(result).toEqual(name);
+        expect(result).toContain(name);
         expect(memberTransforms[syntaxKind][0]).toHaveBeenCalledWith(node, expect.anything());
         Object.values(memberTransforms).forEach((transform) => {
-          if ((result as any) !== name) expect(transform[0]).not.toHaveBeenCalled();
+          if ((result as any)[0] !== name) expect(transform[0]).not.toHaveBeenCalled();
         });
       },
     );

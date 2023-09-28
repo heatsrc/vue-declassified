@@ -17,12 +17,14 @@ describe("TemplateRef", () => {
     const output = transformTemplateRef(property, program);
 
     shouldBeTruthy(output);
-    expect(output.tag).toBe("TemplateRef");
-    expect(output.reference).toBe(VxReferenceKind.VARIABLE_VALUE);
-    expect(output.kind).toBe(VxResultKind.COMPOSITION);
-    expect(output.nodes.length).toBe(1);
-    expect(output.outputVariables).toEqual(["a"]);
-    expect((output.nodes[0] as any).emitNode.leadingComments[0].text).toContain(
+    shouldBeTruthy(output.result);
+    expect(output.shouldContinue).toBe(false);
+    expect(output.result.tag).toBe("TemplateRef");
+    expect(output.result.reference).toBe(VxReferenceKind.VARIABLE_VALUE);
+    expect(output.result.kind).toBe(VxResultKind.COMPOSITION);
+    expect(output.result.nodes.length).toBe(1);
+    expect(output.result.outputVariables).toEqual(["a"]);
+    expect((output.result.nodes[0] as any).emitNode.leadingComments[0].text).toContain(
       "VEXUS_TODO: Check for potential naming collisions",
     );
   });

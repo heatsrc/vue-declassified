@@ -32,12 +32,15 @@ function transformAccessor(type: "getter" | "setter"): VxTransform<ts.AccessorDe
     // We only transform the get/set accessor to a function and later merge them
     // in a computed call
     return {
-      imports: namedImports(["computed"]),
-      kind: VxResultKind.COMPOSITION,
-      nodes: [copySyntheticComments(computedArrowFunction, node)],
-      outputVariables: [variableName],
-      reference: VxReferenceKind.VARIABLE,
-      tag: `Computed-${type}`,
+      shouldContinue: false,
+      result: {
+        imports: namedImports(["computed"]),
+        kind: VxResultKind.COMPOSITION,
+        nodes: [copySyntheticComments(computedArrowFunction, node)],
+        outputVariables: [variableName],
+        reference: VxReferenceKind.VARIABLE,
+        tag: `Computed-${type}`,
+      },
     };
   };
 }

@@ -50,11 +50,14 @@ export const transformData: VxTransform<ts.PropertyDeclaration> = (node, program
   }
 
   return {
-    tag,
-    kind: VxResultKind.COMPOSITION,
-    imports: callName ? namedImports([callName]) : [],
-    reference: isRef ? VxReferenceKind.VARIABLE_VALUE : VxReferenceKind.VARIABLE,
-    outputVariables: [variableName],
-    nodes: [copySyntheticComments(variableAssignment, node)],
+    shouldContinue: false,
+    result: {
+      tag,
+      kind: VxResultKind.COMPOSITION,
+      imports: callName ? namedImports([callName]) : [],
+      reference: isRef ? VxReferenceKind.VARIABLE_VALUE : VxReferenceKind.VARIABLE,
+      outputVariables: [variableName],
+      nodes: [copySyntheticComments(variableAssignment, node)],
+    },
   };
 };

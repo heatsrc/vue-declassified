@@ -89,10 +89,15 @@ export type VxTransformResult<N> =
   | VxResultToMacro<N>
   | VxResultToOptions<N>;
 
+export type VxTransformReturnType = {
+  shouldContinue: boolean;
+  result?: VxTransformResult<ts.Node>;
+};
+
 export type VxTransform<T extends ts.Node> = (
   node: T,
   program: ts.Program,
-) => VxTransformResult<ts.Node> | false;
+) => VxTransformReturnType;
 
 export type VxPostProcessor = (
   astResults: VxTransformResult<ts.Node>[],

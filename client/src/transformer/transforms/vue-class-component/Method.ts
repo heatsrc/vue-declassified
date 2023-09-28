@@ -30,11 +30,14 @@ export const transformMethod: VxTransform<ts.MethodDeclaration> = (node, program
   methodConstStatement = copySyntheticComments(methodConstStatement, node);
 
   return {
-    tag: "Method",
-    reference: VxReferenceKind.VARIABLE,
-    kind: VxResultKind.COMPOSITION,
-    imports: [],
-    outputVariables: [methodName],
-    nodes: [methodConstStatement],
+    shouldContinue: false,
+    result: {
+      tag: "Method",
+      reference: VxReferenceKind.VARIABLE,
+      kind: VxResultKind.COMPOSITION,
+      imports: [],
+      outputVariables: [methodName],
+      nodes: [methodConstStatement],
+    },
   };
 };

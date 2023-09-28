@@ -12,13 +12,16 @@ describe("Method", () => {
     const output = transformMethod(method, program);
 
     shouldBeTruthy(output);
-    expect(output.tag).toBe("Method");
-    expect(output.reference).toBe(VxReferenceKind.VARIABLE);
-    expect(output.kind).toBe(VxResultKind.COMPOSITION);
-    expect(output.nodes.length).toBe(1);
-    expect(output.outputVariables).toEqual(["a"]);
+    shouldBeTruthy(output.result);
+    expect(output.shouldContinue).toBe(false);
+    const result = output.result;
+    expect(result.tag).toBe("Method");
+    expect(result.reference).toBe(VxReferenceKind.VARIABLE);
+    expect(result.kind).toBe(VxResultKind.COMPOSITION);
+    expect(result.nodes.length).toBe(1);
+    expect(result.outputVariables).toEqual(["a"]);
     // no additional comments added
-    expect((output.nodes[0] as any).emitNode).toBeUndefined();
+    expect((result.nodes[0] as any).emitNode).toBeUndefined();
   });
 
   it("should add a todo comment for unsupported decorators", () => {
@@ -34,11 +37,14 @@ describe("Method", () => {
     const output = transformMethod(method, program);
 
     shouldBeTruthy(output);
-    expect(output.tag).toBe("Method");
-    expect(output.reference).toBe(VxReferenceKind.VARIABLE);
-    expect(output.kind).toBe(VxResultKind.COMPOSITION);
-    expect(output.nodes.length).toBe(1);
-    expect(output.outputVariables).toEqual(["a"]);
-    expect((output.nodes[0] as any).emitNode.leadingComments[0].text).toContain("VEXUS_TODO");
+    shouldBeTruthy(output.result);
+    expect(output.shouldContinue).toBe(false);
+    const result = output.result;
+    expect(result.tag).toBe("Method");
+    expect(result.reference).toBe(VxReferenceKind.VARIABLE);
+    expect(result.kind).toBe(VxResultKind.COMPOSITION);
+    expect(result.nodes.length).toBe(1);
+    expect(result.outputVariables).toEqual(["a"]);
+    expect((result.nodes[0] as any).emitNode.leadingComments[0].text).toContain("VEXUS_TODO");
   });
 });

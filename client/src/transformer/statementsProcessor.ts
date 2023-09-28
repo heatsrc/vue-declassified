@@ -53,7 +53,7 @@ export function processClassDecorator(
       const optionTransforms = transforms[property.kind];
       const opts = processNode(property, program, optionTransforms);
 
-      if (opts) results.push(opts);
+      if (opts) results.push(...opts);
     } else {
       results.push(processUnknownOption(property));
     }
@@ -76,11 +76,14 @@ function processUnknownOption(node: ts.Node) {
 
 // TODO fix this any
 function processNode<T>(node: T, program: ts.Program, transforms: VxTransform<any>[]) {
+  const results: VxTransformResult<ts.Node>[] = [];
   for (const transform of transforms) {
     const opt = transform(node, program);
-    if (opt) return opt;
+
+    if (opt.result) results.push(opt.result);
+    if (!opt.shouldContinue) break;
   }
-  return false;
+  return results;
 }
 
 function getDecoratorOptions(decorator: ts.Decorator) {

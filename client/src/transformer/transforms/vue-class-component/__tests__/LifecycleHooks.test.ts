@@ -14,7 +14,7 @@ describe("LifecycleHooks", () => {
     `);
     const node = (ast.statements[0] as ts.ClassDeclaration).members[0] as ts.MethodDeclaration;
     const result = transformLifecycleHooks(node, program);
-    expect(result).toBe(false);
+    expect(result.shouldContinue).toBe(true);
   });
 
   it("should return the body of the method if the lifecycle hook doesn't exist", () => {
@@ -25,9 +25,12 @@ describe("LifecycleHooks", () => {
     `);
 
     const node = (ast.statements[0] as ts.ClassDeclaration).members[0] as ts.MethodDeclaration;
-    const result = transformLifecycleHooks(node, program);
+    const output = transformLifecycleHooks(node, program);
 
-    shouldBeTruthy(result);
+    shouldBeTruthy(output);
+    shouldBeTruthy(output.result);
+    expect(output.shouldContinue).toBe(false);
+    const result = output.result;
     expect(result.tag).toBe("LifeCycleHook");
     expect(result.kind).toBe(VxResultKind.COMPOSITION);
     expect(result.reference).toBe(VxReferenceKind.NONE);
@@ -46,8 +49,12 @@ describe("LifecycleHooks", () => {
     `);
 
     const node = (ast.statements[0] as ts.ClassDeclaration).members[0] as ts.MethodDeclaration;
-    const results = transformLifecycleHooks(node, program);
+    const output = transformLifecycleHooks(node, program);
 
+    shouldBeTruthy(output);
+    shouldBeTruthy(output.result);
+    expect(output.shouldContinue).toBe(false);
+    const results = output.result;
     shouldBeTruthy(results);
     expect(results.tag).toBe("LifeCycleHook");
     expect(results.kind).toBe(VxResultKind.COMPOSITION);

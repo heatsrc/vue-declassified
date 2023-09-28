@@ -14,7 +14,7 @@ import ts from "typescript";
  */
 export const transformTemplateRef: VxTransform<ts.PropertyDeclaration> = (node) => {
   const signatures = getPropertySignatures(node);
-  if (!signatures) return false;
+  if (!signatures) return { shouldContinue: true };
 
   const [names, refs] = signatures.reduce(
     (acc, signature) => {
@@ -29,12 +29,15 @@ export const transformTemplateRef: VxTransform<ts.PropertyDeclaration> = (node) 
   if (refs.length > 0) copySyntheticComments(refs[0], node);
 
   return {
-    tag: "TemplateRef",
-    kind: VxResultKind.COMPOSITION,
-    reference: VxReferenceKind.VARIABLE_VALUE,
-    imports: namedImports(["ref"]),
-    outputVariables: names,
-    nodes: refs,
+    shouldContinue: false,
+    result: {
+      tag: "TemplateRef",
+      kind: VxResultKind.COMPOSITION,
+      reference: VxReferenceKind.VARIABLE_VALUE,
+      imports: namedImports(["ref"]),
+      outputVariables: names,
+      nodes: refs,
+    },
   };
 };
 

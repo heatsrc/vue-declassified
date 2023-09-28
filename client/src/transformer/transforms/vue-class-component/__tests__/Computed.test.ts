@@ -12,11 +12,14 @@ describe("Computed", () => {
       .members[0] as ts.GetAccessorDeclaration;
     const output = transformGetter(property, program);
     shouldBeTruthy(output);
-    expect(output.tag).toBe("Computed-getter");
-    expect(output.reference).toBe(VxReferenceKind.VARIABLE);
-    expect(output.kind).toBe(VxResultKind.COMPOSITION);
-    expect(output.nodes.length).toBe(1);
-    expect(output.outputVariables).toEqual(["a"]);
+    shouldBeTruthy(output.result);
+    expect(output.shouldContinue).toBe(false);
+    const result = output.result;
+    expect(result.tag).toBe("Computed-getter");
+    expect(result.reference).toBe(VxReferenceKind.VARIABLE);
+    expect(result.kind).toBe(VxResultKind.COMPOSITION);
+    expect(result.nodes.length).toBe(1);
+    expect(result.outputVariables).toEqual(["a"]);
   });
 
   it("should transform setter", () => {
@@ -25,11 +28,14 @@ describe("Computed", () => {
       .members[0] as ts.SetAccessorDeclaration;
     const output = transformSetter(property, program);
     shouldBeTruthy(output);
-    expect(output.tag).toBe("Computed-setter");
-    expect(output.reference).toBe(VxReferenceKind.VARIABLE);
-    expect(output.kind).toBe(VxResultKind.COMPOSITION);
-    expect(output.nodes.length).toBe(1);
-    expect(output.outputVariables).toEqual(["a"]);
+    shouldBeTruthy(output.result);
+    expect(output.shouldContinue).toBe(false);
+    const result = output.result;
+    expect(result.tag).toBe("Computed-setter");
+    expect(result.reference).toBe(VxReferenceKind.VARIABLE);
+    expect(result.kind).toBe(VxResultKind.COMPOSITION);
+    expect(result.nodes.length).toBe(1);
+    expect(result.outputVariables).toEqual(["a"]);
   });
 
   describe("Merging computed properties", () => {
@@ -45,7 +51,10 @@ describe("Computed", () => {
         .members[0] as ts.GetAccessorDeclaration;
       const output = transformGetter(property, program);
       shouldBeTruthy(output);
-      const merged = mergeComputed([output], program);
+      shouldBeTruthy(output.result);
+      expect(output.shouldContinue).toBe(false);
+      const result = output.result;
+      const merged = mergeComputed([result], program);
       shouldBeTruthy(merged);
       expect(merged[0].tag).toBe("Computed");
       expect(merged[0].reference).toBe(VxReferenceKind.VARIABLE_VALUE);
@@ -67,7 +76,9 @@ describe("Computed", () => {
         .members[1] as ts.SetAccessorDeclaration;
       const outputGetter = transformGetter(getter, program);
       const outputSetter = transformSetter(setter, program);
-      const output = [outputGetter, outputSetter].filter(
+      expect(outputGetter.result).toBeTruthy();
+      expect(outputSetter.result).toBeTruthy();
+      const output = [outputGetter.result, outputSetter.result].filter(
         (o): o is VxTransformResult<ts.Node> => !!o,
       );
       const merged = mergeComputed(output, program);
@@ -89,7 +100,8 @@ describe("Computed", () => {
       const setter = (ast.statements[0] as ts.ClassDeclaration)
         .members[0] as ts.SetAccessorDeclaration;
       const outputSetter = transformSetter(setter, program);
-      const output = [outputSetter].filter((o): o is VxTransformResult<ts.Node> => !!o);
+      expect(outputSetter.result).toBeTruthy();
+      const output = [outputSetter.result].filter((o): o is VxTransformResult<ts.Node> => !!o);
       const merged = mergeComputed(output, program);
       expect(merged.length).toBe(1);
       expect(merged[0].tag).toBe("Computed");

@@ -29,13 +29,13 @@ const lifeCycleHooks = new Map<string, string | false>([
 export const transformLifecycleHooks: VxTransform<ts.MethodDeclaration> = (node) => {
   const hookName = node.name.getText();
 
-  if (!lifeCycleHooks.has(hookName)) return false;
+  if (!lifeCycleHooks.has(hookName)) return { shouldContinue: true };
 
   const namedImport = lifeCycleHooks.get(hookName);
   let outputNodes: ts.Statement[] | ts.ExpressionStatement[];
 
   if (!namedImport) {
-    if (!node.body) return false;
+    if (!node.body) return { shouldContinue: true };
     // get the body of the method and return it
     outputNodes = node.body?.statements.map((stmt, index) => {
       if (index === 0) copySyntheticComments(stmt, node);
@@ -49,11 +49,14 @@ export const transformLifecycleHooks: VxTransform<ts.MethodDeclaration> = (node)
   }
 
   return {
-    tag: "LifeCycleHook",
-    kind: VxResultKind.COMPOSITION,
-    reference: VxReferenceKind.NONE,
-    nodes: outputNodes,
-    outputVariables: namedImport ? [namedImport] : [],
-    imports: namedImport ? namedImports([namedImport]) : [],
+    shouldContinue: false,
+    result: {
+      tag: "LifeCycleHook",
+      kind: VxResultKind.COMPOSITION,
+      reference: VxReferenceKind.NONE,
+      nodes: outputNodes,
+      outputVariables: namedImport ? [namedImport] : [],
+      imports: namedImport ? namedImports([namedImport]) : [],
+    },
   };
 };

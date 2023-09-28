@@ -159,10 +159,10 @@ describe("convert", () => {
       const world = ref(\\"world\\");
       // VEXUS_TODO: Encountered unsupported Decorator(s): \\"@Prop() hello!: string;\\")
       let hello: string;
-      // VEXUS_TODO: Check for potential naming collisions from \`$refs\` conversion.
+      // VEXUS_TODO: Check for potential naming collisions from '$refs.divElement' conversion.
       // Template Refs
       const divElement = ref<HTMLDivElement>();
-      // VEXUS_TODO: Check for potential naming collisions from \`$refs\` conversion.
+      // VEXUS_TODO: Check for potential naming collisions from '$refs.b' conversion.
       const b = ref();
       console.log('beforeCreate');
       console.log('created');

@@ -31,7 +31,7 @@ function getAstResults(node: ts.ClassDeclaration, program: ts.Program) {
       if (res) results.push(...res);
     } else if (child.kind in classTransforms) {
       const member = processClassMember(child, program);
-      if (member) results.push(member);
+      if (member) results.push(...member);
     }
   });
 
