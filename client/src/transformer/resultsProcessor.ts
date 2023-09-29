@@ -1,11 +1,20 @@
 import ts from "typescript";
-import { VxTransformResult, VxImportClause, VxResultKind } from "../types.js";
+import {
+  VxImportClause,
+  VxTransformResult,
+  isComposableType,
+  isCompositionType,
+  isImportType,
+  isMacroType,
+} from "../types.js";
 
 export function getImports(results: VxTransformResult<ts.Node>[]) {
   const importMap = new Map<string, VxImportClause>();
 
-  results.forEach((r) => {
-    r.imports.forEach((i) => {
+  const importResults = results.filter(isImportType);
+
+  results.forEach(({ imports }) => {
+    imports.forEach((i) => {
       const key = "external" in i ? i.external : i.path;
       const clause: VxImportClause = importMap.get(key) ?? { named: new Set() };
 
@@ -33,8 +42,13 @@ export function getImports(results: VxTransformResult<ts.Node>[]) {
 }
 
 export function getBody(results: VxTransformResult<ts.Node>[]) {
-  return results
-    .filter((el) => el.kind === VxResultKind.COMPOSITION)
-    .map((el) => el.nodes)
-    .reduce((acc, el) => acc.concat(el), []) as ts.Statement[];
+  return results.filter(isCompositionType).flatMap((el) => el.nodes);
+}
+
+export function getMacros(results: VxTransformResult<ts.Node>[]) {
+  return results.filter(isMacroType).flatMap((el) => el.nodes);
+}
+
+export function getComposables(results: VxTransformResult<ts.Node>[]) {
+  return results.filter(isComposableType).flatMap((el) => el.nodes);
 }

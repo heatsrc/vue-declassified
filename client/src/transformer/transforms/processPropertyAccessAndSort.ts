@@ -1,27 +1,29 @@
 import { addTodoComment } from "@/helpers/comments.js";
 import { createIdentifier, createPropertyAccess } from "@/helpers/tsHelpers.js";
-import { VxPostProcessor, VxReferenceKind, VxTransformResult } from "@/types.js";
+import { VxPostProcessor, VxReferenceKind, VxResultToImport, VxTransformResult } from "@/types.js";
 import { cloneNode } from "ts-clone-node";
 import ts from "typescript";
 
 type TransformerResult = {
-  readonly astResult: VxTransformResult<ts.Node>;
+  readonly astResult: Exclude<VxTransformResult<ts.Node>, VxResultToImport>;
   readonly dependsOn: string[];
 };
 export const processPropertyAccessAndSort: VxPostProcessor = (astResults) => {
   const variableHandlers = getVariableHandlers(astResults);
 
-  const transformerResults = astResults.map((astResult) => {
-    // TODO don't like mutating this array in the transformer, should refactor
-    const dependsOn: string[] = [];
-    const transformer = getTransformer(variableHandlers, dependsOn);
-    const nodes = ts.transform(astResult.nodes, [transformer]).transformed;
+  const transformerResults = astResults
+    .map((astResult) => {
+      // TODO don't like mutating this array in the transformer, should refactor
+      const dependsOn: string[] = [];
+      const transformer = getTransformer(variableHandlers, dependsOn);
+      const nodes = ts.transform(astResult.nodes, [transformer]).transformed;
 
-    return {
-      astResult: { ...astResult, nodes } as VxTransformResult<ts.Node>,
-      dependsOn,
-    } as TransformerResult;
-  });
+      return {
+        astResult: { ...astResult, nodes } as VxTransformResult<ts.Node>,
+        dependsOn,
+      } as TransformerResult;
+    })
+    .filter((r): r is TransformerResult => !!r);
 
   const result = orderByDependencies(transformerResults, astResults.length);
 

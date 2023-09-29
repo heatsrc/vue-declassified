@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { convertAst } from "../convert.js";
 import { getSingleFileProgram } from "../parser.js";
 
@@ -72,6 +72,8 @@ describe("convert", () => {
     import { Component, Prop } from "vue-class-component";
     import { bar } from "./bar.js";
 
+    const MOUNT_EVENT = 'component:mounted';
+
     @Component
     export default class Test {
       // Properties
@@ -80,10 +82,12 @@ describe("convert", () => {
 
       // Accessors
       get hello() {
+        this.$props.fdsa;
         return this.hello;
       }
 
       get foo() {
+        this.$route.query;
         return this.hello + this.world;
       }
       set foo(value) {
@@ -92,11 +96,13 @@ describe("convert", () => {
       }
 
       set bar(value) {
+        this.$router.push('');
         this.world = value;
       }
 
       // Methods
-      getFoo() {
+      async getFoo() {
+        await this.$nextTick();
         return this.foo;
       }
 
@@ -116,8 +122,12 @@ describe("convert", () => {
       }
       created() {
         console.log('created');
+        this.$watch(this.foo, (newVal: string, oldVal = 'old')  => {
+          this.$emit('foo:changed', newVal, oldVal);
+        })
       }
       beforeMount() {
+        this.$emit(MOUNT_EVENT);
         console.log('beforeMounted');
       }
       mounted() {
@@ -136,12 +146,14 @@ describe("convert", () => {
         console.log('destroyed');
       }
       activated() {
+        this.$store.dispatch('foo', this.foo);
         console.log('activated');
       }
       deactivated() {
-        console.log('deactivated');
+        console.log('deactivated', this.$props.asdf);
       }
       errorCaptured() {
+        this.$store.dispatch('foo', this.foo);
         console.log('errorCaptured');
       }
     }
@@ -154,7 +166,25 @@ describe("convert", () => {
     expect(result).toMatchInlineSnapshot(`
       "import { bar } from \\"./bar.js\\";
       import foo from \\"foo\\";
-      import { ref, onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted, onActivated, onDeactivated, onErrorCaptured, computed } from \\"vue\\";
+      import { useRoute, useRouter } from \\"vue-router\\";
+      import { useStore } from \\"vuex\\";
+      import { ref, nextTick, watch, onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted, onDeactivated, computed, onActivated, onErrorCaptured } from \\"vue\\";
+      const MOUNT_EVENT = 'component:mounted';
+      const props = defineProps<{
+          \\"fdsa\\": unknown;
+          \\"asdf\\": unknown;
+      }>();
+      const emit = defineEmits<{
+          \\"foo:changed\\": [
+              newVal: string,
+              oldVal: string
+          ];
+          \\"component:mounted\\": [
+          ];
+      }>();
+      const route = useRoute();
+      const router = useRouter();
+      const store = useStore();
       // Properties
       const world = ref(\\"world\\");
       // VEXUS_TODO: Encountered unsupported Decorator(s): \\"@Prop() hello!: string;\\")
@@ -165,8 +195,9 @@ describe("convert", () => {
       // VEXUS_TODO: Check for potential naming collisions from '$refs.b' conversion.
       const b = ref();
       console.log('beforeCreate');
-      console.log('created');
       onBeforeMount(() => {
+          // VEXUS_TODO: Unknown variable source for \\"this.$emit\\"
+          this.$emit(MOUNT_EVENT);
           console.log('beforeMounted');
       });
       onMounted(() => {
@@ -184,21 +215,21 @@ describe("convert", () => {
       onUnmounted(() => {
           console.log('destroyed');
       });
-      onActivated(() => {
-          console.log('activated');
-      });
       onDeactivated(() => {
-          console.log('deactivated');
-      });
-      onErrorCaptured(() => {
-          console.log('errorCaptured');
+          console.log('deactivated', 
+          // VEXUS_TODO: Unknown variable source for \\"this.$props\\"
+          this.$props.asdf);
       });
       // Accessors
       const hello = computed(() => {
+          // VEXUS_TODO: Unknown variable source for \\"this.$props\\"
+          this.$props.fdsa;
           return hello.value;
       });
       const foo = computed({
           get: () => {
+              // VEXUS_TODO: Unknown variable source for \\"this.$route\\"
+              this.$route.query;
               return hello.value + world.value;
           },
           set: (value) => {
@@ -209,11 +240,18 @@ describe("convert", () => {
       // VEXUS_TODO: setter with no getter is suspicious...
       const bar = computed({
           set: (value) => {
+              // VEXUS_TODO: Unknown variable source for \\"this.$router\\"
+              this.$router.push('');
               world.value = value;
           }
       });
       // Methods
-      const getFoo = () => {
+      const getFoo = 
+      // Methods
+      async () => {
+          await 
+          // VEXUS_TODO: Unknown variable source for \\"this.$nextTick\\"
+          this.$nextTick();
           return foo.value;
       };
       // VEXUS_TODO: Encountered unsupported decorator(s): \\"@Emit\\"
@@ -222,6 +260,22 @@ describe("convert", () => {
           this.undefinedProperty = value;
           return foo.value;
       };
+      console.log('created');
+      // VEXUS_TODO: Unknown variable source for \\"this.$watch\\"
+      this.$watch(foo.value, (newVal: string, oldVal = 'old') => {
+          // VEXUS_TODO: Unknown variable source for \\"this.$emit\\"
+          this.$emit('foo:changed', newVal, oldVal);
+      });
+      onActivated(() => {
+          // VEXUS_TODO: Unknown variable source for \\"this.$store\\"
+          this.$store.dispatch('foo', foo.value);
+          console.log('activated');
+      });
+      onErrorCaptured(() => {
+          // VEXUS_TODO: Unknown variable source for \\"this.$store\\"
+          this.$store.dispatch('foo', foo.value);
+          console.log('errorCaptured');
+      });
       "
     `);
   });

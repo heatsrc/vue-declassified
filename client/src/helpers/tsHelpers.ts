@@ -90,6 +90,23 @@ export function getLiteralFromValue(val: string | boolean | number | RegExp | bi
   throw new Error(`Unknown value type: ${typeof val}`);
 }
 
+export function getPrimitiveKeyword(kind: ts.SyntaxKind) {
+  type PrimitiveKeywords =
+    | ts.SyntaxKind.StringKeyword
+    | ts.SyntaxKind.NumberKeyword
+    | ts.SyntaxKind.BooleanKeyword
+    | ts.SyntaxKind.BigIntKeyword;
+  const keywordMap = new Map<ts.SyntaxKind, PrimitiveKeywords>([
+    [ts.SyntaxKind.StringLiteral, ts.SyntaxKind.StringKeyword],
+    [ts.SyntaxKind.NumericLiteral, ts.SyntaxKind.NumberKeyword],
+    [ts.SyntaxKind.TrueKeyword, ts.SyntaxKind.BooleanKeyword],
+    [ts.SyntaxKind.FalseKeyword, ts.SyntaxKind.BooleanKeyword],
+    [ts.SyntaxKind.BigIntLiteral, ts.SyntaxKind.BigIntKeyword],
+  ]);
+  if (keywordMap.has(kind)) return keywordMap.get(kind)!;
+  return ts.SyntaxKind.UnknownKeyword;
+}
+
 export function isPrimitiveType({ flags }: ts.Type) {
   return (
     !!(flags & ts.TypeFlags.NumberLike) ||

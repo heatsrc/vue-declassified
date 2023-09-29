@@ -10,6 +10,7 @@ import {
   VxPostProcessor,
   VxReferenceKind,
   VxResultKind,
+  VxResultToComposition,
   VxTransform,
   VxTransformResult,
 } from "@/types.js";
@@ -51,8 +52,12 @@ function transformAccessor(type: "getter" | "setter"): VxTransform<ts.AccessorDe
  * @returns
  */
 export const mergeComputed: VxPostProcessor = (astResult) => {
-  const getters = astResult.filter((r) => r.tag === "Computed-getter");
-  const setters = astResult.filter((r) => r.tag === "Computed-setter");
+  const getters = astResult.filter(
+    (r): r is VxResultToComposition<ts.Expression> => r.tag === "Computed-getter",
+  );
+  const setters = astResult.filter(
+    (r): r is VxResultToComposition<ts.Expression> => r.tag === "Computed-setter",
+  );
   const others = astResult.filter(
     (r) => r.tag !== "Computed-getter" && r.tag !== "Computed-setter",
   );
@@ -66,8 +71,8 @@ export const mergeComputed: VxPostProcessor = (astResult) => {
 };
 
 function mergeAccessors(
-  getters: VxTransformResult<ts.Node>[],
-  setters: VxTransformResult<ts.Node>[],
+  getters: VxResultToComposition<ts.Expression>[],
+  setters: VxResultToComposition<ts.Expression>[],
 ) {
   const leftOverSetters = [...setters];
   const mergedAccessors = getters.reduce((acc, getter) => {
@@ -84,10 +89,10 @@ function mergeAccessors(
     const trailingComments = setter ? [] : ts.getSyntheticTrailingComments(getter.nodes[0]);
 
     let computedExpression: ts.Expression;
-    const gNodes = getter.nodes[0] as ts.Expression;
+    const gNodes = getter.nodes[0];
 
     if (setter) {
-      const sNodes = setter.nodes[0] as ts.Expression;
+      const sNodes = setter.nodes[0];
       computedExpression = createObjectLiteral([
         ["get", gNodes],
         ["set", sNodes],
@@ -108,15 +113,15 @@ function mergeAccessors(
     return acc;
   }, [] as VxTransformResult<ts.Node>[]);
 
-  return [mergedAccessors, leftOverSetters];
+  return [mergedAccessors, leftOverSetters] as const;
 }
 
-function processOrphanedSetters(setters: VxTransformResult<ts.Node>[]) {
+function processOrphanedSetters(setters: VxResultToComposition<ts.Expression>[]) {
   return setters.reduce((acc, setter) => {
     const variableName = setter.outputVariables[0];
 
     // Strip comments to be hoisted
-    const setterNode = setter.nodes[0] as ts.Expression;
+    const setterNode = setter.nodes[0];
     const leadingComments = ts.getSyntheticLeadingComments(setterNode);
     const trailingComments = ts.getSyntheticTrailingComments(setterNode);
     const setterNodes = setSyntheticComments(setterNode, undefined, undefined);

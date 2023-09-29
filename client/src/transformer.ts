@@ -1,9 +1,9 @@
 import ts from "typescript";
 import { prependSyntheticComments } from "./helpers/comments.js";
-import { VxTransformResult } from "./types.js";
 import { classTransforms } from "./transformer/config.js";
-import { getBody, getImports } from "./transformer/resultsProcessor.js";
+import { getBody, getComposables, getImports, getMacros } from "./transformer/resultsProcessor.js";
 import { processClassDecorator, processClassMember } from "./transformer/statementsProcessor.js";
+import { VxTransformResult } from "./types.js";
 
 export function runTransforms(node: ts.ClassDeclaration, program: ts.Program) {
   const results = getAstResults(node, program);
@@ -16,10 +16,10 @@ export function runTransforms(node: ts.ClassDeclaration, program: ts.Program) {
 
   return [
     ...imports,
-    //...macros,
-    //...composables,
+    ...getMacros(results),
+    ...getComposables(results),
     ...getBody(results),
-  ];
+  ] as ts.Statement[];
 }
 
 function getAstResults(node: ts.ClassDeclaration, program: ts.Program) {

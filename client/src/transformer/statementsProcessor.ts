@@ -1,14 +1,14 @@
 import ts from "typescript";
-import { classTransforms } from "./config.js";
 import { addTodoComment } from "../helpers/comments.js";
 import {
-  VxTransformResult,
-  VxResultKind,
+  VxClassMemberTransforms,
   VxReferenceKind,
+  VxResultKind,
   VxResultToOptions,
   VxTransform,
-  VxClassMemberTransforms,
+  VxTransformResult,
 } from "../types.js";
+import { classTransforms } from "./config.js";
 
 const {
   [ts.SyntaxKind.Decorator]: decoratorTransforms,
@@ -80,7 +80,10 @@ function processNode<T>(node: T, program: ts.Program, transforms: VxTransform<an
   for (const transform of transforms) {
     const opt = transform(node, program);
 
-    if (opt.result) results.push(opt.result);
+    if (opt.result) {
+      const result = Array.isArray(opt.result) ? opt.result : [opt.result];
+      results.push(...result);
+    }
     if (!opt.shouldContinue) break;
   }
   return results;
