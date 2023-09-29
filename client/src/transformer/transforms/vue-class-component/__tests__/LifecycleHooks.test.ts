@@ -1,9 +1,9 @@
-import { describe, it, expect, vi } from "vitest";
-import { transformLifecycleHooks } from "../LifecycleHooks.js";
+import { getSingleFileProgram } from "@/parser.js";
 import { VxReferenceKind, VxResultKind } from "@/types.js";
 import { shouldBeTruthy } from "@test/customAssertions.js";
-import { getSingleFileProgram } from "@/parser.js";
 import ts from "typescript";
+import { describe, expect, it } from "vitest";
+import { transformLifecycleHooks } from "../LifecycleHooks.js";
 
 describe("LifecycleHooks", () => {
   it("should return false if the node is not a lifecycle hook", () => {
@@ -30,6 +30,7 @@ describe("LifecycleHooks", () => {
     shouldBeTruthy(output);
     shouldBeTruthy(output.result);
     expect(output.shouldContinue).toBe(false);
+    if (Array.isArray(output.result)) throw new Error("Expected result to be a single node");
     const result = output.result;
     expect(result.tag).toBe("LifeCycleHook");
     expect(result.kind).toBe(VxResultKind.COMPOSITION);
@@ -56,6 +57,7 @@ describe("LifecycleHooks", () => {
     expect(output.shouldContinue).toBe(false);
     const results = output.result;
     shouldBeTruthy(results);
+    if (Array.isArray(results)) throw new Error("Expected result to be a single node");
     expect(results.tag).toBe("LifeCycleHook");
     expect(results.kind).toBe(VxResultKind.COMPOSITION);
     expect(results.reference).toBe(VxReferenceKind.NONE);

@@ -1,9 +1,9 @@
 import { getSingleFileProgram } from "@/parser.js";
-import { transformMethod } from "../Method.js";
-import { describe, it, expect, should } from "vitest";
-import ts from "typescript";
-import { shouldBeTruthy } from "@test/customAssertions.js";
 import { VxReferenceKind, VxResultKind } from "@/types.js";
+import { shouldBeTruthy } from "@test/customAssertions.js";
+import ts from "typescript";
+import { describe, expect, it } from "vitest";
+import { transformMethod } from "../Method.js";
 
 describe("Method", () => {
   it("should transform a method to function expression", () => {
@@ -15,6 +15,7 @@ describe("Method", () => {
     shouldBeTruthy(output.result);
     expect(output.shouldContinue).toBe(false);
     const result = output.result;
+    if (Array.isArray(result)) throw new Error("Expected result to be a single node");
     expect(result.tag).toBe("Method");
     expect(result.reference).toBe(VxReferenceKind.VARIABLE);
     expect(result.kind).toBe(VxResultKind.COMPOSITION);
@@ -40,11 +41,12 @@ describe("Method", () => {
     shouldBeTruthy(output.result);
     expect(output.shouldContinue).toBe(false);
     const result = output.result;
+    if (Array.isArray(result)) throw new Error("Expected result to be a single node");
     expect(result.tag).toBe("Method");
     expect(result.reference).toBe(VxReferenceKind.VARIABLE);
     expect(result.kind).toBe(VxResultKind.COMPOSITION);
     expect(result.nodes.length).toBe(1);
     expect(result.outputVariables).toEqual(["a"]);
-    expect((result.nodes[0] as any).emitNode.leadingComments[0].text).toContain("VEXUS_TODO");
+    expect((result.nodes[0] as any).emitNode.leadingComments[0].text).toContain("VUEDC_TODO");
   });
 });

@@ -15,6 +15,7 @@ describe("Data", () => {
     shouldBeTruthy(output.result);
     expect(output.shouldContinue).toBe(false);
     const result = output.result;
+    if (Array.isArray(result)) throw new Error("Expected result to be a single node");
     expect(result.tag).toBe("Data-ref");
     expect(result.reference).toBe(VxReferenceKind.VARIABLE_VALUE);
     expect(result.kind).toBe(VxResultKind.COMPOSITION);
@@ -34,6 +35,7 @@ describe("Data", () => {
     shouldBeTruthy(output.result);
     expect(output.shouldContinue).toBe(false);
     const result = output.result;
+    if (Array.isArray(result)) throw new Error("Expected result to be a single node");
     expect(result.tag).toBe("Data-nonreactive");
     expect(result.reference).toBe(VxReferenceKind.VARIABLE);
     expect(result.kind).toBe(VxResultKind.COMPOSITION);
@@ -54,6 +56,7 @@ describe("Data", () => {
     shouldBeTruthy(output.result);
     expect(output.shouldContinue).toBe(false);
     const result = output.result;
+    if (Array.isArray(result)) throw new Error("Expected result to be a single node");
     expect(result.tag).toBe("Data-reactive");
     expect(result.reference).toBe(VxReferenceKind.VARIABLE);
     expect(result.kind).toBe(VxResultKind.COMPOSITION);

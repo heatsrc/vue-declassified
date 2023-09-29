@@ -18,6 +18,7 @@ describe("TemplateRef", () => {
 
     shouldBeTruthy(output);
     shouldBeTruthy(output.result);
+    if (Array.isArray(output.result)) throw new Error("Expected result to be a single node");
     expect(output.shouldContinue).toBe(false);
     expect(output.result.tag).toBe("TemplateRef");
     expect(output.result.reference).toBe(VxReferenceKind.VARIABLE_VALUE);

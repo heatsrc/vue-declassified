@@ -15,6 +15,7 @@ describe("Computed", () => {
     shouldBeTruthy(output.result);
     expect(output.shouldContinue).toBe(false);
     const result = output.result;
+    if (Array.isArray(result)) throw new Error("Expected result to be a single node");
     expect(result.tag).toBe("Computed-getter");
     expect(result.reference).toBe(VxReferenceKind.VARIABLE);
     expect(result.kind).toBe(VxResultKind.COMPOSITION);
@@ -31,6 +32,7 @@ describe("Computed", () => {
     shouldBeTruthy(output.result);
     expect(output.shouldContinue).toBe(false);
     const result = output.result;
+    if (Array.isArray(result)) throw new Error("Expected result to be a single node");
     expect(result.tag).toBe("Computed-setter");
     expect(result.reference).toBe(VxReferenceKind.VARIABLE);
     expect(result.kind).toBe(VxResultKind.COMPOSITION);
@@ -54,6 +56,7 @@ describe("Computed", () => {
       shouldBeTruthy(output.result);
       expect(output.shouldContinue).toBe(false);
       const result = output.result;
+      if (Array.isArray(result)) throw new Error("Expected result to be a single node");
       const merged = mergeComputed([result], program);
       shouldBeTruthy(merged);
       expect(merged[0].tag).toBe("Computed");
