@@ -1,8 +1,8 @@
-import { vi, describe, it, expect } from "vitest";
-import { readVueFile, writeVueFile } from "../file.js";
+import { writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { writeFile } from "node:fs/promises";
+import { describe, expect, it, vi } from "vitest";
+import { readVueFile, writeVueFile } from "../file.js";
 
 const dirname = fileURLToPath(new URL(".", import.meta.url));
 
@@ -20,9 +20,10 @@ describe("test readFile", () => {
   it("test should read a valid vue file", async () => {
     const path = resolve(dirname, "./fixtures/TestInput.vue");
 
-    let vueFile = await readVueFile(path);
+    let { script, vueFile } = await readVueFile(path);
 
     expect(vueFile.descriptor.script).toBeDefined();
+    expect(script).toEqual(vueFile.descriptor.script);
     expect(vueFile.descriptor.script!.lang).toEqual("ts");
     expect(vueFile.descriptor.scriptSetup).toBeNull();
     expect(vueFile.descriptor.template).toBeDefined();
@@ -43,7 +44,7 @@ describe("test readFile", () => {
 
 describe("test writeFile", () => {
   it("should write a valid vue file", async () => {
-    const vueFile = await readVueFile(resolve(dirname, "./fixtures/MinInput.vue"));
+    const { script, vueFile } = await readVueFile(resolve(dirname, "./fixtures/MinInput.vue"));
     const scriptContent = '"placeholder";';
 
     await writeVueFile("output.vue", vueFile, scriptContent);

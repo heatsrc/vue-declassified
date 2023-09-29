@@ -16,7 +16,7 @@ export async function readVueFile(path: string) {
   if (vueFile.descriptor.scriptSetup) throw new Error("Vue file already has script setup!");
   if (!vueFile.descriptor.script) throw new Error("Vue file has no script!");
 
-  return vueFile;
+  return { script: vueFile.descriptor.script, vueFile };
 }
 
 /**
