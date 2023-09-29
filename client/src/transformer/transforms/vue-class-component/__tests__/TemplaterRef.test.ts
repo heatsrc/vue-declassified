@@ -1,9 +1,9 @@
-import { describe, it, expect } from "vitest";
-import { transformTemplateRef } from "../TemplateRef.js";
 import { getSingleFileProgram } from "@/parser.js";
 import { VxReferenceKind, VxResultKind } from "@/types.js";
 import { shouldBeTruthy } from "@test/customAssertions.js";
 import ts from "typescript";
+import { describe, expect, it } from "vitest";
+import { transformTemplateRef } from "../TemplateRef.js";
 
 describe("TemplateRef", () => {
   it("should transform template ref", () => {
@@ -25,7 +25,7 @@ describe("TemplateRef", () => {
     expect(output.result.nodes.length).toBe(1);
     expect(output.result.outputVariables).toEqual(["a"]);
     expect((output.result.nodes[0] as any).emitNode.leadingComments[0].text).toContain(
-      "VEXUS_TODO: Check for potential naming collisions",
+      "VUEDC_TODO: Check for potential naming collisions",
     );
   });
 });

@@ -4,7 +4,7 @@ export function addTodoComment<T extends ts.Node>(node: T, comment: string, mult
   const kind = multiline
     ? ts.SyntaxKind.MultiLineCommentTrivia
     : ts.SyntaxKind.SingleLineCommentTrivia;
-  const todo = ` VEXUS_TODO: ${comment}`;
+  const todo = ` VUEDC_TODO: ${comment}`;
   return ts.addSyntheticLeadingComment(node, kind, todo, true);
 }
 

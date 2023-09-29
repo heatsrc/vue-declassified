@@ -187,16 +187,16 @@ describe("convert", () => {
       const store = useStore();
       // Properties
       const world = ref(\\"world\\");
-      // VEXUS_TODO: Encountered unsupported Decorator(s): \\"@Prop() hello!: string;\\")
+      // VUEDC_TODO: Encountered unsupported Decorator(s): \\"@Prop() hello!: string;\\")
       let hello: string;
-      // VEXUS_TODO: Check for potential naming collisions from '$refs.divElement' conversion.
+      // VUEDC_TODO: Check for potential naming collisions from '$refs.divElement' conversion.
       // Template Refs
       const divElement = ref<HTMLDivElement>();
-      // VEXUS_TODO: Check for potential naming collisions from '$refs.b' conversion.
+      // VUEDC_TODO: Check for potential naming collisions from '$refs.b' conversion.
       const b = ref();
       console.log('beforeCreate');
       onBeforeMount(() => {
-          // VEXUS_TODO: Unknown variable source for \\"this.$emit\\"
+          // VUEDC_TODO: Unknown variable source for \\"this.$emit\\"
           this.$emit(MOUNT_EVENT);
           console.log('beforeMounted');
       });
@@ -217,18 +217,18 @@ describe("convert", () => {
       });
       onDeactivated(() => {
           console.log('deactivated', 
-          // VEXUS_TODO: Unknown variable source for \\"this.$props\\"
+          // VUEDC_TODO: Unknown variable source for \\"this.$props\\"
           this.$props.asdf);
       });
       // Accessors
       const hello = computed(() => {
-          // VEXUS_TODO: Unknown variable source for \\"this.$props\\"
+          // VUEDC_TODO: Unknown variable source for \\"this.$props\\"
           this.$props.fdsa;
           return hello.value;
       });
       const foo = computed({
           get: () => {
-              // VEXUS_TODO: Unknown variable source for \\"this.$route\\"
+              // VUEDC_TODO: Unknown variable source for \\"this.$route\\"
               this.$route.query;
               return hello.value + world.value;
           },
@@ -237,10 +237,10 @@ describe("convert", () => {
               hello.value = value;
           }
       });
-      // VEXUS_TODO: setter with no getter is suspicious...
+      // VUEDC_TODO: setter with no getter is suspicious...
       const bar = computed({
           set: (value) => {
-              // VEXUS_TODO: Unknown variable source for \\"this.$router\\"
+              // VUEDC_TODO: Unknown variable source for \\"this.$router\\"
               this.$router.push('');
               world.value = value;
           }
@@ -250,29 +250,29 @@ describe("convert", () => {
       // Methods
       async () => {
           await 
-          // VEXUS_TODO: Unknown variable source for \\"this.$nextTick\\"
+          // VUEDC_TODO: Unknown variable source for \\"this.$nextTick\\"
           this.$nextTick();
           return foo.value;
       };
-      // VEXUS_TODO: Encountered unsupported decorator(s): \\"@Emit\\"
+      // VUEDC_TODO: Encountered unsupported decorator(s): \\"@Emit\\"
       const handleFoo = (value) => {
-          // VEXUS_TODO: Unknown variable source for \\"this.undefinedProperty\\"
+          // VUEDC_TODO: Unknown variable source for \\"this.undefinedProperty\\"
           this.undefinedProperty = value;
           return foo.value;
       };
       console.log('created');
-      // VEXUS_TODO: Unknown variable source for \\"this.$watch\\"
+      // VUEDC_TODO: Unknown variable source for \\"this.$watch\\"
       this.$watch(foo.value, (newVal: string, oldVal = 'old') => {
-          // VEXUS_TODO: Unknown variable source for \\"this.$emit\\"
+          // VUEDC_TODO: Unknown variable source for \\"this.$emit\\"
           this.$emit('foo:changed', newVal, oldVal);
       });
       onActivated(() => {
-          // VEXUS_TODO: Unknown variable source for \\"this.$store\\"
+          // VUEDC_TODO: Unknown variable source for \\"this.$store\\"
           this.$store.dispatch('foo', foo.value);
           console.log('activated');
       });
       onErrorCaptured(() => {
-          // VEXUS_TODO: Unknown variable source for \\"this.$store\\"
+          // VUEDC_TODO: Unknown variable source for \\"this.$store\\"
           this.$store.dispatch('foo', foo.value);
           console.log('errorCaptured');
       });

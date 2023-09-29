@@ -1,8 +1,8 @@
-# Vexus
+# Vue DeClassified (VueDc)
 
 ## Convert Vue Class Components to Vue 3 script setup
 
-Vexus is an opinionated tool that will format Vue class components to script setup. Vexus is heavily influence by the great work of yoyo930021: https://github.com/yoyo930021/vc2c
+VueDc is an opinionated tool that will format Vue class components to script setup. This project a fork and re-write of yoyo930021's [vc2c](https://github.com/yoyo930021/vc2c)
 
 ### Opinionated decisions These decisions are made arbitrarily, mostly for sanity and convenience.
 
@@ -83,7 +83,7 @@ These are options provided in the decorator call, e.g., `@Component({ components
 |  functional  |       :zzz:        | If all it uses is props script setup will automatically be functional |
 |    model     | :heavy_check_mark: |                                                                       |
 | inheritAttrs | :heavy_check_mark: |                                                                       |
-|   comments   |       :zzz:        | Vexus will try to preserve comments by default                        |
+|   comments   |       :zzz:        | VueDc will try to preserve comments by default                        |
 
 #### Class
 
@@ -97,7 +97,7 @@ These are options provided in the decorator call, e.g., `@Component({ components
 | sort by dependency | :white_check_mark: | Will try to sort dependencies\*        |
 |  `$refs:! {...}`   | :white_check_mark: | converted to regular `Ref`s            |
 
-<sup>\* Vexus does it best to sort dependencies to avoid used before defined issues. It requires processing essentially a directed acyclic graph and it's complicated so please raise issues if found.</sup>
+<sup>\* VueDc does it best to sort dependencies to avoid used before defined issues. It requires processing essentially a directed acyclic graph and it's complicated so please raise issues if found.</sup>
 
 | lifecycle hooks |     supported?     | notes                                            |
 | :-------------: | :----------------: | ------------------------------------------------ |

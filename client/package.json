@@ -1,5 +1,5 @@
 {
-  "name": "@heatsrc/vexus",
+  "name": "@heatsrc/vue-declassified",
   "version": "1.0.0",
   "packageManager": "pnpm@8.7.5",
   "engines": {
@@ -24,10 +24,15 @@
     "coverage": "vitest --coverage"
   },
   "keywords": [
-    "vexus",
+    "vue-declassified",
+    "vuedc",
+    "vue-class-component",
+    "composition api",
+    "script setup",
     "vue",
     "vue 3",
-    "transform"
+    "transform",
+    "cli"
   ],
   "author": "Jared McAteer <jared.mcateer@heatsrc.com>",
   "license": "ISC",
