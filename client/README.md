@@ -42,12 +42,20 @@ These are options provided in the decorator call, e.g., `@Component({ components
 |    emits     | :heavy_check_mark: | RC Feature since Vue 3 requires declaring emits         |
 |   exposes    | :heavy_check_mark: | RC Feature since Vue 3 require declaring exposed fields |
 
+<details>
+<summary>Options-DOM :zzz:</summary>
+
 | Options-DOM | supported? | notes                                       |
 | :---------: | :--------: | ------------------------------------------- |
 |     el      |   :zzz:    | DOM Options are more suited for Options API |
 |  template   |   :zzz:    | -                                           |
 |   render    |   :zzz:    | -                                           |
 | renderError |   :zzz:    | -                                           |
+
+</details>
+
+<details>
+<summary>Options-LifeCycleHooks :zzz:</summary>
 
 | Options-LifeCycle Hooks | supported? | notes                                                |
 | :---------------------: | :--------: | ---------------------------------------------------- |
@@ -62,6 +70,8 @@ These are options provided in the decorator call, e.g., `@Component({ components
 |      beforeDestroy      |   :zzz:    | -                                                    |
 |        destroyed        |   :zzz:    | -                                                    |
 |      errorCaptured      |   :zzz:    | -                                                    |
+
+</details>
 
 | Options-Assets |     supported?     | notes                                                 |
 | :------------: | :----------------: | ----------------------------------------------------- |
