@@ -63,6 +63,7 @@ export const transformDefinables: VxTransform<
         acc.push(tupleElement);
         return acc;
       }, [] as ts.NamedTupleMember[]);
+
       const tupleLiteral = ts.factory.createTupleTypeNode(tupleArgs);
       dependency.typeProperties.push([propertyName, tupleLiteral]);
     }

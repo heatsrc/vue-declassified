@@ -74,7 +74,16 @@ describe("convert", () => {
 
     const MOUNT_EVENT = 'component:mounted';
 
-    @Component
+    @Component({
+      props: {
+        fdsa: String,
+        asdf: {
+          type: Object,
+          required: false,
+          default: () => {foo: 'bar'},
+        }
+      }
+    })
     export default class Test {
       // Properties
       world = "world";
@@ -168,12 +177,14 @@ describe("convert", () => {
       import foo from \\"foo\\";
       import { useRoute, useRouter } from \\"vue-router\\";
       import { useStore } from \\"vuex\\";
-      import { ref, nextTick, watch, onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted, onDeactivated, computed, onActivated, onErrorCaptured } from \\"vue\\";
+      import { ref, nextTick, watch, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted, computed, onBeforeMount, onActivated, onDeactivated, onErrorCaptured } from \\"vue\\";
       const MOUNT_EVENT = 'component:mounted';
-      const props = defineProps<{
-          \\"fdsa\\": unknown;
-          \\"asdf\\": unknown;
-      }>();
+      const props = withDefaults(defineProps<{
+          \\"fdsa\\": string;
+          \\"asdf\\"?: Record<string, unknown>;
+      }>(), {
+          asdf: () => { foo: \\"bar\\"; }
+      });
       const emit = defineEmits<{
           \\"foo:changed\\": [
               newVal: string,
@@ -187,19 +198,12 @@ describe("convert", () => {
       const store = useStore();
       // Properties
       const world = ref(\\"world\\");
-      // VUEDC_TODO: Encountered unsupported Decorator(s): \\"@Prop() hello!: string;\\")
-      let hello: string;
-      // VUEDC_TODO: Check for potential naming collisions from '$refs.divElement' conversion.
+      /* VUEDC_TODO: Encountered unsupported Decorator(s): \\"@Prop() hello!: string;\\")*/ let hello: string;
+      /* VUEDC_TODO: Check for potential naming collisions from '$refs.divElement' conversion.*/ 
       // Template Refs
       const divElement = ref<HTMLDivElement>();
-      // VUEDC_TODO: Check for potential naming collisions from '$refs.b' conversion.
-      const b = ref();
+      /* VUEDC_TODO: Check for potential naming collisions from '$refs.b' conversion.*/ const b = ref();
       console.log('beforeCreate');
-      onBeforeMount(() => {
-          // VUEDC_TODO: Unknown variable source for \\"this.$emit\\"
-          this.$emit(MOUNT_EVENT);
-          console.log('beforeMounted');
-      });
       onMounted(() => {
           console.log('onMounted');
       });
@@ -215,21 +219,14 @@ describe("convert", () => {
       onUnmounted(() => {
           console.log('destroyed');
       });
-      onDeactivated(() => {
-          console.log('deactivated', 
-          // VUEDC_TODO: Unknown variable source for \\"this.$props\\"
-          this.$props.asdf);
-      });
       // Accessors
       const hello = computed(() => {
-          // VUEDC_TODO: Unknown variable source for \\"this.$props\\"
-          this.$props.fdsa;
+          props.fdsa;
           return hello.value;
       });
       const foo = computed({
           get: () => {
-              // VUEDC_TODO: Unknown variable source for \\"this.$route\\"
-              this.$route.query;
+              route.query;
               return hello.value + world.value;
           },
           set: (value) => {
@@ -237,11 +234,9 @@ describe("convert", () => {
               hello.value = value;
           }
       });
-      // VUEDC_TODO: setter with no getter is suspicious...
-      const bar = computed({
+      /* VUEDC_TODO: setter with no getter is suspicious...*/ const bar = computed({
           set: (value) => {
-              // VUEDC_TODO: Unknown variable source for \\"this.$router\\"
-              this.$router.push('');
+              router.push('');
               world.value = value;
           }
       });
@@ -249,31 +244,30 @@ describe("convert", () => {
       const getFoo = 
       // Methods
       async () => {
-          await 
-          // VUEDC_TODO: Unknown variable source for \\"this.$nextTick\\"
-          this.$nextTick();
+          await /* VUEDC_TODO: Unknown variable source for \\"this.$nextTick\\"*/ this.$nextTick();
           return foo.value;
       };
-      // VUEDC_TODO: Encountered unsupported decorator(s): \\"@Emit\\"
-      const handleFoo = (value) => {
-          // VUEDC_TODO: Unknown variable source for \\"this.undefinedProperty\\"
-          this.undefinedProperty = value;
+      /* VUEDC_TODO: Encountered unsupported decorator(s): \\"@Emit\\"*/ const handleFoo = (value) => {
+          /* VUEDC_TODO: Unknown variable source for \\"this.undefinedProperty\\"*/ this.undefinedProperty = value;
           return foo.value;
       };
       console.log('created');
-      // VUEDC_TODO: Unknown variable source for \\"this.$watch\\"
-      this.$watch(foo.value, (newVal: string, oldVal = 'old') => {
-          // VUEDC_TODO: Unknown variable source for \\"this.$emit\\"
-          this.$emit('foo:changed', newVal, oldVal);
+      /* VUEDC_TODO: Unknown variable source for \\"this.$watch\\"*/ this.$watch(foo.value, (newVal: string, oldVal = 'old') => {
+          emit('foo:changed', newVal, oldVal);
+      });
+      onBeforeMount(() => {
+          emit(MOUNT_EVENT);
+          console.log('beforeMounted');
       });
       onActivated(() => {
-          // VUEDC_TODO: Unknown variable source for \\"this.$store\\"
-          this.$store.dispatch('foo', foo.value);
+          store.dispatch('foo', foo.value);
           console.log('activated');
       });
+      onDeactivated(() => {
+          console.log('deactivated', props.asdf);
+      });
       onErrorCaptured(() => {
-          // VUEDC_TODO: Unknown variable source for \\"this.$store\\"
-          this.$store.dispatch('foo', foo.value);
+          store.dispatch('foo', foo.value);
           console.log('errorCaptured');
       });
       "

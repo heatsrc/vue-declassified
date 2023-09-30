@@ -25,8 +25,8 @@ export enum VxMacro {
 }
 
 export enum VxReferenceKind {
-  /** component props */
-  PROPS,
+  DEFINABLE_METHOD,
+  DEFINABLE_VARIABLE,
   /** reactive variables that require `.value` */
   VARIABLE_VALUE,
   /** variables not requiring `.value` (may or may not be reactive) */
@@ -93,9 +93,10 @@ export interface VxResultToOptions<N = ts.Statement> extends VxResultBase {
   nodes: N[];
 }
 
-export interface VxResultToMacro<N = ts.Statement> extends VxResultBase {
+export interface VxResultToMacro<N = ts.PropertyAssignment> extends VxResultBase {
   kind: VxResultKind.MACRO;
-  typeProperties: [propId: string, type: ts.TypeNode][];
+  typeProperties: [propId: string, type: ts.TypeNode, optional?: boolean][];
+  /** Default values (only really applies to defineProps) */
   nodes: N[];
 }
 export interface VxResultToComposable<N = ts.Statement> extends VxResultBase {

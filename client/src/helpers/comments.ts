@@ -1,11 +1,8 @@
 import ts from "typescript";
 
-export function addTodoComment<T extends ts.Node>(node: T, comment: string, multiline?: boolean) {
-  const kind = multiline
-    ? ts.SyntaxKind.MultiLineCommentTrivia
-    : ts.SyntaxKind.SingleLineCommentTrivia;
+export function addTodoComment<T extends ts.Node>(node: T, comment: string) {
   const todo = ` VUEDC_TODO: ${comment}`;
-  return ts.addSyntheticLeadingComment(node, kind, todo, true);
+  return ts.addSyntheticLeadingComment(node, ts.SyntaxKind.MultiLineCommentTrivia, todo, false);
 }
 
 export function prependSyntheticComments<T extends ts.Node>(node: T, copyNode: ts.Node): T {

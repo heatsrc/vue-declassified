@@ -34,12 +34,12 @@ VueDc is an opinionated tool that will format Vue class components to script set
 These are options provided in the decorator call, e.g., `@Component({ components: { MyIcon } })`. All Options API fields are _technically_ supported in Vue Class Components (e.g., data, computed, methods, etc) but many of them don't make sense and will not be actively developed but PRs may be accepted.
 
 <details>
-<summary>Options-Data (4 :heavy_check_mark: / 3 :zzz:)</summary>
+<summary>Options-Data (1 :white_check_mark: / 3 :heavy_check_mark: / 3 :zzz:)</summary>
 
 | Options-Data |     supported?     | notes                                                   |
 | :----------: | :----------------: | ------------------------------------------------------- |
 |     data     |       :zzz:        | While you can add these what you even using VCC for?    |
-|    props     | :heavy_check_mark: |                                                         |
+|    props     | :white_check_mark: |                                                         |
 |  propsData   |       :zzz:        | This is primarily a testing feature                     |
 |   computed   |       :zzz:        | While you can add these what you even using VCC for?    |
 |    watch     | :heavy_check_mark: |                                                         |
@@ -155,25 +155,25 @@ These are options provided in the decorator call, e.g., `@Component({ components
 </details>
 
 <details>
-<summary>`this.<property>` (3 :white_check_mark: / 11 :heavy_check_mark: / 5 :boom:)</summary>
+<summary>`this.<property>` (10 :white_check_mark: / 4 :heavy_check_mark: / 5 :boom:)</summary>
 
 |    `this.`     |     supported?     | notes                                                                    |
 | :------------: | :----------------: | ------------------------------------------------------------------------ |
 | PropertyAccess | :white_check_mark: | Primitives: `Ref`, Complex: `Reactive`, Uninitialized: Regular variables |
 |    methods     | :white_check_mark: |                                                                          |
 |    `$attrs`    | :heavy_check_mark: | Via `const attrs = useAttrs()`                                           |
-|    `$data`     | :heavy_check_mark: | Treated same as data Class PropertyAssignments                           |
-|    `$emit`     | :heavy_check_mark: | Via `const emit = defineEmits<...>()`                                    |
-|  `$nextTick`   | :heavy_check_mark: | Via `import { nextTick } from 'vue';`                                    |
+|    `$data`     | :white_check_mark: | Treated same as data Class PropertyAssignments                           |
+|    `$emit`     | :white_check_mark: | Via `const emit = defineEmits<...>()`                                    |
+|  `$nextTick`   | :white_check_mark: | Via `import { nextTick } from 'vue';`                                    |
 |   `$parent`    |       :boom:       | Refactor your code. Prop/Emits or Provide/Inject<sup>\*</sup>            |
 |  `$children`   |       :boom:       | -                                                                        |
-|    `$props`    | :heavy_check_mark: | Via `const props = defineProps<...>()`                                   |
+|    `$props`    | :white_check_mark: | Via `const props = defineProps<...>()`                                   |
 |    `$refs`     | :white_check_mark: |                                                                          |
-|    `$route`    | :heavy_check_mark: | Via `const route = useRoute();`                                          |
-|   `$router`    | :heavy_check_mark: | Via `const router = useRouter();`                                        |
+|    `$route`    | :white_check_mark: | Via `const route = useRoute();`                                          |
+|   `$router`    | :white_check_mark: | Via `const router = useRouter();`                                        |
 |    `$slots`    | :heavy_check_mark: | Via `const slots = defineSlots<...>()`                                   |
 | `$scopedSlots` | :heavy_check_mark: | Via `const slots = defineSlots<...>()`                                   |
-|    `$store`    | :heavy_check_mark: | Via `const store = useStore();`                                          |
+|    `$store`    | :white_check_mark: | Via `const store = useStore();`                                          |
 |    `$watch`    | :heavy_check_mark: | Via `import { watch } from 'vue';`                                       |
 |     `$on`      |       :boom:       |                                                                          |
 |    `$once`     |       :boom:       |                                                                          |

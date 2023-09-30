@@ -1,7 +1,8 @@
+import { VxClassTransforms } from "@/types.js";
 import ts from "typescript";
-import { VxClassTransforms } from "../types.js";
+import { mergeComposables } from "./transforms/mergeComposables.js";
+import { mergeMacros } from "./transforms/mergeMacros.js";
 import { processPropertyAccessAndSort } from "./transforms/processPropertyAccessAndSort.js";
-import { mergeComposables, mergeMacros } from "./transforms/utils/instancePropertyAccess.js";
 import {
   mergeComputed,
   transformGetter,
@@ -12,12 +13,13 @@ import { transformDefinables } from "./transforms/vue-class-component/InstancePr
 import { transformLifecycleHooks } from "./transforms/vue-class-component/LifecycleHooks.js";
 import { transformMethod } from "./transforms/vue-class-component/Method.js";
 import { transformTemplateRef } from "./transforms/vue-class-component/TemplateRef.js";
+import { transformOptionsProps } from "./transforms/vue-class-component/decorator-options/Props.js";
 
 export const classTransforms: VxClassTransforms = {
   /** Primary decorate: @Options or Component */
   [ts.SyntaxKind.Decorator]: {
     /** Options object: name, props */
-    [ts.SyntaxKind.PropertyAssignment]: [],
+    [ts.SyntaxKind.PropertyAssignment]: [transformOptionsProps],
     /** Options object: data, lifecycle hooks */
     [ts.SyntaxKind.MethodDeclaration]: [],
   },

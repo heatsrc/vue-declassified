@@ -5,13 +5,11 @@ import {
 } from "@/helpers/tsHelpers.js";
 import { namedImports } from "@/helpers/utils.js";
 import {
-  VxPostProcessor,
   VxReferenceKind,
   VxResultKind,
   VxResultToComposable,
   VxResultToImport,
   VxResultToMacro,
-  VxTransformResult,
 } from "@/types.js";
 import { cloneNode } from "ts-clone-node";
 import ts from "typescript";
@@ -22,6 +20,20 @@ import ts from "typescript";
  * (e.g., `defineProps`), some with composables (e.g., `useRouter`), and some
  * are just imports from the main vue package now.
  */
+
+export const instancePropertyKeyMap = new Map([
+  ["$attrs", "attrs"],
+  ["$emit", "emit"],
+  ["$nextTick", "nextTick"],
+  ["$options", "options"],
+  ["$props", "props"],
+  ["$route", "route"],
+  ["$router", "router"],
+  ["$scopedSlots", "slots"],
+  ["$slots", "slots"],
+  ["$store", "store"],
+  ["$watch", "watch"],
+]);
 
 export const instanceDependencies = new Map([
   ["$attrs", getConversion(VxResultKind.COMPOSABLE, "attrs", "useAttrs", "vue")],
@@ -84,7 +96,7 @@ function getConversion(
       tag: `Composable-${callExpression}`,
       imports: namedImports([callExpression], importModule),
       outputVariables: [varName],
-      reference: VxReferenceKind.VARIABLE,
+      reference: VxReferenceKind.DEFINABLE_VARIABLE,
       nodes: [getComposableNode(varName!, callExpression)],
       typeProperties: [],
     } as VxResultToComposable;
@@ -95,7 +107,7 @@ function getConversion(
       tag: `Macro-${callExpression}`,
       imports: [],
       outputVariables: [varName],
-      reference: VxReferenceKind.VARIABLE,
+      reference: VxReferenceKind.DEFINABLE_VARIABLE,
       nodes: [],
       typeProperties: [],
     } as VxResultToMacro;
@@ -105,7 +117,7 @@ function getConversion(
     tag: `Import-${callExpression}`,
     imports: namedImports([callExpression], importModule),
     outputVariables: [callExpression],
-    reference: VxReferenceKind.NONE,
+    reference: VxReferenceKind.DEFINABLE_METHOD,
     nodes: [],
   } as VxResultToImport;
 }
@@ -114,85 +126,4 @@ function getComposableNode(varName: string, callExprName: string) {
   const callExpr = createCallExpression(callExprName);
   const constStatement = createConstStatement(varName, callExpr);
   return constStatement;
-}
-
-export const mergeComposables: VxPostProcessor = (results, program) => {
-  const composableResults = results.filter((d): d is VxResultToComposable<ts.Expression> => {
-    return !!d && d.kind === VxResultKind.COMPOSABLE;
-  });
-  const otherResults = results.filter((d): d is VxResultToComposable<ts.Expression> => {
-    return !!d && d.kind !== VxResultKind.COMPOSABLE;
-  });
-
-  let composableSet = new Set<string>();
-  const composables = composableResults.reduce((acc, composable) => {
-    if (composableSet.has(composable.tag)) return acc;
-    composableSet.add(composable.tag);
-    acc.push(composable);
-    return acc;
-  }, [] as VxTransformResult<ts.Node>[]);
-  return [...composables, ...otherResults];
-};
-export const mergeMacros: VxPostProcessor = (results, program) => {
-  const macroResults = results.filter(
-    (d): d is VxResultToMacro<ts.Expression> => !!d && d.kind === VxResultKind.MACRO,
-  );
-  const otherResults = results.filter(
-    (d): d is VxResultToMacro<ts.Expression> => !!d && d.kind !== VxResultKind.MACRO,
-  );
-
-  const macros = mergeMacroResults(macroResults);
-
-  return [...macros, ...otherResults];
-};
-
-function mergeMacroResults(macroResults: VxResultToMacro<ts.Expression>[]) {
-  const macrosByTag = macroResults.reduce((acc, macro) => {
-    if (!acc.get(macro.tag)) acc.set(macro.tag, []);
-    const existing = acc.get(macro.tag)!;
-    existing.push(macro);
-    return acc;
-  }, new Map<string, VxResultToMacro<ts.Expression>[]>());
-
-  const macroStatements: VxTransformResult<ts.VariableStatement>[] = [];
-
-  macrosByTag.forEach((macros, key) => {
-    const macroName = key.split("-")[1];
-    const varName = macros[0].outputVariables[0];
-
-    const mergedProperties = macros
-      .flatMap((m) => m.typeProperties)
-      .reduce((acc, [k, v]) => {
-        if (!acc.has(k)) {
-          acc.set(k, v);
-          return acc;
-        }
-        const existing = acc.get(k)!;
-        if (existing.kind === ts.SyntaxKind.UndefinedKeyword) acc.set(k, v);
-        return acc;
-      }, new Map<string, ts.TypeNode>());
-
-    const TypeElements = [...mergedProperties].map(([p, v]) => {
-      const prop = ts.factory.createStringLiteral(p);
-      return ts.factory.createPropertySignature(undefined, prop, undefined, v);
-    });
-    const TypeLiteral = ts.factory.createTypeLiteralNode(TypeElements);
-    const callExpr = createCallExpression(macroName, TypeLiteral);
-    const constStatement = createConstStatement(varName, callExpr);
-    macroStatements.push(macroResult(varName, constStatement));
-  });
-
-  return macroStatements;
-}
-
-function macroResult(variableName: string, node: ts.VariableStatement) {
-  return {
-    tag: "Macro",
-    kind: VxResultKind.MACRO,
-    imports: [],
-    reference: VxReferenceKind.VARIABLE,
-    outputVariables: [variableName],
-    nodes: [node],
-    typeProperties: [],
-  } as VxResultToMacro<ts.VariableStatement>;
 }

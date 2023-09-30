@@ -3,6 +3,7 @@ import { createIdentifier, createPropertyAccess } from "@/helpers/tsHelpers.js";
 import { VxPostProcessor, VxReferenceKind, VxResultToImport, VxTransformResult } from "@/types.js";
 import { cloneNode } from "ts-clone-node";
 import ts from "typescript";
+import { instancePropertyKeyMap } from "./utils/instancePropertyAccess.js";
 
 type TransformerResult = {
   readonly astResult: Exclude<VxTransformResult<ts.Node>, VxResultToImport>;
@@ -39,13 +40,16 @@ function getVariableHandlers(astResults: VxTransformResult<ts.Node>[]) {
   };
 
   const refVariables = getReferences(VxReferenceKind.VARIABLE_VALUE);
-  const propsVariables = getReferences(VxReferenceKind.PROPS);
   const variables = getReferences(VxReferenceKind.VARIABLE);
+  const definableVariable = getReferences(VxReferenceKind.DEFINABLE_VARIABLE);
+  const definableMethods = getReferences(VxReferenceKind.DEFINABLE_METHOD);
 
   return (name: string, node: ts.Node) => {
     if (refVariables.includes(name)) return [createPropertyAccess(name, "value"), true] as const;
-    if (propsVariables.includes(name)) return [createPropertyAccess("props", name), true] as const;
     if (variables.includes(name)) return [createIdentifier(name), true] as const;
+
+    const instanceProperty = transformInstanceProperties(name, definableVariable, definableMethods);
+    if (instanceProperty) return instanceProperty;
 
     // cloneNode cleanly copies the node and removes any references to the parent
     // without this comments don't properly get copied over
@@ -53,6 +57,25 @@ function getVariableHandlers(astResults: VxTransformResult<ts.Node>[]) {
     const comment = `Unknown variable source for "this.${name}"`;
     return [addTodoComment(clonedNode, comment), false] as const;
   };
+}
+
+function transformInstanceProperties(name: string, variables: string[], methods: string[]) {
+  const key = instancePropertyKeyMap.get(name);
+  if (!key) return false;
+
+  if (variables.includes(key)) {
+    const key = instancePropertyKeyMap.get(name);
+    if (!key) throw new Error(`No key found for definable "${name}"`);
+    return [createIdentifier(key), true] as const;
+  }
+
+  if (methods.includes(name)) {
+    const key = instancePropertyKeyMap.get(name);
+    if (!key) throw new Error(`No key found for definable "${name}"`);
+    return [createIdentifier(key), true] as const;
+  }
+
+  return false;
 }
 
 function getTransformer(variableHandlers: VariableHandlers, dependents: string[]) {
