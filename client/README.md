@@ -25,7 +25,6 @@ VueDc is an opinionated tool that will format Vue class components to script set
 | :heavy_check_mark: | Not currently being supported but being worked on                 |
 |       :zzz:        | Support is not prioritized                                        |
 |       :boom:       | No transform path to script setup (breaking change in Vue 2 -> 3) |
-|      (#/#/#)       | Supported / Will Support / Skipped                                |
 
 ### vue-class-component
 
