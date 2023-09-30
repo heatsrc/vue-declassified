@@ -25,12 +25,16 @@ VueDc is an opinionated tool that will format Vue class components to script set
 | :heavy_check_mark: | Not currently being supported but being worked on                 |
 |       :zzz:        | Support is not prioritized                                        |
 |       :boom:       | No transform path to script setup (breaking change in Vue 2 -> 3) |
+|      (#/#/#)       | Supported / Will Support / Skipped                                |
 
 ### vue-class-component
 
 #### `@Component` / `@Options` (v8.0.0-rc.1)
 
 These are options provided in the decorator call, e.g., `@Component({ components: { MyIcon } })`. All Options API fields are _technically_ supported in Vue Class Components (e.g., data, computed, methods, etc) but many of them don't make sense and will not be actively developed but PRs may be accepted.
+
+<details>
+<summary>Options-Data (4 :heavy_check_mark: / 3 :zzz:)</summary>
 
 | Options-Data |     supported?     | notes                                                   |
 | :----------: | :----------------: | ------------------------------------------------------- |
@@ -42,8 +46,10 @@ These are options provided in the decorator call, e.g., `@Component({ components
 |    emits     | :heavy_check_mark: | RC Feature since Vue 3 requires declaring emits         |
 |   exposes    | :heavy_check_mark: | RC Feature since Vue 3 require declaring exposed fields |
 
+</details>
+
 <details>
-<summary>Options-DOM :zzz:</summary>
+<summary>Options-DOM (4/4 :zzz:)</summary>
 
 | Options-DOM | supported? | notes                                       |
 | :---------: | :--------: | ------------------------------------------- |
@@ -55,7 +61,7 @@ These are options provided in the decorator call, e.g., `@Component({ components
 </details>
 
 <details>
-<summary>Options-LifeCycleHooks :zzz:</summary>
+<summary>Options-LifeCycleHooks (11/11 :zzz:)</summary>
 
 | Options-LifeCycle Hooks | supported? | notes                                                |
 | :---------------------: | :--------: | ---------------------------------------------------- |
@@ -73,11 +79,19 @@ These are options provided in the decorator call, e.g., `@Component({ components
 
 </details>
 
+<details>
+<summary>Options-Assets (2 :heavy_check_mark: / 1 :zzz:)</summary>
+
 | Options-Assets |     supported?     | notes                                                 |
 | :------------: | :----------------: | ----------------------------------------------------- |
 |   directives   | :heavy_check_mark: |                                                       |
 |    filters     | :heavy_check_mark: | Will be converted to simple methods                   |
 |   components   |       :zzz:        | If you chance the name of your imports this may break |
+
+</details>
+
+<details>
+<summary>Options-Composition (1 :heavy_check_mark: / 3 :zzz:)</summary>
 
 | Options-Composition |     supported?     | notes                                                    |
 | :-----------------: | :----------------: | -------------------------------------------------------- |
@@ -85,6 +99,11 @@ These are options provided in the decorator call, e.g., `@Component({ components
 |       mixins        |       :zzz:        | While you can add these what are you even using VCC for? |
 |       extends       |       :zzz:        | -                                                        |
 |   provide/inject    | :heavy_check_mark: |                                                          |
+
+</details>
+
+<details>
+<summary>Options-Misc (2 :heavy_check_mark: / 4 :zzz:)</summary>
 
 | Options-Misc |     supported?     | notes                                                                 |
 | :----------: | :----------------: | --------------------------------------------------------------------- |
@@ -95,7 +114,12 @@ These are options provided in the decorator call, e.g., `@Component({ components
 | inheritAttrs | :heavy_check_mark: |                                                                       |
 |   comments   |       :zzz:        | VueDc will try to preserve comments by default                        |
 
+</details>
+
 #### Class
+
+<details>
+<summary>Basic class transforms (5 :white_check_mark: / 2 :heavy_check_mark:)</summary>
 
 |      feature       |     supported?     | notes                                  |
 | :----------------: | :----------------: | -------------------------------------- |
@@ -108,6 +132,11 @@ These are options provided in the decorator call, e.g., `@Component({ components
 |  `$refs:! {...}`   | :white_check_mark: | converted to regular `Ref`s            |
 
 <sup>\* VueDc does it best to sort dependencies to avoid used before defined issues. It requires processing essentially a directed acyclic graph and it's complicated so please raise issues if found.</sup>
+
+</details>
+
+<details>
+<summary>Lifecycle Hooks (11/11 :white_check_mark:) :rocket:</summary>
 
 | lifecycle hooks |     supported?     | notes                                            |
 | :-------------: | :----------------: | ------------------------------------------------ |
@@ -122,6 +151,11 @@ These are options provided in the decorator call, e.g., `@Component({ components
 |  beforeDestroy  | :white_check_mark: | `onBeforeDestroy`                                |
 |    destroyed    | :white_check_mark: | `onDestroy`                                      |
 |  errorCaptured  | :white_check_mark: | `onErrorCaptured`                                |
+
+</details>
+
+<details>
+<summary>`this.<property>` (3 :white_check_mark: / 11 :heavy_check_mark: / 5 :boom:)</summary>
 
 |    `this.`     |     supported?     | notes                                                                    |
 | :------------: | :----------------: | ------------------------------------------------------------------------ |
@@ -147,7 +181,12 @@ These are options provided in the decorator call, e.g., `@Component({ components
 
 <sup>\* <a href="https://stackoverflow.com/questions/50942544/emit-event-from-content-in-slot-to-parent">Strategies to handle tightly coupled children in slots</a></sup>
 
+</details>
+
 ### vue-property-decorator
+
+<details>
+<summary>`Decorators` (9 :heavy_check_mark: / 1 :zzz:)</summary>
 
 |     decorator      |     supported?     | notes |
 | :----------------: | :----------------: | ----- |
@@ -162,7 +201,12 @@ These are options provided in the decorator call, e.g., `@Component({ components
 |      `@Emit`       | :heavy_check_mark: |       |
 |       `@Ref`       | :heavy_check_mark: |       |
 
+</details>
+
 ### vuex-class
+
+<details>
+<summary>`Decorators` (8/8 :heavy_check_mark:)</summary>
 
 |   decorator    |     supported?     | notes |
 | :------------: | :----------------: | ----- |
@@ -174,3 +218,5 @@ These are options provided in the decorator call, e.g., `@Component({ components
 |  `@Ns.Getter`  | :heavy_check_mark: |       |
 | `@Ns.Mutation` | :heavy_check_mark: |       |
 |  `@Ns.State`   | :heavy_check_mark: |       |
+
+</details>
