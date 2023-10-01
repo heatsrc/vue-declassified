@@ -92,6 +92,8 @@ describe("convert", () => {
           handler: 'handleFoo',
           deep: true,
         }, 'getFoo'],
+      },
+      expose: ['b', 'foo', 'world'],
 
     })
     export default class Test {
@@ -290,6 +292,7 @@ describe("convert", () => {
       });
       watch(() => c?.d?.e, handleFoo, { deep: true });
       watch(() => c?.d?.e, getFoo);
+      defineExpose({ b, foo, world });
       "
     `);
   });

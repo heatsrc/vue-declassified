@@ -30,7 +30,7 @@ export const transformOptionsWatch: VxTransform<ts.PropertyAssignment> = (watchO
     shouldContinue: false,
     result: {
       kind: VxResultKind.COMPOSITION,
-      tag: `Watch`,
+      tag: `SortLast:90:Watch`,
       imports: namedImports(["watch"]),
       outputVariables: [],
       reference: VxReferenceKind.NONE,

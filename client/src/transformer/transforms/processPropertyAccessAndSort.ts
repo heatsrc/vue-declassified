@@ -106,20 +106,23 @@ function getTransformer(variableHandlers: VariableHandlers, dependents: string[]
  * @returns ordered results
  */
 function orderByDependencies(transformerResults: TransformerResult[], numberOfNodes: number) {
-  const isWatch = (r: TransformerResult) => r.astResult.tag === "Watch";
+  const sortLast = (r: TransformerResult) => r.astResult.tag.startsWith("SortLast");
   const resultsWithNoDependencies = transformerResults
     .filter((r) => r.dependsOn.length === 0)
-    .filter((r) => !isWatch(r))
+    .filter((r) => !sortLast(r))
     .map((r) => r.astResult);
   const registeredDependencies = resultsWithNoDependencies.flatMap((r) => r.outputVariables);
   // WatchSources are special and make it hard to track dependencies depending
   // if it's just a Ref<T>, function or array of values so we'll just dump them
   // at the end where it is safe
-  const watchResults = transformerResults.filter((r) => isWatch(r)).map((r) => r.astResult);
+  const lastResults = transformerResults
+    .filter((r) => sortLast(r))
+    .map((r) => r.astResult)
+    .sort((a, b) => b.tag.split(":")[1].localeCompare(a.tag.split(":")[1]));
 
   let otherResults = transformerResults
     .filter((r) => r.dependsOn.length !== 0)
-    .filter((r) => !isWatch(r));
+    .filter((r) => !sortLast(r));
 
   let result: VxTransformResult<ts.Node>[] = [...resultsWithNoDependencies];
 
@@ -151,7 +154,7 @@ function orderByDependencies(transformerResults: TransformerResult[], numberOfNo
     }
   } while (result.length < numberOfNodes);
 
-  result = result.concat(watchResults);
+  result = result.concat(lastResults);
 
   return result;
 }
