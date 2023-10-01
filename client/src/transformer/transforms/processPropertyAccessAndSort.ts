@@ -106,12 +106,21 @@ function getTransformer(variableHandlers: VariableHandlers, dependents: string[]
  * @returns ordered results
  */
 function orderByDependencies(transformerResults: TransformerResult[], numberOfNodes: number) {
+  const isWatch = (r: TransformerResult) => r.astResult.tag === "Watch";
   const resultsWithNoDependencies = transformerResults
     .filter((r) => r.dependsOn.length === 0)
+    .filter((r) => !isWatch(r))
     .map((r) => r.astResult);
   const registeredDependencies = resultsWithNoDependencies.flatMap((r) => r.outputVariables);
+  // WatchSources are special and make it hard to track dependencies depending
+  // if it's just a Ref<T>, function or array of values so we'll just dump them
+  // at the end where it is safe
+  const watchResults = transformerResults.filter((r) => isWatch(r)).map((r) => r.astResult);
 
-  let otherResults = transformerResults.filter((r) => r.dependsOn.length !== 0);
+  let otherResults = transformerResults
+    .filter((r) => r.dependsOn.length !== 0)
+    .filter((r) => !isWatch(r));
+
   let result: VxTransformResult<ts.Node>[] = [...resultsWithNoDependencies];
 
   // Each iteration, loop through the remaining "other" results and add any that
@@ -141,6 +150,8 @@ function orderByDependencies(transformerResults: TransformerResult[], numberOfNo
       break;
     }
   } while (result.length < numberOfNodes);
+
+  result = result.concat(watchResults);
 
   return result;
 }

@@ -82,11 +82,23 @@ describe("convert", () => {
           required: false,
           default: () => {foo: 'bar'},
         }
-      }
+      },
+      watch: {
+        world: (val, oldVal) => { this.$emit('foo:changed', val, oldVal) },
+        b: function (val, oldVal) {
+          console.log('new: %s, old: %s', val, oldVal);
+        },
+        'c.d.e': [{
+          handler: 'handleFoo',
+          deep: true,
+        }, 'getFoo'],
+
     })
     export default class Test {
       // Properties
       world = "world";
+      b = "b";
+      c = { d: { e: "f" } };
       @Prop() hello!: string;
 
       // Accessors
@@ -177,7 +189,7 @@ describe("convert", () => {
       import foo from \\"foo\\";
       import { useRoute, useRouter } from \\"vue-router\\";
       import { useStore } from \\"vuex\\";
-      import { ref, nextTick, watch, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted, computed, onBeforeMount, onActivated, onDeactivated, onErrorCaptured } from \\"vue\\";
+      import { ref, reactive, nextTick, watch, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted, computed, onBeforeMount, onActivated, onDeactivated, onErrorCaptured } from \\"vue\\";
       const MOUNT_EVENT = 'component:mounted';
       const props = withDefaults(defineProps<{
           \\"fdsa\\": string;
@@ -198,6 +210,8 @@ describe("convert", () => {
       const store = useStore();
       // Properties
       const world = ref(\\"world\\");
+      const b = ref(\\"b\\");
+      const c = reactive({ d: { e: \\"f\\" } });
       /* VUEDC_TODO: Encountered unsupported Decorator(s): \\"@Prop() hello!: string;\\")*/ let hello: string;
       /* VUEDC_TODO: Check for potential naming collisions from '$refs.divElement' conversion.*/ 
       // Template Refs
@@ -270,6 +284,12 @@ describe("convert", () => {
           store.dispatch('foo', foo.value);
           console.log('errorCaptured');
       });
+      watch(world, (val, oldVal) => { emit('foo:changed', val, oldVal); });
+      watch(b, function (val, oldVal) {
+          console.log('new: %s, old: %s', val, oldVal);
+      });
+      watch(() => c?.d?.e, handleFoo, { deep: true });
+      watch(() => c?.d?.e, getFoo);
       "
     `);
   });

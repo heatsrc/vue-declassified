@@ -14,12 +14,13 @@ import { transformLifecycleHooks } from "./transforms/vue-class-component/Lifecy
 import { transformMethod } from "./transforms/vue-class-component/Method.js";
 import { transformTemplateRef } from "./transforms/vue-class-component/TemplateRef.js";
 import { transformOptionsProps } from "./transforms/vue-class-component/decorator-options/Props.js";
+import { transformOptionsWatch } from "./transforms/vue-class-component/decorator-options/Watch.js";
 
 export const classTransforms: VxClassTransforms = {
   /** Primary decorate: @Options or Component */
   [ts.SyntaxKind.Decorator]: {
     /** Options object: name, props */
-    [ts.SyntaxKind.PropertyAssignment]: [transformOptionsProps],
+    [ts.SyntaxKind.PropertyAssignment]: [transformOptionsProps, transformOptionsWatch],
     /** Options object: data, lifecycle hooks */
     [ts.SyntaxKind.MethodDeclaration]: [],
   },

@@ -169,3 +169,10 @@ function createVariableStatement(
     ),
   );
 }
+export function isFunctionExpressionLike(
+  node: ts.Node,
+): node is ts.FunctionExpression | ts.ArrowFunction {
+  return (
+    node.kind === ts.SyntaxKind.FunctionExpression || node.kind === ts.SyntaxKind.ArrowFunction
+  );
+}

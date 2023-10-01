@@ -33,7 +33,7 @@ VueDc is an opinionated tool that will format Vue class components to script set
 These are options provided in the decorator call, e.g., `@Component({ components: { MyIcon } })`. All Options API fields are _technically_ supported in Vue Class Components (e.g., data, computed, methods, etc) but many of them don't make sense and will not be actively developed but PRs may be accepted.
 
 <details>
-<summary>Options-Data (1 :white_check_mark: / 3 :heavy_check_mark: / 3 :zzz:)</summary>
+<summary>Options-Data (2 :white_check_mark: / 2 :heavy_check_mark: / 3 :zzz:)</summary>
 
 | Options-Data |     supported?     | notes                                                   |
 | :----------: | :----------------: | ------------------------------------------------------- |
@@ -41,7 +41,7 @@ These are options provided in the decorator call, e.g., `@Component({ components
 |    props     | :white_check_mark: |                                                         |
 |  propsData   |       :zzz:        | This is primarily a testing feature                     |
 |   computed   |       :zzz:        | While you can add these what you even using VCC for?    |
-|    watch     | :heavy_check_mark: |                                                         |
+|    watch     | :white_check_mark: |                                                         |
 |    emits     | :heavy_check_mark: | RC Feature since Vue 3 requires declaring emits         |
 |   exposes    | :heavy_check_mark: | RC Feature since Vue 3 require declaring exposed fields |
 
