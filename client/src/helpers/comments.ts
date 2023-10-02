@@ -20,6 +20,16 @@ export function prependSyntheticComments<T extends ts.Node>(node: T, copyNode: t
   return node;
 }
 
+/**
+ * Copy leading and trailing comments associated with the copy node.
+ *
+ * ! Note: it's probably a good idea to copy these comments before adding any
+ *         others like todos, otherwise these commends will appear below those
+ *         (and possibly strip them.)
+ * @param node
+ * @param copyNode
+ * @returns
+ */
 export function copySyntheticComments<T extends ts.Node>(node: T, copyNode: ts.Node): T {
   const fullText = copyNode.getSourceFile().getFullText();
   const leadingComments = getLeadingComments(fullText, copyNode.pos);

@@ -15,7 +15,7 @@ import { transformMethod } from "./transforms/vue-class-component/Method.js";
 import { transformTemplateRef } from "./transforms/vue-class-component/TemplateRef.js";
 import { transformOptionsExpose } from "./transforms/vue-class-component/decorator-options/Expose.js";
 import { transformOptionsProps } from "./transforms/vue-class-component/decorator-options/Props.js";
-import { transformOptionsWatch } from "./transforms/vue-class-component/decorator-options/Watch.js";
+import { transformOptionsWatch } from "./transforms/vue-class-component/decorator-options/Watches.js";
 import { transformPropDecorator } from "./transforms/vue-property-decorator/Prop.js";
 
 export const classTransforms: VxClassTransforms = {

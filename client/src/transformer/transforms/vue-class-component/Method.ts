@@ -16,8 +16,10 @@ import ts from "typescript";
  */
 export const transformMethod: VxTransform<ts.MethodDeclaration> = (node, program) => {
   const methodName = node.name.getText();
-  const outputMethod = createArrowFunction(node);
+  const outputMethod = createArrowFunction(node, undefined, true);
   let methodConstStatement = createConstStatement(methodName, outputMethod);
+
+  copySyntheticComments(methodConstStatement, node);
 
   const decorators = getDecoratorNames(node);
   if (decorators.length > 0) {
@@ -26,8 +28,6 @@ export const transformMethod: VxTransform<ts.MethodDeclaration> = (node, program
       `Encountered unsupported decorator(s): ${decorators.map((d) => `"@${d}"`).join(", ")}`,
     );
   }
-
-  methodConstStatement = copySyntheticComments(methodConstStatement, node);
 
   return {
     shouldContinue: false,

@@ -38,7 +38,7 @@ export const transformData: VxTransform<ts.PropertyDeclaration> = (node, program
     const callExpr = createCallExpression(callName, node.type, [removeComments(node.initializer)]);
     variableAssignment = createConstStatement(variableName, callExpr);
   }
-
+  copySyntheticComments(variableAssignment, node);
   // If we got here and there are decorators, it means we couldn't transform
   // this node, we need to add a todo comment
   const decorators = getDecoratorNames(node);
@@ -57,7 +57,7 @@ export const transformData: VxTransform<ts.PropertyDeclaration> = (node, program
       imports: callName ? namedImports([callName]) : [],
       reference: isRef ? VxReferenceKind.VARIABLE_VALUE : VxReferenceKind.VARIABLE,
       outputVariables: [variableName],
-      nodes: [copySyntheticComments(variableAssignment, node)],
+      nodes: [variableAssignment],
     },
   };
 };

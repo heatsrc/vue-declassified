@@ -65,10 +65,12 @@ function getVarStatement(signature: ts.PropertySignature) {
   const callExpr = createCallExpression("ref", refType, undefined);
   let refConstStatement = createConstStatement(name, callExpr);
 
+  copySyntheticComments(refConstStatement, signature);
+
   refConstStatement = addTodoComment(
     refConstStatement,
     `Check for potential naming collisions from '$refs.${name}' conversion.`,
   );
 
-  return [name, copySyntheticComments(refConstStatement, signature)] as const;
+  return [name, refConstStatement] as const;
 }

@@ -98,6 +98,7 @@ describe("convert", () => {
     })
     export default class Test {
       // Properties
+      @Getter() myGetter: string;
       world = "world";
       b = "b";
       c = { d: { e: "f" } };
@@ -126,7 +127,8 @@ describe("convert", () => {
       }
 
       // Methods
-      async getFoo() {
+      @Watch('foo')
+      getFoo() {
         await this.$nextTick();
         return this.foo;
       }
@@ -218,6 +220,7 @@ describe("convert", () => {
       const router = useRouter();
       const store = useStore();
       // Properties
+      /* VUEDC_TODO: Encountered unsupported Decorator(s): \\"@Getter() myGetter: string;\\")*/ let myGetter: string;
       const world = ref(\\"world\\");
       const b = ref(\\"b\\");
       const c = reactive({ d: { e: \\"f\\" } });
@@ -263,9 +266,7 @@ describe("convert", () => {
           }
       });
       // Methods
-      const getFoo = 
-      // Methods
-      async () => {
+      /* VUEDC_TODO: Encountered unsupported decorator(s): \\"@Watch\\"*/ const getFoo = () => {
           await /* VUEDC_TODO: Unknown variable source for \\"this.$nextTick\\"*/ this.$nextTick();
           return foo.value;
       };
