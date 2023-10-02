@@ -266,7 +266,7 @@ describe("convert", () => {
           }
       });
       // Methods
-      /* VUEDC_TODO: Encountered unsupported decorator(s): \\"@Watch\\"*/ const getFoo = () => {
+      const getFoo = () => {
           await /* VUEDC_TODO: Unknown variable source for \\"this.$nextTick\\"*/ this.$nextTick();
           return foo.value;
       };
@@ -299,6 +299,7 @@ describe("convert", () => {
       });
       watch(() => c?.d?.e, handleFoo, { deep: true });
       watch(() => c?.d?.e, getFoo);
+      watch(foo, getFoo);
       defineExpose({ b, foo, world });
       "
     `);

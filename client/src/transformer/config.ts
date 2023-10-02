@@ -17,6 +17,7 @@ import { transformOptionsExpose } from "./transforms/vue-class-component/decorat
 import { transformOptionsProps } from "./transforms/vue-class-component/decorator-options/Props.js";
 import { transformOptionsWatch } from "./transforms/vue-class-component/decorator-options/Watches.js";
 import { transformPropDecorator } from "./transforms/vue-property-decorator/Prop.js";
+import { transformWatchDecorator } from "./transforms/vue-property-decorator/Watch.js";
 
 export const classTransforms: VxClassTransforms = {
   /** Primary decorate: @Options or Component */
@@ -50,6 +51,7 @@ export const classTransforms: VxClassTransforms = {
   [ts.SyntaxKind.MethodDeclaration]: [
     transformDefinables,
     transformLifecycleHooks,
+    transformWatchDecorator,
     transformMethod,
   ],
   /** Post processing transforms */

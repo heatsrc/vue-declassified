@@ -188,7 +188,7 @@ These are options provided in the decorator call, e.g., `@Component({ components
 |      `@Prop`       | :white_check_mark: |       |
 |    `@PropSync`     |       :zzz:        |       |
 |      `@Model`      | :heavy_check_mark: |       |
-|      `@Watch`      | :heavy_check_mark: |       |
+|      `@Watch`      | :white_check_mark: |       |
 |     `@Provide`     | :heavy_check_mark: |       |
 |     `@Inject`      | :heavy_check_mark: |       |
 | `@ProvideReactive` | :heavy_check_mark: |       |

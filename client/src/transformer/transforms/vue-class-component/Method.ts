@@ -4,6 +4,7 @@ import {
   createConstStatement,
   getDecoratorNames,
 } from "@/helpers/tsHelpers.js";
+import { isDecoratorRegistered } from "@/transformer/registry.js";
 import { VxReferenceKind, VxResultKind, VxTransform } from "@/types.js";
 import ts from "typescript";
 
@@ -21,8 +22,9 @@ export const transformMethod: VxTransform<ts.MethodDeclaration> = (node, program
 
   copySyntheticComments(methodConstStatement, node);
 
+  /** Some decorators may fall through like @Watch don't want to warn on that */
   const decorators = getDecoratorNames(node);
-  if (decorators.length > 0) {
+  if (!decorators.every((d) => isDecoratorRegistered(d))) {
     methodConstStatement = addTodoComment(
       methodConstStatement,
       `Encountered unsupported decorator(s): ${decorators.map((d) => `"@${d}"`).join(", ")}`,

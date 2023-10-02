@@ -1,4 +1,5 @@
-import { getDecorator } from "@/helpers/tsHelpers.js";
+import { getDecorators } from "@/helpers/tsHelpers.js";
+import { registerDecorator } from "@/transformer/registry.js";
 import { VxReferenceKind, VxResultKind, VxResultToMacro, VxTransform } from "@/types.js";
 import { cloneNode } from "ts-clone-node";
 import ts from "typescript";
@@ -11,10 +12,15 @@ export const transformPropDecorator: VxTransform<ts.PropertyDeclaration> = (prop
   if (!ts.isPropertyDeclaration(prop)) return { shouldContinue: true };
 
   const propName = prop.name.getText();
-  const decorator = getDecorator(prop, DECORATOR);
+  const decorators = getDecorators(prop, DECORATOR);
 
-  if (!decorator) return { shouldContinue: true };
+  if (!decorators || decorators.length <= 0) return { shouldContinue: true };
+  if (decorators.length > 1)
+    throw new Error(`[vue-property-decorator] Duplicate @${DECORATOR} decorators for ${propName}`);
 
+  registerDecorator(DECORATOR);
+
+  const decorator = decorators[0];
   const propType = prop.type ? cloneNode(prop.type) : undefined;
 
   let decoratorArg: ts.Expression | undefined;

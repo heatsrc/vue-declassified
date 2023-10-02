@@ -67,7 +67,7 @@ export function convertInitializerToWatchHandlers(initializer: ts.Expression, re
  * @param watchHandlers
  * @returns
  */
-export function getOptionWatchCalls(watchSource: WatchSource, watchHandlers: WatchHandler[]) {
+export function getWatchCalls(watchSource: WatchSource, watchHandlers: WatchHandler[]) {
   let source: Exclude<typeof watchSource, string>;
   if (typeof watchSource !== "string") {
     source = watchSource;

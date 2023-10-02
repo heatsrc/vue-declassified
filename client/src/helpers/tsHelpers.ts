@@ -13,11 +13,11 @@ export function getDecoratorNames(node: ts.Node) {
   );
 }
 
-export function getDecorator(node: ts.Node, name: string) {
+export function getDecorators(node: ts.Node, name: string) {
   if (!ts.canHaveDecorators(node)) return undefined;
 
   const decorators = ts.getDecorators(node) ?? [];
-  return decorators.find((decorator) =>
+  return decorators.filter((decorator) =>
     ts.isCallExpression(decorator.expression)
       ? decorator.expression.expression.getText() === name
       : decorator.expression.getText() === name,

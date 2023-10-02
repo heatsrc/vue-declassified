@@ -1,7 +1,7 @@
 import { namedImports } from "@/helpers/utils.js";
 import {
   convertInitializerToWatchHandlers,
-  getOptionWatchCalls,
+  getWatchCalls,
 } from "@/transformer/transforms/utils/getWatchCall.js";
 import { VxReferenceKind, VxResultKind, VxTransform } from "@/types.js";
 import ts from "typescript";
@@ -20,7 +20,7 @@ export const transformOptionsWatch: VxTransform<ts.PropertyAssignment> = (watchO
     let watchSource = prop.name.getText();
     if (ts.isStringLiteral(prop.name)) watchSource = prop.name.text;
     const watchHandlers = convertInitializerToWatchHandlers(prop.initializer);
-    const watchCalls = getOptionWatchCalls(watchSource, watchHandlers);
+    const watchCalls = getWatchCalls(watchSource, watchHandlers);
 
     acc.push(...watchCalls);
     return acc;
