@@ -181,7 +181,7 @@ These are options provided in the decorator call, e.g., `@Component({ components
 ### vue-property-decorator
 
 <details>
-<summary>`Decorators` (1 :white_check_mark: 8 :heavy_check_mark: / 1 :zzz:)</summary>
+<summary>`Decorators` (2 :white_check_mark: 7 :heavy_check_mark: / 1 :zzz:)</summary>
 
 |     decorator      |     supported?     | notes |
 | :----------------: | :----------------: | ----- |
