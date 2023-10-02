@@ -102,6 +102,8 @@ describe("convert", () => {
       b = "b";
       c = { d: { e: "f" } };
       @Prop() hello!: string;
+      @Prop({ type: Boolean, default: false, required: false }) propA: boolean;
+      @Prop({ type: [Number, String], default: 0 }) propB;
 
       // Accessors
       get hello() {
@@ -196,8 +198,13 @@ describe("convert", () => {
       const props = withDefaults(defineProps<{
           \\"fdsa\\": string;
           \\"asdf\\"?: Record<string, unknown>;
+          \\"hello\\": string;
+          \\"propA\\"?: boolean;
+          \\"propB\\": number | string;
       }>(), {
-          asdf: () => { foo: \\"bar\\"; }
+          asdf: () => { foo: \\"bar\\"; },
+          propA: false,
+          propB: 0
       });
       const emit = defineEmits<{
           \\"foo:changed\\": [
@@ -214,7 +221,6 @@ describe("convert", () => {
       const world = ref(\\"world\\");
       const b = ref(\\"b\\");
       const c = reactive({ d: { e: \\"f\\" } });
-      /* VUEDC_TODO: Encountered unsupported Decorator(s): \\"@Prop() hello!: string;\\")*/ let hello: string;
       /* VUEDC_TODO: Check for potential naming collisions from '$refs.divElement' conversion.*/ 
       // Template Refs
       const divElement = ref<HTMLDivElement>();

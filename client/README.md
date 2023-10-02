@@ -181,11 +181,11 @@ These are options provided in the decorator call, e.g., `@Component({ components
 ### vue-property-decorator
 
 <details>
-<summary>`Decorators` (9 :heavy_check_mark: / 1 :zzz:)</summary>
+<summary>`Decorators` (1 :white_check_mark: 8 :heavy_check_mark: / 1 :zzz:)</summary>
 
 |     decorator      |     supported?     | notes |
 | :----------------: | :----------------: | ----- |
-|      `@Prop`       | :heavy_check_mark: |       |
+|      `@Prop`       | :white_check_mark: |       |
 |    `@PropSync`     |       :zzz:        |       |
 |      `@Model`      | :heavy_check_mark: |       |
 |      `@Watch`      | :heavy_check_mark: |       |

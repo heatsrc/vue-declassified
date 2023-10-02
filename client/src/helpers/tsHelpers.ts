@@ -13,6 +13,17 @@ export function getDecoratorNames(node: ts.Node) {
   );
 }
 
+export function getDecorator(node: ts.Node, name: string) {
+  if (!ts.canHaveDecorators(node)) return undefined;
+
+  const decorators = ts.getDecorators(node) ?? [];
+  return decorators.find((decorator) =>
+    ts.isCallExpression(decorator.expression)
+      ? decorator.expression.expression.getText() === name
+      : decorator.expression.getText() === name,
+  );
+}
+
 export function getPackageName(node: ts.Node) {
   if (!ts.isImportDeclaration(node)) return undefined;
 
