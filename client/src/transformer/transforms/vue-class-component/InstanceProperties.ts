@@ -51,8 +51,14 @@ export const transformDefinables: VxTransform<
         propertyName = firstArg.text;
       }
 
+      let argCount = 0;
       const tupleArgs = args.reduce((acc, arg) => {
-        const argName = createIdentifier(arg.getText());
+        let argN = arg.getText();
+        if (ts.isPropertyAccessExpression(arg)) {
+          argN = `_${arg.name.text}${argCount}`;
+          argCount += 1;
+        }
+        const argName = createIdentifier(argN);
         const tupleType = tryToFindType(arg, program);
         const tupleElement = ts.factory.createNamedTupleMember(
           undefined,
