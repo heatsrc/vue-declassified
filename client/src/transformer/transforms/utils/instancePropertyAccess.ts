@@ -21,7 +21,7 @@ import ts from "typescript";
  * are just imports from the main vue package now.
  */
 
-export const instancePropertyKeyMap = new Map([
+export const instancePropertyKeyMap = new Map<string, string | ts.PropertyAccessExpression>([
   ["$attrs", "attrs"],
   ["$emit", "emit"],
   ["$nextTick", "nextTick"],

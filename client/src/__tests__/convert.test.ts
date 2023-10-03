@@ -251,7 +251,7 @@ describe("convert", () => {
       // Accessors
       const hello = computed(() => {
           props.fdsa;
-          return /* VUEDC_TODO: Unknown variable source for \\"this.propC\\"*/ this.propC;
+          return props.propC;
       });
       const foo = computed({
           get: (): string => {
@@ -271,7 +271,7 @@ describe("convert", () => {
       });
       // Methods
       const getFoo = () => {
-          await /* VUEDC_TODO: Unknown variable source for \\"this.$nextTick\\"*/ this.$nextTick();
+          await nextTick();
           return foo.value;
       };
       const handleFoo = (value: string) => {
@@ -281,7 +281,7 @@ describe("convert", () => {
           return returnVal;
       };
       console.log('created');
-      /* VUEDC_TODO: Unknown variable source for \\"this.$watch\\"*/ this.$watch(foo.value, (newVal: string, oldVal = 'old') => {
+      watch(foo.value, (newVal: string, oldVal = 'old') => {
           emit('foo:changed', newVal, oldVal);
       });
       onBeforeMount(() => {

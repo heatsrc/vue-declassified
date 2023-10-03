@@ -1,8 +1,9 @@
-import { getDecorators } from "@/helpers/tsHelpers.js";
+import { createIdentifier, getDecorators } from "@/helpers/tsHelpers.js";
 import { registerDecorator } from "@/transformer/registry.js";
 import { VxReferenceKind, VxResultKind, VxResultToMacro, VxTransform } from "@/types.js";
 import { cloneNode } from "ts-clone-node";
 import ts from "typescript";
+import { instancePropertyKeyMap } from "../utils/instancePropertyAccess.js";
 import { processPropMetadata } from "../utils/processPropsMetadata.js";
 import { unknownKeyword } from "../vue-class-component/decorator-options/ctorToType.js";
 
@@ -40,13 +41,19 @@ export const transformPropDecorator: VxTransform<ts.PropertyDeclaration> = (prop
     typeProperties.push([propName, propType ?? unknownKeyword()]);
   }
 
+  const propertyAccess = ts.factory.createPropertyAccessExpression(
+    createIdentifier("props"),
+    createIdentifier(propName),
+  );
+  instancePropertyKeyMap.set(propName, propertyAccess);
+
   return {
     shouldContinue: false,
     result: {
       kind: VxResultKind.MACRO,
       tag: "Macro-defineProps",
       imports: [],
-      outputVariables: ["props"],
+      outputVariables: ["props", propName],
       reference: VxReferenceKind.DEFINABLE_VARIABLE,
       nodes: defaults,
       typeProperties,

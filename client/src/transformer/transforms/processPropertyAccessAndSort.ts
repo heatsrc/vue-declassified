@@ -1,5 +1,6 @@
 import { addTodoComment } from "@/helpers/comments.js";
 import { createIdentifier, createPropertyAccess } from "@/helpers/tsHelpers.js";
+import { isString } from "@/helpers/utils.js";
 import { VxPostProcessor, VxReferenceKind, VxResultToImport, VxTransformResult } from "@/types.js";
 import { cloneNode } from "ts-clone-node";
 import ts from "typescript";
@@ -63,12 +64,10 @@ function transformInstanceProperties(name: string, variables: string[], methods:
   const key = instancePropertyKeyMap.get(name);
   if (!key) return false;
 
-  if (variables.includes(key)) {
+  if (isString(key) && (variables.includes(key) || methods.includes(key))) {
     return [createIdentifier(key), key] as const;
-  }
-
-  if (methods.includes(name)) {
-    return [createIdentifier(key), key] as const;
+  } else if (!isString(key) && (variables.includes(name) || methods.includes(name))) {
+    return [key, name] as const;
   }
 
   return false;

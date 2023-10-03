@@ -63,7 +63,10 @@ function mergeMacroResults(macroResults: VxResultToMacro[]) {
     }
 
     const constStatement = createConstStatement(varName, callExpr);
-    macroStatements.push(macroResult(varName, constStatement));
+    const resultMacro = macroResult(varName, constStatement);
+    const uniqueVariables = [...new Set(macros.flatMap((m) => m.outputVariables))];
+    resultMacro.outputVariables.push(...uniqueVariables);
+    macroStatements.push(resultMacro);
   });
 
   return macroStatements;
