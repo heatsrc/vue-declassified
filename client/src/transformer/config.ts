@@ -14,6 +14,7 @@ import { transformLifecycleHooks } from "./transforms/vue-class-component/Lifecy
 import { transformMethod } from "./transforms/vue-class-component/Method.js";
 import { transformTemplateRef } from "./transforms/vue-class-component/TemplateRef.js";
 import { transformOptionsExpose } from "./transforms/vue-class-component/decorator-options/Expose.js";
+import { transformDecoratorInject } from "./transforms/vue-class-component/decorator-options/Inject.js";
 import { transformOptionsProps } from "./transforms/vue-class-component/decorator-options/Props.js";
 import { transformDecoratorProvide } from "./transforms/vue-class-component/decorator-options/Provide.js";
 import { transformOptionsWatch } from "./transforms/vue-class-component/decorator-options/Watches.js";
@@ -46,6 +47,7 @@ export const classTransforms: VxClassTransforms = {
     transformPropDecorator,
     transformDecoratorRef,
     transformDecoratorProvide,
+    transformDecoratorInject,
     transformData,
   ],
   /** Class computed getters via get */

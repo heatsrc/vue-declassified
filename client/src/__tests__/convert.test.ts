@@ -107,7 +107,9 @@ describe("convert", () => {
       @Prop() propC!: string;
       @Prop({ type: Boolean, default: false, required: false }) propA: boolean;
       @Prop({ type: [Number, String], default: 0 }) propB;
-
+      @Inject() iFoo: string;
+      @Inject('bar') iBaz: string;
+      @Inject({ from: 'optional', default: () => ({ foo: 'bar' }) }) iOptional: { foo: string };
       // Accessors
       get hello() {
         this.$props.fdsa;
@@ -234,7 +236,7 @@ describe("convert", () => {
       const world = ref(\\"world\\");
       const b = ref(\\"b\\");
       const c = reactive({ d: { e: \\"f\\" } });
-      /* VUEDC_TODO: Check for potential naming collisions from '$refs.divElement' conversion.*/ 
+      /* VUEDC_TODO: Check for potential naming collisions from '$refs.divElement' conversion.*/
       // Template Refs
       const divElement = ref<HTMLDivElement>();
       /* VUEDC_TODO: Check for potential naming collisions from '$refs.b' conversion.*/ const b = ref();

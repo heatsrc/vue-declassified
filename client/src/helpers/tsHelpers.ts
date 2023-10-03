@@ -187,3 +187,40 @@ export function isFunctionExpressionLike(
     node.kind === ts.SyntaxKind.FunctionExpression || node.kind === ts.SyntaxKind.ArrowFunction
   );
 }
+
+/**
+ * This is a best approximation as there isn't really a constructor for Nodes in
+ * TS we have to deduce it based properties and what it's not.
+ * @param node
+ * @returns
+ */
+export function isNode(node: unknown): node is ts.Node {
+  if (!node) return false;
+  if (typeof node !== "object") return false;
+  if (!("kind" in node)) return false;
+  if (!("pos" in node)) return false;
+  if (!("end" in node)) return false;
+  if (!("flags" in node)) return false;
+  if (!("parent" in node)) return false;
+  return true;
+}
+
+type KeysMatching<T, V> = { [K in keyof T]-?: T[K] extends V ? K : never }[keyof T];
+type TsNodeChecks = KeysMatching<typeof ts, (node: ts.Node) => boolean>;
+
+/**
+ * Will check that value that is passed is a defined Node and assert that
+ * @param node
+ * @returns
+ */
+export function isTypeOfNode<T = ts.Node>(node: ts.Node | unknown, fn: TsNodeChecks): node is T {
+  return !!isNode(node) && !!ts[fn](node);
+}
+
+export function isObjLitExpr(node: ts.Node | unknown): node is ts.ObjectLiteralExpression {
+  return isTypeOfNode<ts.ObjectLiteralExpression>(node, "isObjectLiteralExpression");
+}
+
+export function isStringLit(node: ts.Node | unknown): node is ts.StringLiteral {
+  return isTypeOfNode<ts.StringLiteral>(node, "isStringLiteral");
+}
