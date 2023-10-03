@@ -102,7 +102,7 @@ describe("convert", () => {
       @Ref() button: HTMLButtonElement;
       @Ref('aCheckbox') checkbox;
       world = "world";
-      b = "b";
+      @Provide('pB') b = "b";
       c = { d: { e: "f" } };
       @Prop() propC!: string;
       @Prop({ type: Boolean, default: false, required: false }) propA: boolean;
@@ -199,7 +199,7 @@ describe("convert", () => {
       import foo from \\"foo\\";
       import { useRoute, useRouter } from \\"vue-router\\";
       import { useStore } from \\"vuex\\";
-      import { ref, reactive, nextTick, watch, onMounted, onBeforeUnmount, onUnmounted, computed, onBeforeMount, onBeforeUpdate, onUpdated, onActivated, onDeactivated, onErrorCaptured } from \\"vue\\";
+      import { ref, reactive, nextTick, watch, onMounted, onBeforeUnmount, onUnmounted, computed, provide, onBeforeMount, onBeforeUpdate, onUpdated, onActivated, onDeactivated, onErrorCaptured } from \\"vue\\";
       const MOUNT_EVENT = 'component:mounted';
       const props = withDefaults(defineProps<{
           \\"fdsa\\": string;
@@ -269,6 +269,7 @@ describe("convert", () => {
               world.value = value;
           }
       });
+      provide('pB', b)
       // Methods
       const getFoo = () => {
           await nextTick();

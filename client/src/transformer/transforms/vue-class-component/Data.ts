@@ -7,6 +7,7 @@ import {
   isPrimitiveType,
 } from "@/helpers/tsHelpers.js";
 import { namedImports } from "@/helpers/utils.js";
+import { isDecoratorRegistered } from "@/transformer/registry.js";
 import { VxReferenceKind, VxResultKind, VxTransform } from "@/types.js";
 import ts from "typescript";
 
@@ -42,7 +43,7 @@ export const transformData: VxTransform<ts.PropertyDeclaration> = (node, program
   // If we got here and there are decorators, it means we couldn't transform
   // this node, we need to add a todo comment
   const decorators = getDecoratorNames(node);
-  if (decorators.length > 0) {
+  if (!decorators.every((d) => isDecoratorRegistered(d))) {
     variableAssignment = addTodoComment(
       variableAssignment,
       `Encountered unsupported Decorator(s): "${node.getText()}")`,

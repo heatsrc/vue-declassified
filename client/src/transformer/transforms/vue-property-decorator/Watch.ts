@@ -21,6 +21,9 @@ export const transformWatchDecorator: VxTransform<ts.MethodDeclaration> = (watch
     if (!ts.isStringLiteral(decorator.expression.arguments[0]))
       throw getError(watchFnName, `to be called with a string as first argument`);
 
+    // TODO initially avoided using `this` because refs would add `.value` but
+    // TODO since have been using `this?.` to tell the post processor not to add
+    // TODO .value to refs. refactor this
     const watchSource = decorator.expression.arguments[0].text;
     const watchHandler = createIdentifier(watchFnName);
     const watchExpression = getWatchCalls(watchSource, [watchHandler]);

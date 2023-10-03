@@ -45,8 +45,11 @@ function getVariableHandlers(astResults: VxTransformResult<ts.Node>[]) {
   const definableVariable = getReferences(VxReferenceKind.DEFINABLE_VARIABLE);
   const definableMethods = getReferences(VxReferenceKind.DEFINABLE_METHOD);
 
-  return (name: string, node: ts.Node) => {
-    if (refVariables.includes(name)) return [createPropertyAccess(name, "value"), name] as const;
+  return (name: string, node: ts.PropertyAccessExpression) => {
+    if (refVariables.includes(name)) {
+      if (node.questionDotToken) return [createIdentifier(name), name] as const;
+      return [createPropertyAccess(name, "value"), name] as const;
+    }
     if (variables.includes(name)) return [createIdentifier(name), name] as const;
 
     const instanceProperty = transformInstanceProperties(name, definableVariable, definableMethods);

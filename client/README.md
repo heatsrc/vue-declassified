@@ -180,7 +180,7 @@ These are options provided in the decorator call, e.g., `@Component({ components
 ### vue-property-decorator
 
 <details>
-<summary>`Decorators` (4 :white_check_mark: 3 :heavy_check_mark: / 3 :zzz:)</summary>
+<summary>`Decorators` (5 :white_check_mark: 2 :heavy_check_mark: / 3 :zzz:)</summary>
 
 |     decorator      |     supported?     | notes                                                                                        |
 | :----------------: | :----------------: | -------------------------------------------------------------------------------------------- |
@@ -188,7 +188,7 @@ These are options provided in the decorator call, e.g., `@Component({ components
 |    `@PropSync`     |       :zzz:        |                                                                                              |
 |      `@Model`      | :heavy_check_mark: |                                                                                              |
 |      `@Watch`      | :white_check_mark: |                                                                                              |
-|     `@Provide`     | :heavy_check_mark: |                                                                                              |
+|     `@Provide`     | :white_check_mark: |                                                                                              |
 |     `@Inject`      | :heavy_check_mark: |                                                                                              |
 | `@ProvideReactive` |       :zzz:        |                                                                                              |
 | `@InjectReactive`  |       :zzz:        |                                                                                              |
