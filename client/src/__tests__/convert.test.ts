@@ -158,7 +158,7 @@ describe("convert", () => {
         })
       }
       beforeMount() {
-        this.$emit(MOUNT_EVENT);
+        this.$emit(MOUNT_EVENT, this.b);
         console.log('beforeMounted');
       }
       mounted() {
@@ -224,6 +224,7 @@ describe("convert", () => {
               oldVal: string
           ];
           \\"component:mounted\\": [
+              _b0: unknown
           ];
       }>();
       const route = useRoute();
@@ -291,7 +292,7 @@ describe("convert", () => {
           emit('foo:changed', newVal, oldVal);
       });
       onBeforeMount(() => {
-          emit(MOUNT_EVENT);
+          emit(MOUNT_EVENT, b.value);
           console.log('beforeMounted');
       });
       onBeforeUpdate(() => {
