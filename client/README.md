@@ -112,11 +112,11 @@ These are options provided in the decorator call, e.g., `@Component({ components
 <details>
 <summary>Options-Assets (2 :heavy_check_mark: / 1 :zzz:)</summary>
 
-| Options-Assets |     supported?     | notes                                                 |
-| :------------: | :----------------: | ----------------------------------------------------- |
-|   directives   | :heavy_check_mark: |                                                       |
-|    filters     | :heavy_check_mark: | Will be converted to simple methods                   |
-|   components   |       :zzz:        | If you chance the name of your imports this may break |
+| Options-Assets |     supported?     | notes                                                                                             |
+| :------------: | :----------------: | ------------------------------------------------------------------------------------------------- |
+|   directives   | :heavy_check_mark: | Will attempt to rename directives if they don't match                                             |
+|    filters     | :heavy_check_mark: | Will be converted to simple methods, you'll need to fix pipe style filters in your html templates |
+|   components   |       :zzz:        | If you chance the name of your imports this may break                                             |
 
 </details>
 
