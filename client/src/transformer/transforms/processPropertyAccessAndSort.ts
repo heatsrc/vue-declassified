@@ -15,13 +15,13 @@ export const processPropertyAccessAndSort: VxPostProcessor = (astResults) => {
   const transformerResults = astResults
     .map((astResult) => {
       // TODO don't like mutating this array in the transformer, should refactor
-      const dependsOn: string[] = [];
+      const dependsOn = new Set<string>();
       const transformer = getTransformer(variableHandlers, dependsOn);
       const nodes = ts.transform(astResult.nodes, [transformer]).transformed;
 
       return {
         astResult: { ...astResult, nodes } as VxTransformResult<ts.Node>,
-        dependsOn,
+        dependsOn: [...dependsOn],
       } as TransformerResult;
     })
     .filter((r): r is TransformerResult => !!r);
@@ -45,8 +45,8 @@ function getVariableHandlers(astResults: VxTransformResult<ts.Node>[]) {
   const definableMethods = getReferences(VxReferenceKind.DEFINABLE_METHOD);
 
   return (name: string, node: ts.Node) => {
-    if (refVariables.includes(name)) return [createPropertyAccess(name, "value"), true] as const;
-    if (variables.includes(name)) return [createIdentifier(name), true] as const;
+    if (refVariables.includes(name)) return [createPropertyAccess(name, "value"), name] as const;
+    if (variables.includes(name)) return [createIdentifier(name), name] as const;
 
     const instanceProperty = transformInstanceProperties(name, definableVariable, definableMethods);
     if (instanceProperty) return instanceProperty;
@@ -64,21 +64,17 @@ function transformInstanceProperties(name: string, variables: string[], methods:
   if (!key) return false;
 
   if (variables.includes(key)) {
-    const key = instancePropertyKeyMap.get(name);
-    if (!key) throw new Error(`No key found for definable "${name}"`);
-    return [createIdentifier(key), true] as const;
+    return [createIdentifier(key), key] as const;
   }
 
   if (methods.includes(name)) {
-    const key = instancePropertyKeyMap.get(name);
-    if (!key) throw new Error(`No key found for definable "${name}"`);
-    return [createIdentifier(key), true] as const;
+    return [createIdentifier(key), key] as const;
   }
 
   return false;
 }
 
-function getTransformer(variableHandlers: VariableHandlers, dependents: string[]) {
+function getTransformer(variableHandlers: VariableHandlers, dependents: Set<string>) {
   return ((ctx) => {
     const visitor: ts.Visitor<ts.Node, ts.Node> = (node) => {
       if (!ts.isPropertyAccessExpression(node)) return ts.visitEachChild(node, visitor, ctx);
@@ -88,7 +84,7 @@ function getTransformer(variableHandlers: VariableHandlers, dependents: string[]
       const name = node.name.text;
       const [newNode, addToDependents] = variableHandlers(name, node);
 
-      if (addToDependents) dependents.push(name);
+      if (addToDependents) dependents.add(addToDependents);
 
       return newNode;
     };
@@ -137,7 +133,7 @@ function orderByDependencies(transformerResults: TransformerResult[], numberOfNo
       if (curr.dependsOn.every((d) => registeredDependencies.includes(d))) {
         // TODO Side-effects in reduce make me nervous. This should be refactored
         result.push(curr.astResult);
-        registeredDependencies.push(...curr.dependsOn);
+        registeredDependencies.push(...curr.astResult.outputVariables);
         newDependenciesRegistered = true;
       } else {
         acc.push(curr);
@@ -152,7 +148,7 @@ function orderByDependencies(transformerResults: TransformerResult[], numberOfNo
       result = result.concat(otherResults.map((r) => r.astResult));
       break;
     }
-  } while (result.length < numberOfNodes);
+  } while (result.length < numberOfNodes - lastResults.length);
 
   result = result.concat(lastResults);
 

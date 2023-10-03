@@ -181,7 +181,7 @@ These are options provided in the decorator call, e.g., `@Component({ components
 ### vue-property-decorator
 
 <details>
-<summary>`Decorators` (2 :white_check_mark: 7 :heavy_check_mark: / 1 :zzz:)</summary>
+<summary>`Decorators` (3 :white_check_mark: 6 :heavy_check_mark: / 1 :zzz:)</summary>
 
 |     decorator      |     supported?     | notes |
 | :----------------: | :----------------: | ----- |
@@ -193,7 +193,7 @@ These are options provided in the decorator call, e.g., `@Component({ components
 |     `@Inject`      | :heavy_check_mark: |       |
 | `@ProvideReactive` | :heavy_check_mark: |       |
 | `@InjectReactive`  | :heavy_check_mark: |       |
-|      `@Emit`       | :heavy_check_mark: |       |
+|      `@Emit`       | :white_check_mark: |       |
 |       `@Ref`       | :heavy_check_mark: |       |
 
 </details>

@@ -102,21 +102,21 @@ describe("convert", () => {
       world = "world";
       b = "b";
       c = { d: { e: "f" } };
-      @Prop() hello!: string;
+      @Prop() propC!: string;
       @Prop({ type: Boolean, default: false, required: false }) propA: boolean;
       @Prop({ type: [Number, String], default: 0 }) propB;
 
       // Accessors
       get hello() {
         this.$props.fdsa;
-        return this.hello;
+        return this.propC;
       }
 
-      get foo() {
+      get foo(): string {
         this.$route.query;
         return this.hello + this.world;
       }
-      set foo(value) {
+      set foo(value: string) {
         this.divElement.innerText = value;
         this.hello = value;
       }
@@ -133,8 +133,8 @@ describe("convert", () => {
         return this.foo;
       }
 
-      @Emit("foo")
-      handleFoo(value) {
+      @Emit("fooBar")
+      handleFoo(value: string) {
         this.undefinedProperty = value;
         return this.foo;
       }
@@ -200,7 +200,7 @@ describe("convert", () => {
       const props = withDefaults(defineProps<{
           \\"fdsa\\": string;
           \\"asdf\\"?: Record<string, unknown>;
-          \\"hello\\": string;
+          \\"propC\\": string;
           \\"propA\\"?: boolean;
           \\"propB\\": number | string;
       }>(), {
@@ -209,6 +209,10 @@ describe("convert", () => {
           propB: 0
       });
       const emit = defineEmits<{
+          \\"fooBar\\": [
+              value: string,
+              returnVal: string
+          ];
           \\"foo:changed\\": [
               newVal: string,
               oldVal: string
@@ -247,14 +251,14 @@ describe("convert", () => {
       // Accessors
       const hello = computed(() => {
           props.fdsa;
-          return hello.value;
+          return /* VUEDC_TODO: Unknown variable source for \\"this.propC\\"*/ this.propC;
       });
       const foo = computed({
-          get: () => {
+          get: (): string => {
               route.query;
               return hello.value + world.value;
           },
-          set: (value) => {
+          set: (value: string) => {
               divElement.value.innerText = value;
               hello.value = value;
           }
@@ -270,9 +274,11 @@ describe("convert", () => {
           await /* VUEDC_TODO: Unknown variable source for \\"this.$nextTick\\"*/ this.$nextTick();
           return foo.value;
       };
-      /* VUEDC_TODO: Encountered unsupported decorator(s): \\"@Emit\\"*/ const handleFoo = (value) => {
+      const handleFoo = (value: string) => {
           /* VUEDC_TODO: Unknown variable source for \\"this.undefinedProperty\\"*/ this.undefinedProperty = value;
-          return foo.value;
+          const returnVal = foo.value;
+          emit(\\"foo-bar\\", returnVal, value);
+          return returnVal;
       };
       console.log('created');
       /* VUEDC_TODO: Unknown variable source for \\"this.$watch\\"*/ this.$watch(foo.value, (newVal: string, oldVal = 'old') => {
