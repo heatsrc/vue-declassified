@@ -21,7 +21,21 @@ export const transformOptionsProps: VxTransform<ts.PropertyAssignment> = (propsO
     typeProperties = [...propMetadata].map(([k, v]) => [k, v.type, v.optional]);
     defaults = [...propMetadata]
       .filter(([k, v]) => !!v.default)
-      .map(([k, v]) => ts.factory.createPropertyAssignment(k, v.default!));
+      .map(([k, v]) => {
+        let defVal: ts.Expression = v.default!;
+        if (
+          v.default &&
+          (ts.isObjectLiteralExpression(v.default) || ts.isArrayLiteralExpression(v.default))
+        ) {
+          const u = undefined;
+          const expr = ts.factory.createParenthesizedExpression(v.default);
+          const rocket = ts.factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken);
+          const arrowFn = ts.factory.createArrowFunction(u, u, [], u, rocket, expr);
+          defVal = arrowFn;
+        }
+
+        return ts.factory.createPropertyAssignment(k, defVal);
+      });
   } else {
     throw new Error("Invalid props declaration, expecting `string[] | Object`");
   }

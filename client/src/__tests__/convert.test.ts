@@ -80,7 +80,7 @@ describe("convert", () => {
         asdf: {
           type: Object,
           required: false,
-          default: () => {foo: 'bar'},
+          default: () => (['bar']),
         }
       },
       watch: {
@@ -107,6 +107,7 @@ describe("convert", () => {
       @Prop() propC!: string;
       @Prop({ type: Boolean, default: false, required: false }) propA: boolean;
       @Prop({ type: [Number, String], default: 0 }) propB;
+      @Prop({ default: () => ({foo: 'bar'})) propD;
       @Inject() iFoo: string;
       @Inject('bar') iBaz: string;
       @Inject({ from: 'optional', default: () => ({ foo: 'bar' }) }) iOptional: { foo: string };
@@ -240,7 +241,7 @@ describe("convert", () => {
       const iFoo = inject(\\"iFoo\\");
       const iBaz = inject(\\"bar\\");
       const iOptional = inject(\\"'optional'\\", () => ({ foo: \\"bar\\" }));
-      /* VUEDC_TODO: Check for potential naming collisions from '$refs.divElement' conversion.*/ 
+      /* VUEDC_TODO: Check for potential naming collisions from '$refs.divElement' conversion.*/
       // Template Refs
       const divElement = ref<HTMLDivElement>();
       /* VUEDC_TODO: Check for potential naming collisions from '$refs.b' conversion.*/ const b = ref();
