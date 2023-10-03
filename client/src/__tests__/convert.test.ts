@@ -99,6 +99,8 @@ describe("convert", () => {
     export default class Test {
       // Properties
       @Getter() myGetter: string;
+      @Ref() button: HTMLButtonElement;
+      @Ref('aCheckbox') checkbox;
       world = "world";
       b = "b";
       c = { d: { e: "f" } };
@@ -161,9 +163,11 @@ describe("convert", () => {
         console.log('onMounted');
       }
       beforeUpdate() {
+        this.button.innerText = this.foo;
         console.log('beforeUpdate');
       }
       updated() {
+        this.checkbox.checked = true;
         console.log('updated');
       }
       beforeDestroy() {
@@ -195,7 +199,7 @@ describe("convert", () => {
       import foo from \\"foo\\";
       import { useRoute, useRouter } from \\"vue-router\\";
       import { useStore } from \\"vuex\\";
-      import { ref, reactive, nextTick, watch, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted, computed, onBeforeMount, onActivated, onDeactivated, onErrorCaptured } from \\"vue\\";
+      import { ref, reactive, nextTick, watch, onMounted, onBeforeUnmount, onUnmounted, computed, onBeforeMount, onBeforeUpdate, onUpdated, onActivated, onDeactivated, onErrorCaptured } from \\"vue\\";
       const MOUNT_EVENT = 'component:mounted';
       const props = withDefaults(defineProps<{
           \\"fdsa\\": string;
@@ -225,6 +229,8 @@ describe("convert", () => {
       const store = useStore();
       // Properties
       /* VUEDC_TODO: Encountered unsupported Decorator(s): \\"@Getter() myGetter: string;\\")*/ let myGetter: string;
+      const button = ref<HTMLButtonElement>();
+      /* VUEDC_TODO: Update template, replace 'ref=\\"'aCheckbox'\\"' with 'ref=\\"checkbox\\"'*/ const checkbox = ref();
       const world = ref(\\"world\\");
       const b = ref(\\"b\\");
       const c = reactive({ d: { e: \\"f\\" } });
@@ -235,12 +241,6 @@ describe("convert", () => {
       console.log('beforeCreate');
       onMounted(() => {
           console.log('onMounted');
-      });
-      onBeforeUpdate(() => {
-          console.log('beforeUpdate');
-      });
-      onUpdated(() => {
-          console.log('updated');
       });
       onBeforeUnmount(() => {
           console.log('beforeDestroy');
@@ -287,6 +287,14 @@ describe("convert", () => {
       onBeforeMount(() => {
           emit(MOUNT_EVENT);
           console.log('beforeMounted');
+      });
+      onBeforeUpdate(() => {
+          button.value.innerText = foo.value;
+          console.log('beforeUpdate');
+      });
+      onUpdated(() => {
+          checkbox.value.checked = true;
+          console.log('updated');
       });
       onActivated(() => {
           store.dispatch('foo', foo.value);

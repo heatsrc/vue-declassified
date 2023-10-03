@@ -69,7 +69,7 @@ function processUnknownOption(node: ts.Node) {
     reference: VxReferenceKind.NONE,
     outputVariables: [],
     tag: "InheritOptions",
-    nodes: [addTodoComment(node, `Could not convert unknown option`, false)],
+    nodes: [addTodoComment(node, `Could not convert unknown option`)],
     composables: [],
   } as VxResultToOptions<ts.Node>;
 }
