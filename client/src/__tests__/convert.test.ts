@@ -201,7 +201,7 @@ describe("convert", () => {
       import foo from \\"foo\\";
       import { useRoute, useRouter } from \\"vue-router\\";
       import { useStore } from \\"vuex\\";
-      import { ref, reactive, nextTick, watch, onMounted, onBeforeUnmount, onUnmounted, computed, provide, onBeforeMount, onBeforeUpdate, onUpdated, onActivated, onDeactivated, onErrorCaptured } from \\"vue\\";
+      import { ref, reactive, inject, nextTick, watch, onMounted, onBeforeUnmount, onUnmounted, computed, provide, onBeforeMount, onBeforeUpdate, onUpdated, onActivated, onDeactivated, onErrorCaptured } from \\"vue\\";
       const MOUNT_EVENT = 'component:mounted';
       const props = withDefaults(defineProps<{
           \\"fdsa\\": string;
@@ -236,7 +236,10 @@ describe("convert", () => {
       const world = ref(\\"world\\");
       const b = ref(\\"b\\");
       const c = reactive({ d: { e: \\"f\\" } });
-      /* VUEDC_TODO: Check for potential naming collisions from '$refs.divElement' conversion.*/
+      const iFoo = inject(\\"iFoo\\");
+      const iBaz = inject(\\"bar\\");
+      const iOptional = inject(\\"'optional'\\", () => ({ foo: \\"bar\\" }));
+      /* VUEDC_TODO: Check for potential naming collisions from '$refs.divElement' conversion.*/ 
       // Template Refs
       const divElement = ref<HTMLDivElement>();
       /* VUEDC_TODO: Check for potential naming collisions from '$refs.b' conversion.*/ const b = ref();
