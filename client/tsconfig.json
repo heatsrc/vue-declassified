@@ -4,7 +4,7 @@
     "rootDir": "",
     "outDir": "dist",
     "declaration": true,
-    "types": ["vite/client"],
+    "types": ["vite/client", "node"],
     "paths": {
       "@/*": ["./src/*"],
       "@test/*": ["./test/*"]
