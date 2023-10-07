@@ -210,10 +210,12 @@ describe("convert", () => {
           \\"propC\\": string;
           \\"propA\\"?: boolean;
           \\"propB\\": number | string;
+          \\"propD\\": unknown;
       }>(), {
-          asdf: () => { foo: \\"bar\\"; },
+          asdf: () => ([\\"bar\\"]),
           propA: false,
-          propB: 0
+          propB: 0,
+          propD: () => ({ foo: \\"bar\\" })
       });
       const emit = defineEmits<{
           \\"fooBar\\": [
@@ -241,7 +243,7 @@ describe("convert", () => {
       const iFoo = inject(\\"iFoo\\");
       const iBaz = inject(\\"bar\\");
       const iOptional = inject(\\"'optional'\\", () => ({ foo: \\"bar\\" }));
-      /* VUEDC_TODO: Check for potential naming collisions from '$refs.divElement' conversion.*/
+      /* VUEDC_TODO: Check for potential naming collisions from '$refs.divElement' conversion.*/ 
       // Template Refs
       const divElement = ref<HTMLDivElement>();
       /* VUEDC_TODO: Check for potential naming collisions from '$refs.b' conversion.*/ const b = ref();
