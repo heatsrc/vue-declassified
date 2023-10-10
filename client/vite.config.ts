@@ -1,5 +1,6 @@
 import { resolve } from "path";
-import { defineConfig, configDefaults } from "vitest/config";
+import dts from "vite-plugin-dts";
+import { configDefaults, defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
@@ -17,4 +18,24 @@ export default defineConfig({
       "@test": resolve(__dirname, "./test"),
     },
   },
+  build: {
+    sourcemap: true,
+    lib: {
+      entry: resolve(__dirname, "./src/main.ts"),
+      name: "Vue Declassified",
+      fileName: (format) => `main.${format}.js`,
+      formats: ["es", "cjs", "umd"],
+    },
+    rollupOptions: {
+      external: ["vue", "node:fs/promises", "typescript"],
+      output: {
+        globals: {
+          vue: "Vue",
+          typescript: "ts",
+          "node:fs/promises": "fs",
+        },
+      },
+    },
+  },
+  plugins: [dts({ rollupTypes: true })],
 });
