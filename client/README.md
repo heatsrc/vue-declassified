@@ -162,7 +162,7 @@ yarn dlx vuedc -i myVueComponent.vue -o myVueComponent.converted.vue
 These are options provided in the decorator call, e.g., `@Component({ components: { MyIcon } })`. All Options API fields are _technically_ supported in Vue Class Components (e.g., data, computed, methods, etc) but many of them don't make sense and will not be actively developed but PRs may be accepted.
 
 <details>
-<summary>Options-Data (3/3 :rocket:)</summary>
+<summary>Options-Data (4/4 :rocket:)</summary>
 
 | Options-Data |     supported?     | notes                                                            |
 | :----------: | :----------------: | ---------------------------------------------------------------- |
