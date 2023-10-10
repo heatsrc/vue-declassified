@@ -1,9 +1,21 @@
 {
   "name": "@heatsrc/vue-declassified-cli",
-  "version": "1.0.0",
   "description": "Transform Vue Class Components to Vue 3 script setup",
-  "main": "index.js",
+  "version": "0.0.1",
+  "packageManager": "pnpm@8.7.5",
+  "engines": {
+    "node": ">= 18.18.0"
+  },
+  "type": "commonjs",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/src/vuedc.js",
+  "bin": {
+    "vuedc": "./dist/src/vuedc.js"
+  },
   "scripts": {
+    "build": "rimraf dist && npx tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -18,5 +30,17 @@
     "cli"
   ],
   "author": "Jared McAteer <jared.mcateer@heatsrc.com>",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@heatsrc/vue-declassified": "workspace:^",
+    "chalk": "^5.3.0",
+    "commander": "^11.0.0",
+    "figlet": "^1.6.0"
+  },
+  "devDependencies": {
+    "@types/figlet": "^1.5.6",
+    "@types/node": "^20.8.4",
+    "rimraf": "^5.0.5",
+    "typescript": "^5.2.2"
+  }
 }
