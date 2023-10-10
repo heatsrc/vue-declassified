@@ -31,15 +31,15 @@ These decisions are made arbitrarily, mostly for sanity and convenience
 ## Install
 
 ```console
-$ pnpm add @heatsrc/vue-declassified
+pnpm add @heatsrc/vue-declassified
 ```
 
 ```console
-$ npm install @heatsrc/vue-declassified
+npm install @heatsrc/vue-declassified
 ```
 
 ```console
-$ yarn install @heatsrc/vue-declassified
+yarn install @heatsrc/vue-declassified
 ```
 
 ## Usage
@@ -69,15 +69,15 @@ const result = convertScript(input);
 You can call the CLI tool to convert a file directly
 
 ```console
-$ pnpm dlx vuedc -i myVueComponent.vue -o myVueComponent.converted.vue
+pnpm dlx vuedc -i myVueComponent.vue -o myVueComponent.converted.vue
 ```
 
 ```console
-$ npx vuedc -i myVueComponent.vue -o myVueComponent.converted.vue
+npx vuedc -i myVueComponent.vue -o myVueComponent.converted.vue
 ```
 
 ```console
-$ yarn dlx vuedc -i myVueComponent.vue -o myVueComponent.converted.vue
+yarn dlx vuedc -i myVueComponent.vue -o myVueComponent.converted.vue
 ```
 
 ## Supported Features
