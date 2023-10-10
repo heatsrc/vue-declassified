@@ -94,7 +94,7 @@ describe("convert", () => {
         }, 'getFoo'],
       },
       expose: ['b', 'foo', 'world'],
-
+      emits: ['fooBar', 'something-new']
     })
     export default class Test {
       // Properties
@@ -221,6 +221,9 @@ describe("convert", () => {
           \\"fooBar\\": [
               value: string,
               returnVal: string
+          ];
+          \\"something-new\\": [
+              ...args: unknown[]
           ];
           \\"foo:changed\\": [
               newVal: string,

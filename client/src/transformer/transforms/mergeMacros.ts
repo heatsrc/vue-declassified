@@ -46,6 +46,7 @@ function mergeMacroResults(macroResults: VxResultToMacro[]) {
         }
         const existing = acc.get(k)!;
         if (existing[0].kind === ts.SyntaxKind.UndefinedKeyword) acc.set(k, [v, q]);
+        if (isUnknownArgsTuple(existing[0])) acc.set(k, [v, q]);
         return acc;
       }, new Map<string, [type: ts.TypeNode, optional?: boolean]>());
 
@@ -90,4 +91,17 @@ function propsWithDefaults(defineProps: ts.CallExpression, defaultProps: ts.Prop
   const id = createIdentifier("withDefaults");
   const withDefaults = ts.factory.createCallExpression(id, undefined, [defineProps, defaultValues]);
   return withDefaults;
+}
+
+function isUnknownArgsTuple(node: ts.Node) {
+  if (!ts.isTupleTypeNode(node)) return false;
+  const elements = node.elements;
+  if (elements.length !== 1) return false;
+  const el = elements[0];
+  if (!ts.isNamedTupleMember(el)) return false;
+  if (!ts.isIdentifier(el.name)) return false;
+  if (el.name.text !== "args") return false;
+  if (!ts.isArrayTypeNode(el.type)) return false;
+  if (el.type.elementType.kind !== ts.SyntaxKind.UnknownKeyword) return false;
+  return true;
 }

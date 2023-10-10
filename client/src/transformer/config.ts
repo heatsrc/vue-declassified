@@ -13,6 +13,7 @@ import { transformDefinables } from "./transforms/vue-class-component/InstancePr
 import { transformLifecycleHooks } from "./transforms/vue-class-component/LifecycleHooks.js";
 import { transformMethod } from "./transforms/vue-class-component/Method.js";
 import { transformTemplateRef } from "./transforms/vue-class-component/TemplateRef.js";
+import { transformOptionsEmits } from "./transforms/vue-class-component/decorator-options/Emits.js";
 import { transformOptionsExpose } from "./transforms/vue-class-component/decorator-options/Expose.js";
 import { transformDecoratorInject } from "./transforms/vue-class-component/decorator-options/Inject.js";
 import { transformOptionsProps } from "./transforms/vue-class-component/decorator-options/Props.js";
@@ -31,6 +32,7 @@ export const classTransforms: VxClassTransforms = {
       transformOptionsProps,
       transformOptionsWatch,
       transformOptionsExpose,
+      transformOptionsEmits,
     ],
     /** Options object: data, lifecycle hooks */
     [ts.SyntaxKind.MethodDeclaration]: [],

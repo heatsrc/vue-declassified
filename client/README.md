@@ -164,14 +164,15 @@ These are options provided in the decorator call, e.g., `@Component({ components
 <details>
 <summary>Options-Data (3/3 :rocket:)</summary>
 
-| Options-Data |     supported?     | notes                                                   |
-| :----------: | :----------------: | ------------------------------------------------------- |
-|     data     |       :zzz:        | While you can add these what you even using VCC for?    |
-|    props     | :white_check_mark: |                                                         |
-|  propsData   |       :zzz:        | This is primarily a testing feature                     |
-|   computed   |       :zzz:        | While you can add these what you even using VCC for?    |
-|    watch     | :white_check_mark: |                                                         |
-|   exposes    | :white_check_mark: | RC Feature since Vue 3 require declaring exposed fields |
+| Options-Data |     supported?     | notes                                                            |
+| :----------: | :----------------: | ---------------------------------------------------------------- |
+|     data     |       :zzz:        | While you can add these what you even using VCC for?             |
+|    props     | :white_check_mark: |                                                                  |
+|  propsData   |       :zzz:        | This is primarily a testing feature                              |
+|   computed   |       :zzz:        | While you can add these what you even using VCC for?             |
+|    watch     | :white_check_mark: |                                                                  |
+|   exposes    | :white_check_mark: | RC Feature since Vue 3 require declaring exposed fields          |
+|    emits     | :white_check_mark: | RC Feature since Vue 3 require declaring events that are emitted |
 
 </details>
 
