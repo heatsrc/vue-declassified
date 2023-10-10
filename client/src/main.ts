@@ -1,4 +1,6 @@
 import prettier from "prettier";
+import parserTypescript from "prettier/parser-typescript";
+import parserEsTree from "prettier/plugins/estree.js";
 import { convertAst } from "./convert.js";
 import { readVueFile, writeVueFile } from "./file.js";
 import { getSingleFileProgram } from "./parser.js";
@@ -10,9 +12,22 @@ import { getSingleFileProgram } from "./parser.js";
  */
 export async function convertSfc(src: string, dest?: string) {
   const { script, vueFile } = await readVueFile(src);
-  const { ast, program } = getSingleFileProgram(script.content);
-  const result = convertAst(ast, program);
-  const formattedResult = await prettier.format(result, { parser: "typescript", printWidth: 100 });
+  const results = await convertScript(script.content);
+  writeVueFile(dest ?? src, vueFile, results);
+}
 
-  writeVueFile(dest ?? src, vueFile, formattedResult);
+/**
+ * Accepts a Vue SFC Script body in string format and returns the converted Script Setup syntax
+ * @param src A single file containing a Vue Class Component
+ * @returns Converted Script Setup syntax
+ */
+export async function convertScript(src: string) {
+  const { ast, program } = getSingleFileProgram(src);
+  const result = convertAst(ast, program);
+  const formattedResult = await prettier.format(result, {
+    parser: "typescript",
+    printWidth: 100,
+    plugins: [parserTypescript, parserEsTree],
+  });
+  return formattedResult;
 }

@@ -1,10 +1,24 @@
 # Vue DeClassified (VueDc)
 
-## Convert Vue Class Components to Vue 3 script setup
+- [Vue DeClassified (VueDc)](#vue-declassified-vuedc)
+  - [Vue Class Components -\> Vue 3 script setup](#vue-class-components---vue-3-script-setup)
+    - [Opinionated decisions](#opinionated-decisions)
+  - [Install](#install)
+  - [Usage](#usage)
+    - [CLI](#cli)
+  - [Supported Features](#supported-features)
+    - [vue-class-component](#vue-class-component)
+      - [`@Component` / `@Options` (v8.0.0-rc.1)](#component--options-v800-rc1)
+    - [vue-property-decorator](#vue-property-decorator)
+    - [vuex-class](#vuex-class)
+
+## Vue Class Components -> Vue 3 script setup
 
 VueDc is an opinionated tool that will format Vue class components to script setup. This project a fork and re-write of yoyo930021's [vc2c](https://github.com/yoyo930021/vc2c)
 
-### Opinionated decisions These decisions are made arbitrarily, mostly for sanity and convenience
+### Opinionated decisions
+
+These decisions are made arbitrarily, mostly for sanity and convenience
 
 - Will only support TS
 - Won't support esoteric `@Component` options
@@ -14,7 +28,59 @@ VueDc is an opinionated tool that will format Vue class components to script set
 - Will be formatted by prettier with default config
   - exception `printWidth` increased to 100 characters
 
-### Supported Features
+## Install
+
+```console
+$ pnpm add @heatsrc/vue-declassified
+```
+
+```console
+$ npm install @heatsrc/vue-declassified
+```
+
+```console
+$ yarn install @heatsrc/vue-declassified
+```
+
+## Usage
+
+```ts
+import { convertSfc } from "@heatsrc/vue-declassified";
+
+const input = "./myVueComponent.vue";
+const output = "./myVueComponent.converted.vue";
+
+convertSfc(input, output);
+```
+
+```ts
+import { convertScript } from "@heatsrc/vue-declassified";
+
+const input = `
+@Component()
+export default class MyComponent extends Vue {
+
+}`;
+const result = convertScript(input);
+```
+
+### CLI
+
+You can call the CLI tool to convert a file directly
+
+```console
+$ pnpm dlx vuedc -i myVueComponent.vue -o myVueComponent.converted.vue
+```
+
+```console
+$ npx vuedc -i myVueComponent.vue -o myVueComponent.converted.vue
+```
+
+```console
+$ yarn dlx vuedc -i myVueComponent.vue -o myVueComponent.converted.vue
+```
+
+## Supported Features
 
 |       Legend       |                                                                   |
 | :----------------: | ----------------------------------------------------------------- |
