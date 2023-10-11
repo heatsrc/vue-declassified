@@ -70,7 +70,8 @@ describe("convert", () => {
   it("should order imports before other statements", () => {
     let content = `
     import { Component, Prop } from "vue-class-component";
-    import { bar } from "./bar.js";
+    import { bar, b } from "./bar.js";
+    import MyComponent from "./MyComponent.vue";
 
     const MOUNT_EVENT = 'component:mounted';
 
@@ -97,6 +98,7 @@ describe("convert", () => {
       emits: ['fooBar', 'something-new']
     })
     export default class Test {
+      MyComponent = MyComponent;
       // Properties
       @Getter() myGetter: string;
       @Ref() button: HTMLButtonElement;
@@ -198,12 +200,24 @@ describe("convert", () => {
 
     // XXX this snapshot is a WIP, it's not the final result
     expect(result).toMatchInlineSnapshot(`
-      "import { bar } from \\"./bar.js\\";
+      "import { bar, b } from \\"./bar.js\\";
+      import MyComponent from \\"./MyComponent.vue\\";
       import foo from \\"foo\\";
       import { useRoute, useRouter } from \\"vue-router\\";
       import { useStore } from \\"vuex\\";
-      import { ref, reactive, inject, nextTick, watch, onMounted, onBeforeUnmount, onUnmounted, computed, provide, onBeforeMount, onBeforeUpdate, onUpdated, onActivated, onDeactivated, onErrorCaptured } from \\"vue\\";
+      import { reactive, ref, inject, nextTick, watch, onMounted, onBeforeUnmount, onUnmounted, computed, provide, onBeforeMount, onBeforeUpdate, onUpdated, onActivated, onDeactivated, onErrorCaptured } from \\"vue\\";
       const MOUNT_EVENT = 'component:mounted';
+      /* VUEDC_TODO: Fix naming collisions
+       
+         - \`MyComponent\` is defined in: External imports
+         - \`b\` is defined in: External imports, Other variables
+         - \`foo\` is defined in: External imports
+         - \`bar\` is defined in: External imports
+
+         It is strongly suggested you fix these prior to
+         converting the file. Usage of these variables may
+         be ambiguous in the converted code.
+      */
       const props = withDefaults(defineProps<{
           \\"fdsa\\": string;
           \\"asdf\\"?: Record<string, unknown>;
@@ -236,6 +250,7 @@ describe("convert", () => {
       const route = useRoute();
       const router = useRouter();
       const store = useStore();
+      const MyComponent = reactive(MyComponent);
       // Properties
       /* VUEDC_TODO: Encountered unsupported Decorator(s): \\"@Getter() myGetter: string;\\")*/ let myGetter: string;
       const button = ref<HTMLButtonElement>();
