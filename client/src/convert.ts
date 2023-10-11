@@ -11,7 +11,7 @@ export function convertAst(source: ts.SourceFile, program: ts.Program) {
   if (!defaultExportNode) throw new Error("No default export found in this file");
 
   let resultStatements = [
-    ...getOtherStatements(source),
+    ...getOutsideStatements(source),
     ...runTransforms(defaultExportNode, program),
   ];
 
@@ -27,7 +27,12 @@ export function convertAst(source: ts.SourceFile, program: ts.Program) {
   return result;
 }
 
-function getOtherStatements(source: ts.SourceFile) {
+/**
+ * Get's the statements outside of the default class export
+ * @param source
+ * @returns statements not belonging to the default class export
+ */
+function getOutsideStatements(source: ts.SourceFile) {
   const unwantedStatements = (s: ts.Statement) => {
     if (ts.isClassDeclaration(s) && getDecoratorNames(s)) return true;
     const pkg = getPackageName(s);
