@@ -4,14 +4,11 @@ import {
   VxTransformResult,
   isComposableType,
   isCompositionType,
-  isImportType,
   isMacroType,
 } from "../types.js";
 
 export function getImports(results: VxTransformResult<ts.Node>[]) {
   const importMap = new Map<string, VxImportClause>();
-
-  const importResults = results.filter(isImportType);
 
   results.forEach(({ imports }) => {
     imports.forEach((i) => {
