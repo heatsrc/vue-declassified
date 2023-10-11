@@ -47,6 +47,8 @@ function getVariableHandlers(astResults: VxTransformResult<ts.Node>[]) {
 
   return (name: string, node: ts.PropertyAccessExpression) => {
     if (refVariables.includes(name)) {
+      // `this?.<name>` is a hack we're using to avoid creating a `.value`
+      // property access. This is because some functions like watch expects a Ref<T>.
       if (node.questionDotToken) return [createIdentifier(name), name] as const;
       return [createPropertyAccess(name, "value"), name] as const;
     }
