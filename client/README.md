@@ -267,7 +267,7 @@ These are options provided in the decorator call, e.g., `@Component({ components
 ### vuex-class
 
 <details>
-<summary>`Decorators` (2/8 :white_check_mark:, 6/8 :heavy_check_mark:)</summary>
+<summary>`Decorators` (2 :white_check_mark:, 6 :heavy_check_mark:)</summary>
 
 |   decorator    |     supported?     | notes |
 | :------------: | :----------------: | ----- |
