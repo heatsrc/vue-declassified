@@ -1,4 +1,4 @@
-import { addTodoComment } from "@/helpers/comments.js";
+import { addTodoComment, copySyntheticComments } from "@/helpers/comments.js";
 import { createCallExpression, createConstStatement, getDecorators } from "@/helpers/tsHelpers.js";
 import { registerDecorator } from "@/transformer/registry.js";
 import { VxReferenceKind, VxResultKind, VxTransform } from "@/types.js";
@@ -41,6 +41,8 @@ export const transformDecoratorRef: VxTransform<ts.PropertyDeclaration> = (prop,
       `Update template, replace 'ref="${refAlias}"' with 'ref="${refName}"'`,
     );
   }
+
+  copySyntheticComments(refConst, prop);
 
   return {
     shouldContinue: false,

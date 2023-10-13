@@ -23,6 +23,7 @@ import { transformEmitDecorator } from "./transforms/vue-property-decorator/Emit
 import { transformDecoratorProp } from "./transforms/vue-property-decorator/Prop.js";
 import { transformDecoratorRef } from "./transforms/vue-property-decorator/Ref.js";
 import { transformWatchDecorator } from "./transforms/vue-property-decorator/Watch.js";
+import { transformVuexGetter } from "./transforms/vuex-class/Getter.js";
 import { transformVuexState } from "./transforms/vuex-class/State.js";
 
 export const classTransforms: VxClassTransforms = {
@@ -55,6 +56,7 @@ export const classTransforms: VxClassTransforms = {
     transformDecoratorInject,
     // Vuex Class
     transformVuexState,
+    transformVuexGetter,
     // Everything else
     transformData,
   ],

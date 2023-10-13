@@ -102,7 +102,6 @@ describe("convert", () => {
     export default class Test {
       MyComponent = MyComponent;
       // Properties
-      @Getter() myGetter: string;
       @Ref() button: HTMLButtonElement;
       @Ref('aCheckbox') checkbox;
       world = "world";
@@ -121,6 +120,11 @@ describe("convert", () => {
       @State('car') vehicle;
       @State(userProfile) userProfile: Profile;
       @State((s) => s.user.isAdmin) isAdmin: boolean;
+
+      // Vuex Getters
+      @Getter direction: string;
+      @Getter('speed') velocity: number;
+      @Getter(profile) adminProfile: (id: number) => Profile;
 
       // Accessors
       get hello() {
@@ -262,7 +266,6 @@ describe("convert", () => {
       const router = useRouter();
       const MyComponent = reactive(MyComponent);
       // Properties
-      /* VUEDC_TODO: Encountered unsupported Decorator(s): \\"@Getter() myGetter: string;\\")*/ let myGetter: string;
       const button = ref<HTMLButtonElement>();
       /* VUEDC_TODO: Update template, replace 'ref=\\"'aCheckbox'\\"' with 'ref=\\"checkbox\\"'*/ const checkbox = ref();
       const world = ref(\\"world\\");
@@ -276,6 +279,10 @@ describe("convert", () => {
       const vehicle = computed(() => store.state['car']);
       const userProfile = computed<Profile>(() => store.state[userProfile]);
       const isAdmin = computed<boolean>(() => store.state.user.isAdmin);
+      // Vuex Getters
+      const direction = computed<string>(() => store.getters.direction);
+      const velocity = computed<number>(() => store.getters['speed']);
+      const adminProfile = computed<(id: number) => Profile>(() => store.getters[profile]);
       /* VUEDC_TODO: Check for potential naming collisions from '$refs.divElement' conversion.*/ 
       // Template Refs
       const divElement = ref<HTMLDivElement>();
