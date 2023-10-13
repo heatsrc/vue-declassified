@@ -224,3 +224,15 @@ export function isObjLitExpr(node: ts.Node | unknown): node is ts.ObjectLiteralE
 export function isStringLit(node: ts.Node | unknown): node is ts.StringLiteral {
   return isTypeOfNode<ts.StringLiteral>(node, "isStringLiteral");
 }
+
+export function isPropertyAccessExpr(node: ts.Node | unknown): node is ts.PropertyAccessExpression {
+  return isTypeOfNode<ts.PropertyAccessExpression>(node, "isPropertyAccessExpression");
+}
+
+export function isIdent(node: ts.Node | unknown): node is ts.Identifier {
+  return isTypeOfNode<ts.Identifier>(node, "isIdentifier");
+}
+
+export function isArrowFunc(node: ts.Node | unknown): node is ts.ArrowFunction {
+  return isTypeOfNode<ts.ArrowFunction>(node, "isArrowFunction");
+}

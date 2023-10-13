@@ -23,6 +23,7 @@ import { transformEmitDecorator } from "./transforms/vue-property-decorator/Emit
 import { transformDecoratorProp } from "./transforms/vue-property-decorator/Prop.js";
 import { transformDecoratorRef } from "./transforms/vue-property-decorator/Ref.js";
 import { transformWatchDecorator } from "./transforms/vue-property-decorator/Watch.js";
+import { transformVuexState } from "./transforms/vuex-class/State.js";
 
 export const classTransforms: VxClassTransforms = {
   /** Primary decorate: @Options or Component */
@@ -44,15 +45,20 @@ export const classTransforms: VxClassTransforms = {
   [ts.SyntaxKind.HeritageClause]: [],
   /** Data properties, @Model, @Prop, @Watch, @Provide, @Inject, @Ref, @State, @Getter, @Action, @Mutation */
   [ts.SyntaxKind.PropertyDeclaration]: [
+    // Vue Class Component
     transformDefinables,
     transformTemplateRef,
+    // Vue Property Decorator
     transformDecoratorProp,
     transformDecoratorRef,
     transformDecoratorProvide,
     transformDecoratorInject,
-
+    // Vuex Class
+    transformVuexState,
+    // Everything else
     transformData,
   ],
+
   /** Class computed getters via get */
   [ts.SyntaxKind.GetAccessor]: [transformDefinables, transformGetter],
   /** Class computed setters via set */

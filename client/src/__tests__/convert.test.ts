@@ -74,6 +74,8 @@ describe("convert", () => {
     import MyComponent from "./MyComponent.vue";
 
     const MOUNT_EVENT = 'component:mounted';
+    const profile = 'profile';
+
 
     @Component({
       props: {
@@ -113,6 +115,13 @@ describe("convert", () => {
       @Inject() iFoo: string;
       @Inject('bar') iBaz: string;
       @Inject({ from: 'optional', default: () => ({ foo: 'bar' }) }) iOptional: { foo: string };
+
+      // Vuex State
+      @State title: string;
+      @State('car') vehicle;
+      @State(userProfile) userProfile: Profile;
+      @State((s) => s.user.isAdmin) isAdmin: boolean;
+
       // Accessors
       get hello() {
         this.$props.fdsa;
@@ -203,10 +212,11 @@ describe("convert", () => {
       "import { bar, b } from \\"./bar.js\\";
       import MyComponent from \\"./MyComponent.vue\\";
       import foo from \\"foo\\";
-      import { useRoute, useRouter } from \\"vue-router\\";
       import { useStore } from \\"vuex\\";
-      import { reactive, ref, inject, nextTick, watch, onMounted, onBeforeUnmount, onUnmounted, computed, provide, onBeforeMount, onBeforeUpdate, onUpdated, onActivated, onDeactivated, onErrorCaptured } from \\"vue\\";
+      import { useRoute, useRouter } from \\"vue-router\\";
+      import { reactive, ref, inject, computed, nextTick, watch, onMounted, onBeforeUnmount, onUnmounted, provide, onBeforeMount, onBeforeUpdate, onUpdated, onActivated, onDeactivated, onErrorCaptured } from \\"vue\\";
       const MOUNT_EVENT = 'component:mounted';
+      const profile = 'profile';
       /* VUEDC_TODO: Fix naming collisions
        
          - \`MyComponent\` is defined in: External imports
@@ -247,9 +257,9 @@ describe("convert", () => {
               _b0: unknown
           ];
       }>();
+      const store = useStore();
       const route = useRoute();
       const router = useRouter();
-      const store = useStore();
       const MyComponent = reactive(MyComponent);
       // Properties
       /* VUEDC_TODO: Encountered unsupported Decorator(s): \\"@Getter() myGetter: string;\\")*/ let myGetter: string;
@@ -261,6 +271,11 @@ describe("convert", () => {
       const iFoo = inject(\\"iFoo\\");
       const iBaz = inject(\\"bar\\");
       const iOptional = inject(\\"'optional'\\", () => ({ foo: \\"bar\\" }));
+      // Vuex State
+      const title = computed<string>(() => store.state.title);
+      const vehicle = computed(() => store.state['car']);
+      const userProfile = computed<Profile>(() => store.state[userProfile]);
+      const isAdmin = computed<boolean>(() => store.state.user.isAdmin);
       /* VUEDC_TODO: Check for potential naming collisions from '$refs.divElement' conversion.*/ 
       // Template Refs
       const divElement = ref<HTMLDivElement>();
