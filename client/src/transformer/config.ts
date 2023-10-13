@@ -20,7 +20,7 @@ import { transformOptionsProps } from "./transforms/vue-class-component/decorato
 import { transformDecoratorProvide } from "./transforms/vue-class-component/decorator-options/Provide.js";
 import { transformOptionsWatch } from "./transforms/vue-class-component/decorator-options/Watches.js";
 import { transformEmitDecorator } from "./transforms/vue-property-decorator/Emit.js";
-import { transformPropDecorator } from "./transforms/vue-property-decorator/Prop.js";
+import { transformDecoratorProp } from "./transforms/vue-property-decorator/Prop.js";
 import { transformDecoratorRef } from "./transforms/vue-property-decorator/Ref.js";
 import { transformWatchDecorator } from "./transforms/vue-property-decorator/Watch.js";
 
@@ -46,10 +46,11 @@ export const classTransforms: VxClassTransforms = {
   [ts.SyntaxKind.PropertyDeclaration]: [
     transformDefinables,
     transformTemplateRef,
-    transformPropDecorator,
+    transformDecoratorProp,
     transformDecoratorRef,
     transformDecoratorProvide,
     transformDecoratorInject,
+
     transformData,
   ],
   /** Class computed getters via get */

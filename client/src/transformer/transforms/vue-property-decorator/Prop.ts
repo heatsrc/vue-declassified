@@ -9,7 +9,7 @@ import { unknownKeyword } from "../vue-class-component/decorator-options/ctorToT
 
 const DECORATOR = "Prop";
 
-export const transformPropDecorator: VxTransform<ts.PropertyDeclaration> = (prop, program) => {
+export const transformDecoratorProp: VxTransform<ts.PropertyDeclaration> = (prop, program) => {
   if (!ts.isPropertyDeclaration(prop)) return { shouldContinue: true };
 
   const propName = prop.name.getText();
