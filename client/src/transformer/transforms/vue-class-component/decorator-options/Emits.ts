@@ -7,7 +7,7 @@ export const transformOptionsEmits: VxTransform<ts.PropertyAssignment> = (emitsO
 
   const emitsOptions = emitsOption.initializer;
   if (!ts.isArrayLiteralExpression(emitsOptions))
-    throw new Error("Invalid Option-Data: emits option should be string[]");
+    throw new Error("[vue-class-component] emits option should be string[]");
 
   const elements = emitsOptions.elements.map((el) => {
     const name = ts.isStringLiteral(el) ? el.text : el.getText();

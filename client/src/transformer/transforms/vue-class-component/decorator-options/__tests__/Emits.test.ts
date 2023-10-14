@@ -34,7 +34,7 @@ describe("Emits", () => {
       export default class Foo { }
     `);
     expect(() => convertAst(ast, program)).toThrowError(
-      `Invalid Option-Data: emits option should be string[]`,
+      `[vue-class-component] emits option should be string[]`,
     );
   });
 });
