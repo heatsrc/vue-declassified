@@ -1,27 +1,31 @@
-# Vue DeClassified (VueDc)
+<h1 align="center">
+  <p aria-hidden align="center"><img src="assets/vuedc-logo-200.png" aria-hidden /></p>
+  Vue Declassified (vuedc)
+</h1>
 
-- [Vue DeClassified (VueDc)](#vue-declassified-vuedc)
-  - [Vue Class Components -\> Vue 3 script setup](#vue-class-components---vue-3-script-setup)
-    - [Opinionated decisions](#opinionated-decisions)
-  - [Install](#install)
-  - [Usage](#usage)
-    - [CLI](#cli)
-  - [Supported Features](#supported-features)
-    - [vue-class-component](#vue-class-component)
-      - [`@Component` / `@Options` (v8.0.0-rc.1)](#component--options-v800-rc1)
-    - [vue-property-decorator](#vue-property-decorator)
-    - [vuex-class](#vuex-class)
+- [Vue Class Components -\> Vue 3 script setup](#vue-class-components---vue-3-script-setup)
+  - [Opinionated decisions](#opinionated-decisions)
+- [Install](#install)
+- [Usage](#usage)
+  - [vuedc CLI](#vuedc-cli)
+- [Supported Features](#supported-features)
+  - [vue-class-component](#vue-class-component)
+    - [`@Component` / `@Options` (v8.0.0-rc.1)](#component--options-v800-rc1)
+  - [vue-property-decorator](#vue-property-decorator)
+  - [vuex-class](#vuex-class)
 
 ## Vue Class Components -> Vue 3 script setup
 
-VueDc is an opinionated tool that will format Vue class components to script setup. This project a fork and re-write of yoyo930021's [vc2c](https://github.com/yoyo930021/vc2c)
+Vue Declassified is an opinionated tool that will format Vue class components (including the v8 RC package) to script setup. This project a fork and re-write of yoyo930021's [vc2c](https://github.com/yoyo930021/vc2c) which is focused more on Vue 2 -> Composition API using `defineComponent`.
 
 ### Opinionated decisions
 
-These decisions are made arbitrarily, mostly for sanity and convenience
+These decisions are made arbitrarily, mostly for sanity and convenience. You get what you get and you don't get upset.
 
+- No/Limited configuration
+  - There is a lot of different edge cases to test and adding configuration options tends to act as a multiplier for those cases.
 - Will only support TS
-- Won't support esoteric `@Component` options
+- Won't support esoteric/redundant `@Component`/`@Options` options
   - Will consider accepting PRs
 - Will order files `script` -> `template` -> `style`
 - Will reference macros by arbitrary variables (see below)
@@ -46,38 +50,44 @@ yarn install @heatsrc/vue-declassified
 
 ```ts
 import { convertSfc } from "@heatsrc/vue-declassified";
+import {readFile, writeFile} from 'node:fs/promises';
 
 const input = "./myVueComponent.vue";
 const output = "./myVueComponent.converted.vue";
 
-convertSfc(input, output);
+(async () => {
+  const encoding = {encoding: 'utf8'};
+  const inputFile = await readFile(input, encoding);
+
+  const result = await convertSfc(input, output);
+
+  await writeFile(output, encoding);
+}());
 ```
 
 ```ts
 import { convertScript } from "@heatsrc/vue-declassified";
 
 const input = `
+import { Component } from 'vue-class-component';
 @Component()
 export default class MyComponent extends Vue {
-
+  myData: string = 'foo';
 }`;
+
 const result = convertScript(input);
+
+console.log(result);
+// import { ref } from 'vue';
+// const myData = ref<string>('foo');
 ```
 
-### CLI
+### vuedc CLI
 
-You can call the CLI tool to convert a file directly
+You can call the CLI tool to convert a file directly from a terminal. For more information see the [vuedc](https://github.com/heatsrc/vue-declassified/blob/main/cli/README.md) readme.
 
 ```console
 pnpm dlx vuedc -i myVueComponent.vue -o myVueComponent.converted.vue
-```
-
-```console
-npx vuedc -i myVueComponent.vue -o myVueComponent.converted.vue
-```
-
-```console
-yarn dlx vuedc -i myVueComponent.vue -o myVueComponent.converted.vue
 ```
 
 ## Supported Features
