@@ -33,9 +33,9 @@ const props = withDefaults(defineProps<Props>(), {
   theme: 'light',
   store: () => new ReplStore(),
   autoResize: true,
-  showCompileOutput: true,
-  showImportMap: true,
-  showTsConfig: true,
+  showCompileOutput: false,
+  showImportMap: false,
+  showTsConfig: false,
   clearConsole: true,
   ssr: false,
   previewOptions: () => ({
@@ -92,16 +92,19 @@ defineExpose({ reload })
 
 <template>
   <div class="vue-repl">
+    <header>
+      <img src="/vuedc-logo-100.png" />
+      <h1>VueDc Playground</h1>
+    </header>
     <SplitPane :layout="layout">
       <template #left>
-        <EditorContainer :editorComponent="editor" />
+        <EditorContainer :editorComponent="editor" file="activeFile" />
       </template>
       <template #right>
-        <Output
-          ref="outputRef"
+        <EditorContainer
           :editorComponent="editor"
-          :showCompileOutput="props.showCompileOutput"
-          :ssr="!!props.ssr"
+          file="previewFile"
+          :readonly="true"
         />
       </template>
     </SplitPane>
@@ -117,7 +120,7 @@ defineExpose({ reload })
   --font-code: Menlo, Monaco, Consolas, 'Courier New', monospace;
   --color-branding: #42b883;
   --color-branding-dark: #416f9c;
-  --header-height: 38px;
+  --header-height: 55px;
 
   height: 100%;
   margin: 0;
@@ -126,6 +129,23 @@ defineExpose({ reload })
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   background-color: var(--bg-soft);
+
+  header {
+    display: flex;
+    align-items: center;
+    height: var(--header-height);
+    color: white;
+    padding: 5px;
+    border-bottom: 1px solid var(--border);
+
+    img {
+      height: 50px;
+    }
+    h1 {
+      margin-left: 1rem;
+      font-size: 2.25rem;
+    }
+  }
 }
 
 .dark .vue-repl {

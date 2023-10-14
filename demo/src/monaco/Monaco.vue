@@ -79,7 +79,6 @@ onMounted(async () => {
     modifiers: string[],
     _language: string
   ) => {
-    const _readonly = modifiers.includes('readonly')
     switch (type) {
       case 'function':
       case 'method':
@@ -88,7 +87,7 @@ onMounted(async () => {
         return { foreground: 11 }
       case 'variable':
       case 'property':
-        return { foreground: _readonly ? 21 : 9 }
+        return { foreground: 9 }
       default:
         return { foreground: 0 }
     }
@@ -107,34 +106,34 @@ onMounted(async () => {
     monaco.editor.setModelLanguage(editorInstance.getModel()!, lang)
   )
 
-  if (!props.readonly) {
-    watch(
-      () => props.filename,
-      (_, oldFilename) => {
-        if (!editorInstance) return
-        const file = store.state.files[props.filename]
-        if (!file) return null
-        const model = getOrCreateModel(
-          monaco.Uri.parse(`file:///${props.filename}`),
-          file.language,
-          file.code
-        )
+  // if (!props.readonly) {
+  watch(
+    () => props.filename,
+    (_, oldFilename) => {
+      if (!editorInstance) return
+      const file = store.state.files[props.filename]
+      if (!file) return null
+      const model = getOrCreateModel(
+        monaco.Uri.parse(`file:///${props.filename}`),
+        file.language,
+        file.code
+      )
 
-        const oldFile = oldFilename ? store.state.files[oldFilename] : null
-        if (oldFile) {
-          oldFile.editorViewState = editorInstance.saveViewState()
-        }
+      const oldFile = oldFilename ? store.state.files[oldFilename] : null
+      if (oldFile) {
+        oldFile.editorViewState = editorInstance.saveViewState()
+      }
 
-        editorInstance.setModel(model)
+      editorInstance.setModel(model)
 
-        if (file.editorViewState) {
-          editorInstance.restoreViewState(file.editorViewState)
-          editorInstance.focus()
-        }
-      },
-      { immediate: true }
-    )
-  }
+      if (file.editorViewState) {
+        editorInstance.restoreViewState(file.editorViewState)
+        editorInstance.focus()
+      }
+    },
+    { immediate: true }
+  )
+  // }
 
   await loadGrammars(monaco, editorInstance)
 

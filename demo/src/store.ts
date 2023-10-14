@@ -9,23 +9,43 @@ import {
 } from 'vue/compiler-sfc'
 import { OutputModes } from './output/types'
 import type { editor } from 'monaco-editor-core'
+import { convertSfc } from '@heatsrc/vue-declassified'
 
 const defaultMainFile = 'src/App.vue'
+const defaultConvertedFile = 'src/App.converted.vue'
 
 export const importMapFile = 'import-map.json'
 export const tsconfigFile = 'tsconfig.json'
 
 const welcomeCode = `
-<script setup>
-import { ref } from 'vue'
-
-const msg = ref('Hello World!')
-</script>
-
 <template>
-  <h1>{{ msg }}</h1>
-  <input v-model="msg">
+  <div>
+    <label>Update myWatchedProperty
+      <input :value="myWatchedProperty" @input="updateMyProperty($event)"/>
+    </label>
+    <div>{{ myWatchedPropertyStatus }}</div>
+  </div>
 </template>
+
+<script lang="ts">
+import { Component, Watch, Vue, Prop } from 'vue-property-decorator'
+
+@Component
+export default class App extends Vue {
+  @Prop({ default: 'default value' }) myProp: string;
+  myWatchedProperty: string = 'Watched Property'
+  myWatchedPropertyStatus: string = ''
+
+  @Watch('myWatchedProperty')
+  onPropertyChanged(value: string, oldValue: string) {
+    this.myWatchedPropertyStatus = 'Watched Property Changed'
+  }
+
+  updateMyProperty ($event: { target: { value: string } }) {
+    this.myWatchedProperty = $event.target.value
+  }
+}
+</script>
 `.trim()
 
 const tsconfig = {
@@ -33,10 +53,11 @@ const tsconfig = {
     allowJs: true,
     checkJs: true,
     jsx: 'Preserve',
-    target: 'ESNext',
+    target: 'ES2016',
     module: 'ESNext',
     moduleResolution: 'Bundler',
     allowImportingTsExtensions: true,
+    experimentalDecorators: true,
   },
   vueCompilerOptions: {
     target: 3.3,
@@ -155,6 +176,7 @@ export class ReplStore implements Store {
       }
     } else {
       setFile(files, defaultMainFile, welcomeCode)
+      setFile(files, defaultConvertedFile, '')
     }
 
     this.defaultVueRuntimeURL = defaultVueRuntimeURL
@@ -170,6 +192,7 @@ export class ReplStore implements Store {
       mainFile,
       files,
       activeFile: files[mainFile],
+      previewFile: files[defaultConvertedFile],
       errors: [],
       vueRuntimeURL: this.defaultVueRuntimeURL,
       vueServerRendererURL: this.defaultVueServerRendererURL,
@@ -184,11 +207,11 @@ export class ReplStore implements Store {
 
   // don't start compiling until the options are set
   init() {
-    watchEffect(() =>
-      compileFile(this, this.state.activeFile).then(
-        (errs) => (this.state.errors = errs)
-      )
-    )
+    watchEffect(async () => {
+      const errs = await compileFile(this, this.state.activeFile)
+      this.state.errors = errs
+      await this.convertFile()
+    })
 
     watch(
       () => [
@@ -234,7 +257,12 @@ export class ReplStore implements Store {
   }
 
   setActive(filename: string) {
-    this.state.activeFile = this.state.files[filename]
+    // this.state.activeFile = this.state.files[filename]
+  }
+
+  async convertFile() {
+    const converted = await convertSfc(this.state.activeFile.code)
+    this.state.files[defaultConvertedFile].code = converted
   }
 
   addFile(fileOrFilename: string | File): void {
@@ -356,6 +384,12 @@ export class ReplStore implements Store {
             imports: {
               vue: this.defaultVueRuntimeURL,
               'vue/server-renderer': this.defaultVueServerRendererURL,
+              'vue-class-component':
+                'https://cdn.jsdelivr.net/npm/vue-class-component@7.2.6/+esm',
+              'vue-property-decorator':
+                'https://cdn.jsdelivr.net/npm/vue-property-decorator@9.1.2/lib/index.umd.min.js',
+              'vuex-class':
+                'https://cdn.jsdelivr.net/npm/vuex-class@0.3.2/+esm',
             },
           },
           null,

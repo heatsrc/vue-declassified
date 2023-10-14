@@ -7,11 +7,10 @@ import { EditorComponentType } from '../src/editor/types'
 
 const App = {
   setup() {
-    const query = new URLSearchParams(location.search)
     const store = ((window as any).store = new ReplStore({
       serializedState: location.hash.slice(1),
-      showOutput: query.has('so'),
-      outputMode: query.get('om') || 'preview',
+      showOutput: false,
+      outputMode: 'preview',
       defaultVueRuntimeURL: import.meta.env.PROD
         ? undefined
         : `${location.origin}/src/vue-dev-proxy`,

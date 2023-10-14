@@ -81,6 +81,10 @@ importers:
         version: 0.34.6(@vitest/ui@0.34.6)
 
   demo:
+    dependencies:
+      '@heatsrc/vue-declassified':
+        specifier: workspace:^
+        version: link:../client
     devDependencies:
       '@babel/types':
         specifier: ^7.22.5
@@ -155,7 +159,7 @@ importers:
         specifier: ^3.34.0
         version: 3.34.0
       typescript:
-        specifier: ^5.1.6
+        specifier: ^5.2.2
         version: 5.2.2
       vite:
         specifier: ^4.4.7
