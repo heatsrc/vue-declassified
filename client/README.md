@@ -1,5 +1,5 @@
 <h1 align="center">
-  <p aria-hidden align="center"><img src="assets/vuedc-logo-200.png" aria-hidden /></p>
+  <p aria-hidden align="center"><img src="https://github.com/heatsrc/vue-declassified/blob/main/client/assets/vuedc-logo-200.png" aria-hidden /></p>
   Vue Declassified (vuedc)
 </h1>
 
