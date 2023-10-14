@@ -102,6 +102,7 @@ export interface StoreState {
   mainFile: string
   files: Record<string, File>
   activeFile: File
+  previewFile: File
   errors: (string | Error)[]
   vueRuntimeURL: string
   vueServerRendererURL: string
