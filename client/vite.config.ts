@@ -27,12 +27,11 @@ export default defineConfig({
       formats: ["es", "cjs", "umd"],
     },
     rollupOptions: {
-      external: ["vue", "node:fs/promises", "typescript"],
+      external: ["vue", "typescript"],
       output: {
         globals: {
           vue: "Vue",
           typescript: "ts",
-          "node:fs/promises": "fs",
         },
       },
     },

@@ -10,10 +10,11 @@ import { getSingleFileProgram } from "./parser.js";
  * @param src source file path to convert
  * @param dest (Optional.) destination path to write file to (uses src if not provided)
  */
-export async function convertSfc(src: string, dest?: string) {
+export async function convertSfc(src: string) {
   const { script, vueFile } = await readVueFile(src);
   const results = await convertScript(script.content);
-  writeVueFile(dest ?? src, vueFile, results);
+  const fileContent = await writeVueFile(vueFile, results);
+  return fileContent;
 }
 
 /**

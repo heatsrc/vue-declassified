@@ -1,14 +1,12 @@
-import { readFile, writeFile } from "node:fs/promises";
 import * as sfcCompiler from "vue/compiler-sfc";
 
 /**
  * Uses vue compiler to parse a vue file
  *
- * @param path file path to read
+ * @param content vue file content
  * @returns the parsed vue file
  */
-export async function readVueFile(path: string) {
-  const content = await readFile(path, { encoding: "utf8" });
+export async function readVueFile(content: string) {
   const vueFile = sfcCompiler.parse(content);
 
   if (vueFile.errors.length > 0)
@@ -20,17 +18,12 @@ export async function readVueFile(path: string) {
 }
 
 /**
- * Writes a vue file to disk
+ * Overwrites the script section of a vue file
  *
- * @param path file path to write to
  * @param vueFile Original parsed vue file
  * @param scriptContent Script content to write
  */
-export async function writeVueFile(
-  path: string,
-  vueFile: sfcCompiler.SFCParseResult,
-  scriptContent: string,
-) {
+export async function writeVueFile(vueFile: sfcCompiler.SFCParseResult, scriptContent: string) {
   if (!vueFile.descriptor.script) throw new Error("Vue file has no script!");
 
   const lang = vueFile.descriptor.script.lang;
@@ -39,7 +32,7 @@ export async function writeVueFile(
   fileContent += getTemplate(vueFile);
   fileContent += getStyles(vueFile);
 
-  await writeFile(path, fileContent, { encoding: "utf8" });
+  return fileContent;
 }
 
 function addLang(lang: string | undefined) {

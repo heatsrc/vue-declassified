@@ -2,6 +2,7 @@
 import { convertSfc } from "@heatsrc/vue-declassified";
 import { Command } from "commander";
 import figlet from "figlet";
+import { readFile, writeFile } from "node:fs/promises";
 import Readline from "node:readline/promises";
 import pkg from "../package.json";
 
@@ -49,9 +50,12 @@ async function main() {
   console.log(`Converting ${options.input}...`);
 
   try {
-    convertSfc(options.input, output).then(() => {
-      console.log(`Converted file written to: ${output}`);
-    });
+    const content = await readFile(options.input, { encoding: "utf8" });
+    const result = await convertSfc(content);
+
+    await writeFile(output, result, { encoding: "utf8" });
+
+    console.log(`Converted file written to: ${output}`);
   } catch (err) {
     console.error(err);
   }
