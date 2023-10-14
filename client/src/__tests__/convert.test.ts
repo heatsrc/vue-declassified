@@ -132,6 +132,11 @@ describe("convert", () => {
       @Action('user/fetchUser') fetchAdmin: (id: number) => Promise<User>;
       @Action(prefs) fetchPrefs;
 
+      // Vuex Mutations
+      @Mutation updateTitle: (title: string) => void;
+      @Mutation('user/updateTitle') updateAdminTitle: (title: string) => void;
+      @Mutation(profile) updateAdminProfile;
+
       // Accessors
       get hello() {
         this.$props.fdsa;
@@ -294,6 +299,10 @@ describe("convert", () => {
       const fetchUser = async (id: number): Promise<User> => store.dispatch(\\"fetchUser\\", id);
       const fetchAdmin = async (id: number): Promise<User> => store.dispatch('user/fetchUser', id);
       /* VUEDC_TODO: Check function dispatch call signature.*/ const fetchPrefs = async (...args: unknown[]): Promise<unknown> => store.dispatch(prefs, args);
+      // Vuex Mutations
+      const updateTitle = (title: string): void => store.commit(\\"updateTitle\\", title);
+      const updateAdminTitle = (title: string): void => store.commit('user/updateTitle', title);
+      /* VUEDC_TODO: Check function dispatch call signature.*/ const updateAdminProfile = (...args: unknown[]): unknown => store.commit(profile, args);
       /* VUEDC_TODO: Check for potential naming collisions from '$refs.divElement' conversion.*/ 
       // Template Refs
       const divElement = ref<HTMLDivElement>();

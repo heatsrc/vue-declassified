@@ -25,6 +25,7 @@ import { transformDecoratorRef } from "./transforms/vue-property-decorator/Ref.j
 import { transformWatchDecorator } from "./transforms/vue-property-decorator/Watch.js";
 import { transformVuexAction } from "./transforms/vuex-class/Action.js";
 import { transformVuexGetter } from "./transforms/vuex-class/Getter.js";
+import { transformVuexMutation } from "./transforms/vuex-class/Mutation.js";
 import { transformVuexState } from "./transforms/vuex-class/State.js";
 
 export const classTransforms: VxClassTransforms = {
@@ -59,6 +60,7 @@ export const classTransforms: VxClassTransforms = {
     transformVuexState,
     transformVuexGetter,
     transformVuexAction,
+    transformVuexMutation,
     // Everything else
     transformData,
   ],
