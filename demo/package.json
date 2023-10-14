@@ -1,22 +1,90 @@
 {
-  "name": "monorepo/vue-declassified-playground",
+  "name": "monorepo/vue-declassified-playgroung",
   "private": true,
-  "version": "0.0.0",
+  "version": "2.5.8",
+  "description": "This is a modified copy of @vue/repl",
+  "packageManager": "pnpm@8.7.5",
   "type": "module",
+  "main": "dist/ssr-stub.js",
+  "module": "dist/vue-repl.js",
+  "files": [
+    "dist"
+  ],
+  "types": "dist/repl.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/repl.d.ts",
+      "import": "./dist/vue-repl.js",
+      "require": "./dist/ssr-stub.js"
+    },
+    "./monaco-editor": {
+      "types": "./dist/editor-types.d.ts",
+      "import": "./dist/monaco-editor.js",
+      "require": null
+    },
+    "./codemirror-editor": {
+      "types": "./dist/editor-types.d.ts",
+      "import": "./dist/codemirror-editor.js",
+      "require": null
+    },
+    "./style.css": "./dist/style.css",
+    "./dist/style.css": "./dist/style.css"
+  },
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc && vite build",
-    "preview": "vite preview"
+    "build": "vite build",
+    "build-types": "vue-tsc -p tsconfig.build.json && api-extractor run -c api-extractor.json && node scripts/cleanup.js",
+    "build-preview": "vite build -c vite.preview.config.ts",
+    "format": "prettier --write .",
+    "release": "bumpp -r",
+    "prepublishOnly": "npm run build && npm run build-types"
   },
-  "dependencies": {
-    "@heatsrc/vue-declassified": "workspace:^",
-    "monaco-editor": "0.44.0",
-    "vue": "^3.3.4"
+  "simple-git-hooks": {
+    "pre-commit": "pnpm exec lint-staged --concurrent false"
   },
+  "lint-staged": {
+    "*": [
+      "prettier --write --cache --ignore-unknown"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vuejs/repl.git"
+  },
+  "author": "Evan You",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vuejs/repl/issues"
+  },
+  "homepage": "https://github.com/vuejs/repl#readme",
   "devDependencies": {
+    "@babel/types": "^7.22.5",
+    "@microsoft/api-extractor": "^7.36.3",
+    "@rollup/plugin-replace": "^5.0.2",
+    "@types/codemirror": "^5.60.8",
+    "@types/node": "^20.4.5",
     "@vitejs/plugin-vue": "^4.2.3",
-    "typescript": "^5.0.2",
-    "vite": "^4.4.5",
-    "vue-tsc": "^1.8.5"
+    "@volar/cdn": "~1.9.2",
+    "@volar/monaco": "~1.9.2",
+    "@volar/typescript": "~1.9.2",
+    "@vue/language-service": "1.8.6",
+    "bumpp": "^9.1.1",
+    "codemirror": "^5.65.14",
+    "fflate": "^0.8.0",
+    "hash-sum": "^2.0.0",
+    "lint-staged": "^13.2.3",
+    "monaco-editor-core": "^0.40.0",
+    "monaco-editor-textmate": "^4.0.0",
+    "monaco-textmate": "^3.0.1",
+    "monaco-volar": "^0.4.0",
+    "onigasm": "^2.2.5",
+    "path-browserify": "^1.0.1",
+    "prettier": "^3.0.0",
+    "simple-git-hooks": "^2.9.0",
+    "sucrase": "^3.34.0",
+    "typescript": "^5.1.6",
+    "vite": "^4.4.7",
+    "vue": "^3.3.4",
+    "vue-tsc": "1.8.6"
   }
 }

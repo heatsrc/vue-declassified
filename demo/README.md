@@ -1,18 +1,87 @@
-# Vue 3 + TypeScript + Vite
+# @vue/repl
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Vue SFC REPL as a Vue 3 component.
 
-## Recommended IDE Setup
+## Basic Usage
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+**Note: 2.0 now supports Monaco Editor, but also requires explicitly passing in the editor to be used for tree-shaking.**
 
-## Type Support For `.vue` Imports in TS
+### With CodeMirror Editor
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+Basic editing experience with no intellisense. Lighter weight, fewer network requests, better for embedding use cases.
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+```vue
+<script setup>
+import { Repl } from '@vue/repl'
+import CodeMirror from '@vue/repl/codemirror-editor'
+import '@vue/repl/style.css'
+</script>
 
-1. Disable the built-in TypeScript Extension
-   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+<template>
+  <Repl :editor="CodeMirror" />
+</template>
+```
+
+### With Monaco Editor
+
+With Volar support, autocomplete, type inference, and semantic highlighting. Heavier bundle, loads dts files from CDN, better for standalone use cases.
+
+```vue
+<script setup>
+import { Repl } from '@vue/repl'
+import Monaco from '@vue/repl/monaco-editor'
+import '@vue/repl/style.css'
+</script>
+
+<template>
+  <Repl :editor="Monaco" />
+</template>
+```
+
+## Advanced Usage
+
+Customize the behavior of the REPL by manually initializing the store.
+
+```vue
+<script setup>
+import { watchEffect } from 'vue'
+import { Repl, ReplStore } from '@vue/repl'
+import Monaco from '@vue/repl/monaco-editor'
+
+// retrieve some configuration options from the URL
+const query = new URLSearchParams(location.search)
+
+const store = new ReplStore({
+  // initialize repl with previously serialized state
+  serializedState: location.hash.slice(1),
+
+  // starts on the output pane (mobile only) if the URL has a showOutput query
+  showOutput: query.has('showOutput'),
+  // starts on a different tab on the output pane if the URL has a outputMode query
+  // and default to the "preview" tab
+  outputMode: query.get('outputMode') || 'preview',
+
+  // specify the default URL to import Vue runtime from in the sandbox
+  // default is the CDN link from jsdelivr.com with version matching Vue's version
+  // from peerDependency
+  defaultVueRuntimeURL: 'cdn link to vue.runtime.esm-browser.js',
+})
+
+// persist state to URL hash
+watchEffect(() => history.replaceState({}, '', store.serialize()))
+
+// pre-set import map
+store.setImportMap({
+  imports: {
+    myLib: 'cdn link to esm build of myLib',
+  },
+})
+
+// use a specific version of Vue
+store.setVueVersion('3.2.8')
+</script>
+
+<template>
+  <Repl :store="store" :editor="Monaco" :showCompileOutput="true" />
+</template>
+```

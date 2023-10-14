@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -14,7 +14,15 @@
       }
     </style>
 
-    <script type="module" src="./test/main.ts"></script>
+    <script type="module">
+      import { createApp } from 'vue'
+      import { Repl } from './dist/vue-repl'
+      import Monaco from './dist/monaco-editor'
+      import './dist/style.css'
+      createApp(Repl, {
+        editor: Monaco,
+      }).mount('#app')
+    </script>
   </head>
   <body>
     <div id="app"></div>
