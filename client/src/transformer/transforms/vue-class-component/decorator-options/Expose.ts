@@ -7,11 +7,11 @@ export const transformOptionsExpose: VxTransform<ts.PropertyAssignment> = (expos
 
   const exposeOptions = exposeOption.initializer;
   if (!ts.isArrayLiteralExpression(exposeOptions))
-    throw new Error("Invalid Option-Data: expose option should be string[]");
+    throw new Error("[vue-class-component] expose option should be string[]");
 
   const properties = exposeOptions.elements.map((el) => {
     if (!ts.isStringLiteral(el))
-      throw new Error("Invalid Option-Data: expose option should be string[]");
+      throw new Error("[vue-class-component] expose option should be string[]");
 
     const name = createIdentifier(el.text);
     const property = ts.factory.createShorthandPropertyAssignment(name);
