@@ -267,11 +267,11 @@ These are options provided in the decorator call, e.g., `@Component({ components
 ### vuex-class
 
 <details>
-<summary>`Decorators` (2 :white_check_mark:, 6 :heavy_check_mark:)</summary>
+<summary>`Decorators` (3 :white_check_mark:, 5 :heavy_check_mark:)</summary>
 
 |   decorator    |     supported?     | notes |
 | :------------: | :----------------: | ----- |
-|   `@Action`    | :heavy_check_mark: |       |
+|   `@Action`    | :white_check_mark: |       |
 |   `@Getter`    | :white_check_mark: |       |
 |  `@Mutation`   | :heavy_check_mark: |       |
 |    `@State`    | :white_check_mark: |       |

@@ -66,7 +66,7 @@ export function convertVuexComputedFactory(
           imports: namedImports(["computed"], "vue"),
           outputVariables: [computedName],
           nodes: [computedStatement],
-          tag: "VuexComputed",
+          tag: `VuexComputed-${decoratorName}`,
         } as VxTransformResult<ts.VariableStatement>,
       ],
     };

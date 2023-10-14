@@ -75,6 +75,7 @@ describe("convert", () => {
 
     const MOUNT_EVENT = 'component:mounted';
     const profile = 'profile';
+    const prefs = 'userPreferences';
 
 
     @Component({
@@ -125,6 +126,11 @@ describe("convert", () => {
       @Getter direction: string;
       @Getter('speed') velocity: number;
       @Getter(profile) adminProfile: (id: number) => Profile;
+
+      // Vuex Actions
+      @Action fetchUser: (id: number) => Promise<User>;
+      @Action('user/fetchUser') fetchAdmin: (id: number) => Promise<User>;
+      @Action(prefs) fetchPrefs;
 
       // Accessors
       get hello() {
@@ -221,6 +227,7 @@ describe("convert", () => {
       import { reactive, ref, inject, computed, nextTick, watch, onMounted, onBeforeUnmount, onUnmounted, provide, onBeforeMount, onBeforeUpdate, onUpdated, onActivated, onDeactivated, onErrorCaptured } from \\"vue\\";
       const MOUNT_EVENT = 'component:mounted';
       const profile = 'profile';
+      const prefs = 'userPreferences';
       /* VUEDC_TODO: Fix naming collisions
        
          - \`MyComponent\` is defined in: External imports
@@ -283,6 +290,10 @@ describe("convert", () => {
       const direction = computed<string>(() => store.getters.direction);
       const velocity = computed<number>(() => store.getters['speed']);
       const adminProfile = computed<(id: number) => Profile>(() => store.getters[profile]);
+      // Vuex Actions
+      const fetchUser = async (id: number): Promise<User> => store.dispatch(\\"fetchUser\\", id);
+      const fetchAdmin = async (id: number): Promise<User> => store.dispatch('user/fetchUser', id);
+      /* VUEDC_TODO: Check function dispatch call signature.*/ const fetchPrefs = async (...args: unknown[]): Promise<unknown> => store.dispatch(prefs, args);
       /* VUEDC_TODO: Check for potential naming collisions from '$refs.divElement' conversion.*/ 
       // Template Refs
       const divElement = ref<HTMLDivElement>();

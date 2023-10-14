@@ -61,6 +61,8 @@ export function createCallExpression(
   return factory.createCallExpression(expr, typeRef, args);
 }
 
+export const rocketToken = () => factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken);
+
 export function createArrowFunction(
   node: ts.MethodDeclaration | ts.AccessorDeclaration,
   statements?: ts.Statement[],
@@ -68,7 +70,7 @@ export function createArrowFunction(
 ) {
   const { body, parameters, type, typeParameters } = node;
   const modifiers = ts.getModifiers(node);
-  const rocket = factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken);
+  const rocket = rocketToken();
   const fnBody = statements
     ? factory.createBlock(statements, multiline)
     : body ?? factory.createBlock([], multiline);
