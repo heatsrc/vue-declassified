@@ -85,11 +85,13 @@ export function convertVuexComputedFactory(
  */
 function getAccessExpression(property: string | ts.Expression, storeProperty: "state" | "getters") {
   // @State(s => s.foo.bar) bar: string; -> store.state.foo.bar
-  if (isArrowFunc(property)) {
+  if (isArrowFunc(property) && storeProperty === "state") {
     const transformer = getArrowFnTransformer(property, storeProperty);
     const transformedArrowFn = ts.transform(property, [transformer]).transformed[0];
     const accessExpr = cloneNode(transformedArrowFn.body) as ts.PropertyAccessExpression;
     return accessExpr;
+  } else if (isArrowFunc(property) && storeProperty === "getters") {
+    throw new Error("[vuex-class] Arrow functions are not supported for @Getter");
   }
 
   const storeId = createIdentifier("store");
