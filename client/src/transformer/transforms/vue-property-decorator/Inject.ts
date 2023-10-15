@@ -10,6 +10,7 @@ import { registerDecorator } from "@/transformer/registry.js";
 import { VxReferenceKind, VxResultKind, VxTransform } from "@/types.js";
 import { cloneNode } from "ts-clone-node";
 import ts from "typescript";
+import { tryToFindType } from "../utils/tryToFindType";
 
 const DECORATOR = "Inject";
 
@@ -31,16 +32,23 @@ export const transformDecoratorInject: VxTransform<ts.PropertyDeclaration> = (no
   if (ts.isCallExpression(decorator.expression)) decoratorArg = decorator.expression.arguments[0];
 
   let injectStatement: ts.Statement | undefined;
-  let injectName: string | undefined;
+  let injectName: string | ts.Identifier | undefined;
   let defaultVal: ts.Expression | undefined = undefined;
 
   const localName = node.name.getText();
   const properties = isObjLitExpr(decoratorArg) ? decoratorArg.properties : undefined;
 
   if (properties) ({ injectName, defaultVal } = parseOptions(properties));
-  if (!injectName) injectName = isStringLit(decoratorArg) ? decoratorArg.text : localName;
+  if (!injectName) {
+    if (decoratorArg && isStringLit(decoratorArg)) injectName = decoratorArg.text;
+    else if (decoratorArg && ts.isIdentifier(decoratorArg)) injectName = decoratorArg;
+    else injectName = localName;
+  }
 
-  injectStatement = createInject(injectName, localName, defaultVal);
+  let type: ts.TypeNode | undefined;
+  if (node.type) type = tryToFindType(node, program);
+
+  injectStatement = createInject(injectName, localName, defaultVal, type);
 
   return {
     shouldContinue: false,
@@ -62,7 +70,10 @@ function parseOptions(properties: ts.NodeArray<ts.ObjectLiteralElementLike>) {
       if (!ts.isPropertyAssignment(prop)) return acc;
 
       const propertyName = prop.name.getText();
-      if (propertyName === "from") acc.injectName = prop.initializer.getText();
+      if (propertyName === "from")
+        acc.injectName = isStringLit(prop.initializer)
+          ? prop.initializer.text
+          : prop.initializer.getText();
       if (propertyName === "default") acc.defaultVal = cloneNode(prop.initializer);
 
       return acc;
@@ -73,10 +84,15 @@ function parseOptions(properties: ts.NodeArray<ts.ObjectLiteralElementLike>) {
   return options;
 }
 
-function createInject(key: string, localAlias: string, defaultValue: ts.Expression | undefined) {
-  const injectId = ts.factory.createStringLiteral(key);
+function createInject(
+  key: string | ts.Identifier,
+  localAlias: string,
+  defaultValue: ts.Expression | undefined,
+  type: ts.TypeNode | undefined,
+) {
+  const injectId = typeof key === "string" ? ts.factory.createStringLiteral(key) : key;
   const defaultVal = defaultValue ? [defaultValue] : [];
-  const injectExpr = createCallExpression("inject", undefined, [injectId, ...defaultVal]);
+  const injectExpr = createCallExpression("inject", type, [injectId, ...defaultVal]);
   const statement = createConstStatement(localAlias, injectExpr);
   return statement;
 }

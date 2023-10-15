@@ -283,9 +283,11 @@ describe("convert", () => {
       const world = ref(\\"world\\");
       const b = ref(\\"b\\");
       const c = reactive({ d: { e: \\"f\\" } });
-      const iFoo = inject(\\"iFoo\\");
-      const iBaz = inject(\\"bar\\");
-      const iOptional = inject(\\"'optional'\\", () => ({ foo: \\"bar\\" }));
+      const iFoo = inject<string>(\\"iFoo\\");
+      const iBaz = inject<string>(\\"bar\\");
+      const iOptional = inject<{
+          foo: string;
+      }>(\\"optional\\", () => ({ foo: \\"bar\\" }));
       // Vuex State
       const title = computed<string>(() => store.state.title);
       const vehicle = computed(() => store.state['car']);

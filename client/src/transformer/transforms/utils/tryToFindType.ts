@@ -2,11 +2,14 @@ import { getPrimitiveKeyword } from "@/helpers/tsHelpers";
 import { cloneNode } from "ts-clone-node";
 import ts from "typescript";
 
-export function tryToFindType(node: ts.Expression | ts.ParameterDeclaration, program: ts.Program) {
+export function tryToFindType(
+  node: ts.Expression | ts.PropertyDeclaration | ts.ParameterDeclaration,
+  program: ts.Program,
+) {
   // If current node is a Keyword Literal we can use default to that for now
   let keyword = getPrimitiveKeyword(node.kind);
 
-  if (ts.isParameter(node) || ts.isVariableDeclaration(node)) {
+  if (ts.isParameter(node) || ts.isVariableDeclaration(node) || ts.isPropertyDeclaration(node)) {
     if (node.type) return cloneNode(node.type);
     else if (node.initializer) {
       keyword = getPrimitiveKeyword(node.initializer.kind);
