@@ -1,8 +1,4 @@
-import {
-  createCallExpression,
-  createConstStatement,
-  getPrimitiveKeyword,
-} from "@/helpers/tsHelpers.js";
+import { createCallExpression, createConstStatement } from "@/helpers/tsHelpers.js";
 import { namedImports } from "@/helpers/utils.js";
 import {
   VxReferenceKind,
@@ -11,9 +7,7 @@ import {
   VxResultToImport,
   VxResultToMacro,
 } from "@/types.js";
-import { cloneNode } from "ts-clone-node";
 import ts from "typescript";
-import { tryToFindType } from "./tryToFindType";
 
 /**
  * Instance properties are internal(ish) properties in Vue components that need
