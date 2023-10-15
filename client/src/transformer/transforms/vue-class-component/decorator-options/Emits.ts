@@ -14,7 +14,9 @@ export const transformOptionsEmits: VxTransform<ts.PropertyAssignment> = (emitsO
     return [name, getUnknownArgs()] as [propId: string, type: ts.TupleTypeNode];
   });
   const arrayLit = ts.factory.createArrayLiteralExpression(emitsOptions.elements);
-  const defineEmitsResult = instanceDependencies.get("$emit") as VxResultToMacro;
+  const getDependency = instanceDependencies.get("$emit");
+  if (!getDependency) throw new Error("[vue-class-component] $emit dependency not found");
+  const defineEmitsResult = getDependency() as VxResultToMacro;
   defineEmitsResult.typeProperties.push(...elements);
 
   return {

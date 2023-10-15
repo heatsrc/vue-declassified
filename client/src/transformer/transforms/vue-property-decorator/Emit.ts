@@ -4,6 +4,7 @@ import {
   createIdentifier,
   createPropertyAccess,
   getDecorators,
+  isStringLit,
 } from "@/helpers/tsHelpers.js";
 import { registerDecorator } from "@/transformer/registry.js";
 import { VxReferenceKind, VxResultKind, VxResultToMacro, VxTransform } from "@/types.js";
@@ -34,7 +35,7 @@ export const transformEmitDecorator: VxTransform<ts.MethodDeclaration> = (node, 
     throw new Error(`[vue-property-decorator] Expected @${DECORATOR} to be a call expression`);
 
   const decoratorArgs = decorator.expression.arguments;
-  const eventName = ts.isStringLiteral(decoratorArgs[0]) ? decoratorArgs[0].text : emitFnName;
+  const eventName = isStringLit(decoratorArgs?.[0]) ? decoratorArgs[0].text : emitFnName;
 
   registerDecorator(DECORATOR);
 
@@ -62,7 +63,7 @@ export const transformEmitDecorator: VxTransform<ts.MethodDeclaration> = (node, 
     return acc;
   }, [] as ts.Statement[]);
 
-  if (!bodyStatements) {
+  if (bodyStatements.length <= 0) {
     bodyStatements = [...originalBodyStatements, createEmit(eventName, methodParamNames)];
   }
 
@@ -86,9 +87,9 @@ export const transformEmitDecorator: VxTransform<ts.MethodDeclaration> = (node, 
   const arrowFunction = createArrowFunction(node, bodyStatements, true);
   const constStatement = createConstStatement(emitFnName, arrowFunction);
 
-  const defineEmitsResult = instanceDependencies.get(
-    "$emit",
-  ) as VxResultToMacro<ts.PropertyAssignment>;
+  const getDependency = instanceDependencies.get("$emit");
+  if (!getDependency) throw new Error("[vue-class-component] $emit dependency not found");
+  const defineEmitsResult = getDependency() as VxResultToMacro;
   defineEmitsResult.typeProperties.push(typeProperty);
 
   return {

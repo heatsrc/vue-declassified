@@ -29,8 +29,9 @@ export const transformDefinables: VxTransform<
     if (child.expression.kind !== ts.SyntaxKind.ThisKeyword) return;
 
     const depName = child.name.text;
-    if (!instanceDependencies.has(depName)) return;
-    const dependency = instanceDependencies.get(depName);
+    const getDependency = instanceDependencies.get(depName);
+    if (!getDependency) return;
+    const dependency = getDependency();
     // TS doesn't type narrow Maps :(
     if (!dependency) return;
 

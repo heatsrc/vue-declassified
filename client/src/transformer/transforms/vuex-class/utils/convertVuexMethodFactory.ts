@@ -49,7 +49,9 @@ export function transformVuexMethodFactory(
       addTodoComment(constStatement, `Check function dispatch call signature.`);
     }
 
-    const storeComposable = instanceDependencies.get("$store") as VxResultToComposable;
+    const getDependency = instanceDependencies.get("$store");
+    if (!getDependency) throw new Error("[vuex-class] $store dependency not found");
+    const storeComposable = getDependency() as VxResultToComposable;
     return {
       shouldContinue: false,
       result: [

@@ -36,17 +36,17 @@ export const instancePropertyKeyMap = new Map<string, string | ts.PropertyAccess
 ]);
 
 export const instanceDependencies = new Map([
-  ["$attrs", getConversion(VxResultKind.COMPOSABLE, "attrs", "useAttrs", "vue")],
-  ["$emit", getConversion(VxResultKind.MACRO, "emit", "defineEmits")],
-  ["$nextTick", getConversion(VxResultKind.IMPORT, null, "nextTick", "vue")],
-  ["$options", getConversion(VxResultKind.MACRO, "options", "defineOptions")],
-  ["$props", getConversion(VxResultKind.MACRO, "props", "defineProps")],
-  ["$route", getConversion(VxResultKind.COMPOSABLE, "route", "useRoute", "vue-router")],
-  ["$router", getConversion(VxResultKind.COMPOSABLE, "router", "useRouter", "vue-router")],
-  ["$scopedSlots", getConversion(VxResultKind.MACRO, "slots", "defineSlots")],
-  ["$slots", getConversion(VxResultKind.MACRO, "slots", "defineSlots")],
-  ["$store", getConversion(VxResultKind.COMPOSABLE, "store", "useStore", "vuex")],
-  ["$watch", getConversion(VxResultKind.IMPORT, null, "watch", "vue")],
+  ["$attrs", () => getConversion(VxResultKind.COMPOSABLE, "attrs", "useAttrs", "vue")],
+  ["$emit", () => getConversion(VxResultKind.MACRO, "emit", "defineEmits")],
+  ["$nextTick", () => getConversion(VxResultKind.IMPORT, null, "nextTick", "vue")],
+  ["$options", () => getConversion(VxResultKind.MACRO, "options", "defineOptions")],
+  ["$props", () => getConversion(VxResultKind.MACRO, "props", "defineProps")],
+  ["$route", () => getConversion(VxResultKind.COMPOSABLE, "route", "useRoute", "vue-router")],
+  ["$router", () => getConversion(VxResultKind.COMPOSABLE, "router", "useRouter", "vue-router")],
+  ["$scopedSlots", () => getConversion(VxResultKind.MACRO, "slots", "defineSlots")],
+  ["$slots", () => getConversion(VxResultKind.MACRO, "slots", "defineSlots")],
+  ["$store", () => getConversion(VxResultKind.COMPOSABLE, "store", "useStore", "vuex")],
+  ["$watch", () => getConversion(VxResultKind.IMPORT, null, "watch", "vue")],
 ]);
 
 export function tryToFindType(node: ts.Expression | ts.ParameterDeclaration, program: ts.Program) {
