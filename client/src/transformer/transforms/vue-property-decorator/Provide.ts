@@ -26,8 +26,7 @@ export const transformDecoratorProvide: VxTransform<ts.PropertyDeclaration> = (n
   if (decoratorArg && !ts.isStringLiteral(decoratorArg))
     throw new Error(`[vue-class-component] Expected @${DECORATOR} to be a string literal`);
 
-  const provideAlias = decoratorArg ? decoratorArg.getText() : node.name.getText();
-  const provideId = createIdentifier(provideAlias);
+  const provideId = decoratorArg ?? ts.factory.createStringLiteral(node.name.getText());
   const provideValue = createIdentifier(node.name.getText());
   // Using `this?.` as a signifier we don't want to convert ref to .value
   const providePropAccess = ts.factory.createPropertyAccessChain(
