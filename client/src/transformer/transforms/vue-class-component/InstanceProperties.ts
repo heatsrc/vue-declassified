@@ -2,11 +2,8 @@ import { createIdentifier } from "@/helpers/tsHelpers.js";
 import { traverseNode } from "@/helpers/utils.js";
 import { VxResultKind, VxTransform, VxTransformResult } from "@/types.js";
 import ts from "typescript";
-import {
-  instanceDependencies,
-  tryGettingEventName,
-  tryToFindType,
-} from "../utils/instancePropertyAccess.js";
+import { instanceDependencies, tryGettingEventName } from "../utils/instancePropertyAccess.js";
+import { tryToFindType } from "../utils/tryToFindType.js";
 /**
  * Inspects a nodes children for instance properties (e.g., `this.$store`) and
  * creates a transform result for each so that they are declared. Some instance

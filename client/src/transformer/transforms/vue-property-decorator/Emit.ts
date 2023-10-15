@@ -9,7 +9,8 @@ import {
 import { registerDecorator } from "@/transformer/registry.js";
 import { VxReferenceKind, VxResultKind, VxResultToMacro, VxTransform } from "@/types.js";
 import ts, { TupleTypeNode } from "typescript";
-import { instanceDependencies, tryToFindType } from "../utils/instancePropertyAccess.js";
+import { instanceDependencies } from "../utils/instancePropertyAccess.js";
+import { tryToFindType } from "../utils/tryToFindType.js";
 
 const DECORATOR = "Emit";
 
