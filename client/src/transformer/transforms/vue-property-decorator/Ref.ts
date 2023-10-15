@@ -1,5 +1,6 @@
 import { addTodoComment, copySyntheticComments } from "@/helpers/comments.js";
 import { createCallExpression, createConstStatement, getDecorators } from "@/helpers/tsHelpers.js";
+import { namedImports } from "@/helpers/utils";
 import { registerDecorator } from "@/transformer/registry.js";
 import { VxReferenceKind, VxResultKind, VxTransform } from "@/types.js";
 import { cloneNode } from "ts-clone-node";
@@ -49,7 +50,7 @@ export const transformDecoratorRef: VxTransform<ts.PropertyDeclaration> = (prop,
     result: {
       kind: VxResultKind.COMPOSITION,
       tag: "TemplateRef",
-      imports: [],
+      imports: namedImports(["ref"]),
       outputVariables: [refName],
       reference: VxReferenceKind.VARIABLE_VALUE,
       nodes: [refConst],
