@@ -37,7 +37,7 @@ export const transformOptionsProps: VxTransform<ts.PropertyAssignment> = (propsO
         return ts.factory.createPropertyAssignment(k, defVal);
       });
   } else {
-    throw new Error("Invalid props declaration, expecting `string[] | Object`");
+    throw new Error("[vue-class-component] props option expecting `string[] | Object`");
   }
 
   results.push({
