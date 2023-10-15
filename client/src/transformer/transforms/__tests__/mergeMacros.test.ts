@@ -17,6 +17,12 @@ describe("mergeMacros test", () => {
       export default class Foo {
         @Prop() aProp: string;
         @Emit('foo') aEmit(a: string) {}
+
+        foo() {
+          // undefined, but prod version of class components allows it
+          this.$emit('bar', 'bar');
+        }
+
       }
     `);
     const result = convertAst(ast, program);
@@ -39,9 +45,16 @@ describe("mergeMacros test", () => {
           \\"foo\\": [
               a: string
           ];
+          \\"bar\\": [
+              'bar': string
+          ];
       }>();
       const aEmit = (a: string) => {
           emit(\\"foo\\", a);
+      };
+      const foo = () => {
+          // undefined, but prod version of class components allows it
+          emit('bar', 'bar');
       };
       "
     `);
