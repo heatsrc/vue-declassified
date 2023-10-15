@@ -16,7 +16,8 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "coverage": "vitest --coverage",
-    "build": "rimraf dist && vite build"
+    "build": "rimraf dist && vite build",
+    "lint": "tsc --noEmit && prettier --check ./**/*.{ts,json,vue}"
   },
   "keywords": [
     "vue-declassified",
