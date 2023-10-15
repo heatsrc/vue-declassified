@@ -12,7 +12,7 @@ export const transformOptionsWatch: VxTransform<ts.PropertyAssignment> = (watchO
   const watchOptionObject = watchOption.initializer;
 
   if (!ts.isObjectLiteralExpression(watchOptionObject))
-    throw new Error("Invalid Option-Data: watch option");
+    throw new Error("[vue-class-component] watch option should be an object");
 
   const nodes = watchOptionObject.properties.reduce((acc, prop) => {
     if (!ts.isPropertyAssignment(prop)) return acc;
