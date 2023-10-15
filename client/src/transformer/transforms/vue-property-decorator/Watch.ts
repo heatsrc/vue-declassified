@@ -2,7 +2,7 @@ import { createIdentifier, getDecorators } from "@/helpers/tsHelpers.js";
 import { registerDecorator } from "@/transformer/registry.js";
 import { VxReferenceKind, VxResultKind, VxTransform } from "@/types.js";
 import ts from "typescript";
-import { getWatchCalls } from "../utils/getWatchCall.js";
+import { convertInitializerToWatchHandlers, getWatchCalls } from "../utils/getWatchCall.js";
 
 const DECORATOR = "Watch";
 
@@ -25,7 +25,15 @@ export const transformWatchDecorator: VxTransform<ts.MethodDeclaration> = (watch
     // TODO since have been using `this?.` to tell the post processor not to add
     // TODO .value to refs. refactor this
     const watchSource = decorator.expression.arguments[0].text;
-    const watchHandler = createIdentifier(watchFnName);
+    const watchHandler = { handler: createIdentifier(watchFnName) };
+    if (
+      decorator.expression.arguments.length > 1 &&
+      ts.isObjectLiteralExpression(decorator.expression.arguments[1])
+    ) {
+      const handlerOpts = convertInitializerToWatchHandlers(decorator.expression.arguments[1]);
+      Object.assign(watchHandler, ...handlerOpts);
+    }
+
     const watchExpression = getWatchCalls(watchSource, [watchHandler]);
     return watchExpression[0];
   });
