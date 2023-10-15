@@ -24,6 +24,7 @@ export function tryToFindType(
     declaration &&
     (ts.isParameter(declaration) ||
       ts.isVariableDeclaration(declaration) ||
+      ts.isPropertyDeclaration(declaration) ||
       ts.isAccessor(declaration))
   ) {
     if (declaration.type) return cloneNode(declaration.type);

@@ -270,7 +270,7 @@ describe("convert", () => {
               oldVal: string
           ];
           \\"component:mounted\\": [
-              _b0: unknown
+              _b0: string
           ];
       }>();
       const store = useStore();
