@@ -304,7 +304,7 @@ describe("convert", () => {
       // Vuex Mutations
       const updateTitle = (title: string): void => store.commit(\\"updateTitle\\", title);
       const updateAdminTitle = (title: string): void => store.commit('user/updateTitle', title);
-      /* VUEDC_TODO: Check function dispatch call signature.*/ const updateAdminProfile = (...args: unknown[]): unknown => store.commit(profile, args);
+      /* VUEDC_TODO: Check function commit call signature.*/ const updateAdminProfile = (...args: unknown[]): unknown => store.commit(profile, args);
       /* VUEDC_TODO: Check for potential naming collisions from '$refs.divElement' conversion.*/ 
       // Template Refs
       const divElement = ref<HTMLDivElement>();

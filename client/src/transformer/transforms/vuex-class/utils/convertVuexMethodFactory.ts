@@ -46,7 +46,7 @@ export function transformVuexMethodFactory(
     copySyntheticComments(constStatement, node);
 
     if (!node.type || !ts.isFunctionTypeNode(node.type)) {
-      addTodoComment(constStatement, `Check function dispatch call signature.`);
+      addTodoComment(constStatement, `Check function ${storeProperty} call signature.`);
     }
 
     const getDependency = instanceDependencies.get("$store");
