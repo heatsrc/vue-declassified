@@ -16,7 +16,7 @@ type PropMetadata = {
  * @example
  *    props: ["a", "b", "c"],
  *    // or
- *    props: { a: String, b: Object, c: Boolean },
+ *    props: { a: String, b: Object, c: Boolean, d: [String, Boolean] },
  *    // or
  *    props: {
  *      a: {

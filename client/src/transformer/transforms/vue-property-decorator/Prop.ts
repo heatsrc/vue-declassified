@@ -5,7 +5,7 @@ import { cloneNode } from "ts-clone-node";
 import ts from "typescript";
 import { instancePropertyKeyMap } from "../utils/instancePropertyAccess.js";
 import { processPropMetadata } from "../utils/processPropsMetadata.js";
-import { unknownKeyword } from "../vue-class-component/decorator-options/ctorToType.js";
+import { ctorToType, unknownKeyword } from "../vue-class-component/decorator-options/ctorToType.js";
 
 const DECORATOR = "Prop";
 
@@ -37,6 +37,14 @@ export const transformDecoratorProp: VxTransform<ts.PropertyDeclaration> = (prop
 
     typeProperties = [[propName, propType ?? type, optional]];
     defaults = def ? [ts.factory.createPropertyAssignment(propName, def)] : [];
+  } else if (decoratorArg && ts.isArrayLiteralExpression(decoratorArg)) {
+    const types = decoratorArg.elements.map((e) => {
+      if (!ts.isIdentifier(e)) return unknownKeyword();
+      const getTypeNode = ctorToType.get(e.getText());
+      if (!getTypeNode) return unknownKeyword();
+      return getTypeNode();
+    });
+    typeProperties = [[propName, ts.factory.createUnionTypeNode(types)]];
   } else {
     typeProperties.push([propName, propType ?? unknownKeyword()]);
   }
