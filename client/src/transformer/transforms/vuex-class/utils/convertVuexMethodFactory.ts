@@ -41,7 +41,7 @@ export function transformVuexMethodFactory(
     }
 
     const storeKeyName = decoratorArgs ?? ts.factory.createStringLiteral(methodName);
-    const value = createArrowFn(storeKeyName, storeProperty, isAsync, node.type);
+    const value = createArrowFn(methodName, storeKeyName, storeProperty, isAsync, node.type);
     const constStatement = createConstStatement(methodName, value);
     copySyntheticComments(constStatement, node);
 
@@ -70,6 +70,7 @@ export function transformVuexMethodFactory(
 }
 
 function createArrowFn(
+  methodName: string,
   storeKeyName: ts.Identifier | ts.Expression,
   storeProperty: "dispatch" | "commit",
   isAsync: boolean,
@@ -87,10 +88,18 @@ function createArrowFn(
     [params, typeRef, argsId] = unknownMethodType(isAsync);
     payloadArgs = ts.factory.createNodeArray([storeKeyName, argsId]);
   } else {
-    params = nodeType.parameters;
-    const payloadName = params[0].name.getText();
     const args = [storeKeyName];
-    if (payloadName) args.push(createIdentifier(payloadName));
+    params = nodeType.parameters;
+    let payloadName: string | undefined;
+    if (params.length === 1) {
+      payloadName = params[0].name.getText();
+      args.push(createIdentifier(payloadName));
+    } else if (params.length > 1) {
+      throw new Error(
+        `[vuex-class] ${methodName} ${storeProperty} signature has more than 1 parameter.`,
+      );
+    }
+
     payloadArgs = ts.factory.createNodeArray(args);
 
     typeRef =
