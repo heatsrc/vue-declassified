@@ -1,7 +1,7 @@
 {
   "name": "@vuedc-internal/vue-declassified-playground",
   "private": true,
-  "version": "2.5.8",
+  "version": "0.0.0",
   "description": "This is a modified copy of @vue/repl",
   "packageManager": "pnpm@8.7.5",
   "type": "module",
