@@ -11,7 +11,8 @@
     "test": "turbo test",
     "lint": "turbo lint",
     "build": "turbo build",
-    "dev": "turbo dev"
+    "dev": "turbo dev",
+    "release": "changesets version"
   },
   "keywords": [],
   "author": "",
