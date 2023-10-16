@@ -10,7 +10,7 @@ export async function readVueFile(content: string) {
   const vueFile = sfcCompiler.parse(content);
 
   if (vueFile.errors.length > 0)
-    throw new AggregateError(["Vue file has errors", ...vueFile.errors]);
+    throw new AggregateError([...vueFile.errors], "Vue file has errors");
   if (vueFile.descriptor.scriptSetup) throw new Error("Vue file already has script setup!");
   if (!vueFile.descriptor.script) throw new Error("Vue file has no script!");
 

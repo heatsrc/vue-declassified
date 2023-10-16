@@ -8,7 +8,6 @@ import { getSingleFileProgram } from "./parser.js";
 /**
  * Convert a Vue SFC file containing Vue Class Component to Script Setup syntax
  * @param src source file path to convert
- * @param dest (Optional.) destination path to write file to (uses src if not provided)
  */
 export async function convertSfc(src: string) {
   const { script, vueFile } = await readVueFile(src);

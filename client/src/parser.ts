@@ -14,6 +14,7 @@ const compilerOptions: ts.CompilerOptions = {
  */
 export function getSingleFileProgram(content: string) {
   const filename = "ast.ts";
+  /* c8 ignore start */
   const compilerHost: ts.CompilerHost = {
     fileExists: (path: string) => path.includes(filename),
     getCanonicalFileName: () => filename,
@@ -27,6 +28,7 @@ export function getSingleFileProgram(content: string) {
     useCaseSensitiveFileNames: () => true,
     writeFile: () => null,
   };
+  /* c8 ignore end */
 
   const program = ts.createProgram(
     [filename],
