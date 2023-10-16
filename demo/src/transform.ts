@@ -1,10 +1,10 @@
-import { Store, File } from './store'
+import { transform } from 'sucrase'
 import {
-  SFCDescriptor,
   BindingMetadata,
   CompilerOptions,
+  SFCDescriptor,
 } from 'vue/compiler-sfc'
-import { transform } from 'sucrase'
+import { File, Store } from './store'
 // @ts-ignore
 import hashId from 'hash-sum'
 
@@ -220,7 +220,7 @@ async function doCompileScript(
 ): Promise<[code: string, bindings: BindingMetadata | undefined]> {
   if (descriptor.script || descriptor.scriptSetup) {
     const expressionPlugins: CompilerOptions['expressionPlugins'] = isTS
-      ? ['typescript']
+      ? ['typescript', 'decorators']
       : undefined
     const compiledScript = store.compiler.compileScript(descriptor, {
       inlineTemplate: true,

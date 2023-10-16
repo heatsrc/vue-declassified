@@ -1,15 +1,15 @@
-import { version, reactive, watchEffect, watch } from 'vue'
+import { convertSfc } from '@heatsrc/vue-declassified'
+import type { editor } from 'monaco-editor-core'
+import { reactive, version, watch, watchEffect } from 'vue'
 import * as defaultCompiler from 'vue/compiler-sfc'
-import { compileFile } from './transform'
-import { utoa, atou } from './utils'
 import {
-  SFCScriptCompileOptions,
   SFCAsyncStyleCompileOptions,
+  SFCScriptCompileOptions,
   SFCTemplateCompileOptions,
 } from 'vue/compiler-sfc'
 import { OutputModes } from './output/types'
-import type { editor } from 'monaco-editor-core'
-import { convertSfc } from '@heatsrc/vue-declassified'
+import { compileFile } from './transform'
+import { atou, utoa } from './utils'
 
 const defaultMainFile = 'src/App.vue'
 const defaultConvertedFile = 'src/App.converted.vue'
@@ -262,8 +262,12 @@ export class ReplStore implements Store {
   }
 
   async convertFile() {
-    const converted = await convertSfc(this.state.activeFile.code)
-    this.state.files[defaultConvertedFile].code = converted
+    try {
+      const converted = await convertSfc(this.state.activeFile.code)
+      this.state.files[defaultConvertedFile].code = converted
+    } catch (e) {
+      this.state.errors = [`Error converting file: ${(e as Error).message}`]
+    }
   }
 
   addFile(fileOrFilename: string | File): void {
@@ -386,11 +390,11 @@ export class ReplStore implements Store {
               vue: this.defaultVueRuntimeURL,
               'vue/server-renderer': this.defaultVueServerRendererURL,
               'vue-class-component':
-                'https://cdn.jsdelivr.net/npm/vue-class-component@7.2.6/+esm',
+                'https://cdn.jsdelivr.net/npm/vue-class-component@7.2.6/dist/vue-class-component.js',
               'vue-property-decorator':
                 'https://cdn.jsdelivr.net/npm/vue-property-decorator@9.1.2/lib/index.umd.min.js',
               'vuex-class':
-                'https://cdn.jsdelivr.net/npm/vuex-class@0.3.2/+esm',
+                'https://cdn.jsdelivr.net/npm/vuex-class@0.3.2/dist/vuex-class.js',
             },
           },
           null,

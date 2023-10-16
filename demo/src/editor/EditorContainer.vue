@@ -1,36 +1,22 @@
 <script setup lang="ts">
-import { debounce } from '../utils'
-import { inject, ref, watch } from 'vue'
+import { inject } from 'vue'
+import Message from '../Message.vue'
 import { Store } from '../store'
+import { debounce } from '../utils'
 import type { EditorComponentType } from './types'
-
-const SHOW_ERROR_KEY = 'repl_show_error'
 
 const props = defineProps<{
   editorComponent: EditorComponentType
   file: 'activeFile' | 'previewFile'
   readonly?: boolean
+  showErr?: boolean
 }>()
 
 const store = inject('store') as Store
-const showMessage = ref(getItem())
 
 const onChange = debounce((code: string) => {
   store.state[props.file].code = code
-}, 250)
-
-function setItem() {
-  localStorage.setItem(SHOW_ERROR_KEY, showMessage.value ? 'true' : 'false')
-}
-
-function getItem() {
-  const item = localStorage.getItem(SHOW_ERROR_KEY)
-  return !(item === 'false')
-}
-
-watch(showMessage, () => {
-  setItem()
-})
+}, 500)
 </script>
 
 <template>
@@ -41,6 +27,7 @@ watch(showMessage, () => {
       :filename="store.state[props.file].filename"
       :readonly="props.readonly"
     />
+    <Message v-show="showErr" :err="store.state.errors[0]" />
   </div>
 </template>
 

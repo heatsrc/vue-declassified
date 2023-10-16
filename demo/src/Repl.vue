@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import SplitPane from './SplitPane.vue'
-import Output from './output/Output.vue'
-import { Store, ReplStore, SFCOptions } from './store'
 import { provide, ref, toRef } from 'vue'
-import type { EditorComponentType } from './editor/types'
+import SplitPane from './SplitPane.vue'
 import EditorContainer from './editor/EditorContainer.vue'
+import type { EditorComponentType } from './editor/types'
+import Output from './output/Output.vue'
+import { ReplStore, SFCOptions, Store } from './store'
 
 export interface Props {
   theme?: 'dark' | 'light'
@@ -98,7 +98,11 @@ defineExpose({ reload })
     </header>
     <SplitPane :layout="layout">
       <template #left>
-        <EditorContainer :editorComponent="editor" file="activeFile" />
+        <EditorContainer
+          :editorComponent="editor"
+          file="activeFile"
+          :showErr="true"
+        />
       </template>
       <template #right>
         <EditorContainer
