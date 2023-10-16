@@ -100,9 +100,6 @@ jobs:
           pnpm-version: "8.7.5"
           os: ${{ runner.os }}
 
-      - name: Build
-        run: pnpm build
-
       - name: Create Release Pull Request
         uses: changesets/action@v1
         with:
