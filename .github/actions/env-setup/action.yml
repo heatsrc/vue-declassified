@@ -5,11 +5,11 @@ inputs:
   node-version:
     description: "Node version"
     required: true
-    default: "14.x"
+    default: "18.18.0"
   pnpm-version:
     description: "pnpm version"
     required: true
-    default: "6.x"
+    default: "8.7.5"
   os:
     description: "Operating system"
     required: true
