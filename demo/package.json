@@ -1,5 +1,5 @@
 {
-  "name": "monorepo/vue-declassified-playgroung",
+  "name": "@vuedc-internal/vue-declassified-playground",
   "private": true,
   "version": "2.5.8",
   "description": "This is a modified copy of @vue/repl",
