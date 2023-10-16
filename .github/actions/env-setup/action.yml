@@ -43,4 +43,5 @@ runs:
           ${{ inputs.os }}-${{ inputs.node-version }}-${{ inputs.pnpm-version }}-pnpm-
 
     - name: Install Dependencies
+      shell: bash
       run: pnpm install
