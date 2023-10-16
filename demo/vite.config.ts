@@ -28,5 +28,5 @@ export default mergeConfig(base, {
       'vue/server-renderer',
     ],
   },
-  base: './',
+  base: '/vue-declassified/',
 })
