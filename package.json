@@ -12,7 +12,8 @@
     "lint": "turbo lint",
     "build": "turbo build",
     "dev": "turbo dev",
-    "release": "changesets version"
+    "release": "changesets version",
+    "changesets": "changesets"
   },
   "keywords": [],
   "author": "",
