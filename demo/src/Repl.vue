@@ -93,8 +93,13 @@ defineExpose({ reload })
 <template>
   <div class="vue-repl">
     <header>
-      <img src="/vuedc-logo-100.png" />
-      <h1>VueDc Playground</h1>
+      <div>
+        <img src="/vuedc-logo-100.png" />
+        <h1>VueDc Playground</h1>
+      </div>
+      <nav>
+        <a href="https://github.com/heatsrc/vue-declassified">Github</a>
+      </nav>
     </header>
     <SplitPane :layout="layout">
       <template #left>
@@ -137,17 +142,28 @@ defineExpose({ reload })
   header {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     height: var(--header-height);
-    color: white;
-    padding: 5px;
+    color: var(--text-light);
+    padding: 0 15px;
+
     border-bottom: 1px solid var(--border);
 
-    img {
-      height: 50px;
+    div {
+      display: flex;
+      align-items: center;
+      img {
+        height: 40px;
+      }
+      h1 {
+        margin-left: 1rem;
+        font-size: 2.25rem;
+      }
     }
-    h1 {
-      margin-left: 1rem;
-      font-size: 2.25rem;
+
+    a {
+      color: var(--color-branding);
+      font-size: 1.25rem;
     }
   }
 }
