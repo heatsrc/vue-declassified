@@ -29,23 +29,4 @@ export default mergeConfig(base, {
     ],
   },
   base: './',
-  build: {
-    target: 'esnext',
-    minify: false,
-    lib: {
-      entry: {
-        'vue-repl': './src/index.ts',
-        'monaco-editor': './src/editor/MonacoEditor.vue',
-        'codemirror-editor': './src/editor/CodeMirrorEditor.vue',
-      },
-      formats: ['es'],
-      fileName: () => '[name].js',
-    },
-    rollupOptions: {
-      output: {
-        chunkFileNames: 'chunks/[name]-[hash].js',
-      },
-      external: ['vue', 'vue/compiler-sfc'],
-    },
-  },
 })
