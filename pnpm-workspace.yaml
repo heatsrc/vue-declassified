@@ -2,4 +2,3 @@ packages:
   - "client"
   - "cli"
   - "demo"
-  - "shared"
