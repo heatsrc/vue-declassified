@@ -1,5 +1,5 @@
 {
-  "name": "@vuedc-internal/vue-declassified-playground",
+  "name": "@vuedc-internal/playground",
   "private": true,
   "version": "0.0.0",
   "description": "This is a modified copy of @vue/repl",
@@ -88,6 +88,6 @@
     "vue-tsc": "1.8.6"
   },
   "dependencies": {
-    "@heatsrc/vue-declassified": "workspace:^"
+    "@heatsrc/vue-declassified": "workspace:*"
   }
 }

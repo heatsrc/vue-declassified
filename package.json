@@ -7,7 +7,12 @@
   "engines": {
     "node": ">=18.18.0"
   },
-  "scripts": {},
+  "scripts": {
+    "test": "turbo test",
+    "lint": "turbo lint",
+    "build": "turbo build",
+    "dev": "turbo dev"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -15,6 +20,7 @@
     "@changesets/changelog-github": "^0.4.8",
     "@changesets/cli": "^2.26.2",
     "@types/node": "^20.6.2",
+    "turbo": "^1.10.15",
     "typescript": "^5.2.2"
   }
 }

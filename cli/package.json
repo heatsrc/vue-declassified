@@ -18,8 +18,7 @@
   },
   "scripts": {
     "lint": "npx tsc --noEmit && prettier --check **/*.ts",
-    "build": "rimraf dist && npx tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "rimraf dist && npx tsc"
   },
   "keywords": [
     "vue-declassified",

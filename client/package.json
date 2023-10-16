@@ -15,7 +15,8 @@
   "module": "./dist/main.es.js",
   "types": "./dist/main.d.ts",
   "scripts": {
-    "test": "vitest",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "coverage": "vitest --coverage",
     "build": "rimraf dist && vite build",
