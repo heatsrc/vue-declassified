@@ -8,7 +8,9 @@
   },
   "type": "commonjs",
   "files": [
-    "dist"
+    "dist",
+    "LICENSE",
+    "README.md"
   ],
   "main": "./dist/src/vuedc.js",
   "bin": {

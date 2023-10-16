@@ -7,7 +7,9 @@
     "node": ">=18.18.0"
   },
   "files": [
-    "dist"
+    "dist",
+    "LICENSE",
+    "README.md"
   ],
   "main": "./dist/main.cjs.js",
   "module": "./dist/main.es.js",
