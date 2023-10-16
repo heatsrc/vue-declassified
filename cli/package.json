@@ -24,6 +24,8 @@
     "vue-declassified",
     "vuedc",
     "vue-class-component",
+    "vue-property-decorator",
+    "vuex-class",
     "composition api",
     "script setup",
     "vue",
