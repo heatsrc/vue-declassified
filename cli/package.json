@@ -14,9 +14,10 @@
   ],
   "main": "./dist/src/vuedc.js",
   "bin": {
-    "vuedc": "./dist/src/vuedc.js"
+    "vuedc": "dist/src/vuedc.js"
   },
   "scripts": {
+    "lint": "npx tsc --noEmit && prettier --check **/*.ts",
     "build": "rimraf dist && npx tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
