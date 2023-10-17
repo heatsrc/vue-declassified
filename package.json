@@ -11,6 +11,7 @@
     "test": "turbo test",
     "lint": "turbo lint",
     "build": "turbo build",
+    "build:demo": "turbo build:demo",
     "dev": "turbo dev",
     "release": "changeset publish",
     "changeset": "changeset"

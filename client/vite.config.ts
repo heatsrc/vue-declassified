@@ -27,11 +27,22 @@ export default defineConfig({
       formats: ["es", "cjs", "umd"],
     },
     rollupOptions: {
-      external: ["vue", "typescript"],
+      external: [
+        "vue",
+        "typescript",
+        "vue/compiler-sfc",
+        "prettier",
+        "prettier/parser-typescript",
+        "prettier/plugins/estree.js",
+      ],
       output: {
         globals: {
           vue: "Vue",
           typescript: "ts",
+          prettier: "prettier",
+          "vue/compiler-sfc": "vueCompilerSfc",
+          "prettier/parser-typescript": "parserTypescript",
+          "prettier/plugins/estree.js": "parserEsTree",
         },
       },
     },

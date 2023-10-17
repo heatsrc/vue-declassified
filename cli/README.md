@@ -6,17 +6,15 @@ This CLI tool converted Vue 2/3 Class Components, i.e., [vue-class-component](ht
 
 Installing is optional as the mainstream package managers have the ability to [hot load packages](#hot-loading).
 
-```console
+```bash
 pnpm add -g @heatsrc/vuedc
-```
-
-```console
+# or
 npm install -g @heatsrc/vuedc
-```
-
-```console
+# or
 yarn global add @heatsrc/vuedc
 ```
+
+**NOTE:** You will need Node 18+ for VueDc to work. Consider using a node version manager, e.g., [nvm](https://github.com/nvm-sh/nvm), to make switching easy if your project is locked to an older version.
 
 ## Usage
 
@@ -43,12 +41,8 @@ Options:
 
 ```bash
 pnpm dlx vuedc -i MyComponent.vue -o MyOutput.vue
-```
-
-```bash
+# or
 npx vuedc -i MyComponent.vue -o MyOutput.vue
-```
-
-```bash
+# or
 yarn dlx vuedc -i MyComponent.vue -o MyOutput.vue
 ```

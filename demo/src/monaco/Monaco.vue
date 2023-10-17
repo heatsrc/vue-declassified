@@ -1,21 +1,21 @@
 <script lang="ts" setup>
+import * as monaco from 'monaco-editor-core'
+import { loadGrammars, loadTheme } from 'monaco-volar'
 import {
-  onMounted,
+  computed,
+  inject,
+  nextTick,
   onBeforeUnmount,
+  onMounted,
   ref,
   shallowRef,
-  nextTick,
-  inject,
   watch,
-  computed,
   type Ref,
 } from 'vue'
-import * as monaco from 'monaco-editor-core'
+import type { PreviewMode } from '../editor/types'
+import { Store } from '../store'
 import { initMonaco } from './env'
 import { getOrCreateModel } from './utils'
-import { loadGrammars, loadTheme } from 'monaco-volar'
-import { Store } from '../store'
-import type { PreviewMode } from '../editor/types'
 
 const props = withDefaults(
   defineProps<{
@@ -64,6 +64,7 @@ onMounted(async () => {
     minimap: {
       enabled: false,
     },
+    quickSuggestions: false,
     inlineSuggest: {
       enabled: false,
     },

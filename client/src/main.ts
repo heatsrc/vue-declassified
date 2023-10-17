@@ -1,6 +1,6 @@
-import prettier from "prettier";
-import parserTypescript from "prettier/parser-typescript";
-import parserEsTree from "prettier/plugins/estree.js";
+import * as prettier from "prettier";
+import * as parserTypescript from "prettier/parser-typescript";
+import * as parserEsTree from "prettier/plugins/estree.js";
 import { convertAst } from "./convert.js";
 import { readVueFile, writeVueFile } from "./file.js";
 import { getSingleFileProgram } from "./parser.js";
