@@ -1,5 +1,16 @@
 # @heatsrc/vuedc
 
+## 2.0.0
+
+### Major Changes
+
+- [#4](https://github.com/heatsrc/vue-declassified/pull/4) [`64ac9e3`](https://github.com/heatsrc/vue-declassified/commit/64ac9e3a57e8575d8e0eb0e9a63a91a166235961) Thanks [@jaredmcateer](https://github.com/jaredmcateer)! - Reducing vue-declassified bundle size by excluding peer deps
+
+### Patch Changes
+
+- Updated dependencies [[`64ac9e3`](https://github.com/heatsrc/vue-declassified/commit/64ac9e3a57e8575d8e0eb0e9a63a91a166235961)]:
+  - @heatsrc/vue-declassified@2.0.0
+
 ## 1.0.1
 
 ### Patch Changes

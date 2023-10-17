@@ -1,5 +1,14 @@
 ## [2.1.3](https://github.com/vuejs/repl/compare/v2.1.2...v2.1.3) (2023-06-22)
 
+## 1.0.2
+
+### Patch Changes
+
+- [#4](https://github.com/heatsrc/vue-declassified/pull/4) [`64ac9e3`](https://github.com/heatsrc/vue-declassified/commit/64ac9e3a57e8575d8e0eb0e9a63a91a166235961) Thanks [@jaredmcateer](https://github.com/jaredmcateer)! - update demo to use new version of vue-declassified
+
+- Updated dependencies [[`64ac9e3`](https://github.com/heatsrc/vue-declassified/commit/64ac9e3a57e8575d8e0eb0e9a63a91a166235961)]:
+  - @heatsrc/vue-declassified@2.0.0
+
 ## 1.0.1
 
 ### Patch Changes
