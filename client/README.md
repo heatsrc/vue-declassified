@@ -1,13 +1,18 @@
 <h1 align="center">
-  <p aria-hidden align="center"><img src="https://github.com/heatsrc/vue-declassified/blob/main/client/assets/vuedc-logo-200.png" aria-hidden /></p>
-  Vue Declassified (vuedc)
+  <div aria-hidden align="center">
+    <img src="https://github.com/heatsrc/vue-declassified/blob/main/client/assets/vuedc-logo-200.png" aria-hidden />
+  </div>
+  <span>Vue Declassified (vuedc)</span>
 </h1>
 
 - [Vue Class Components -\> Vue 3 script setup](#vue-class-components---vue-3-script-setup)
   - [Opinionated decisions](#opinionated-decisions)
-- [Install](#install)
 - [Usage](#usage)
-  - [vuedc CLI](#vuedc-cli)
+  - [vuedc CLI (recommended)](#vuedc-cli-recommended)
+  - [Programmatically](#programmatically)
+    - [Install](#install)
+      - [Dependencies](#dependencies)
+    - [Code](#code)
 - [Supported Features](#supported-features)
   - [vue-class-component](#vue-class-component)
     - [`@Component` / `@Options` (v8.0.0-rc.1)](#component--options-v800-rc1)
@@ -32,21 +37,55 @@ These decisions are made arbitrarily, mostly for sanity and convenience. You get
 - Will be formatted by prettier with default config
   - exception `printWidth` increased to 100 characters
 
-## Install
+## Usage
+
+### vuedc CLI (recommended)
+
+You can call the CLI tool to convert a file directly from a terminal. For more information see the [vuedc](https://github.com/heatsrc/vue-declassified/blob/main/cli/README.md) readme.
+
+```console
+pnpm add -g @heatsrc/vuedc
+# or
+npm install -g @heatsrc/vuedc
+# or
+yarn add -g @heatsrc/vuedc
+
+vuedc -i myVueComponent.vue -o myVueComponent.converted.vue
+```
+
+or run directly with hot loading
+
+```console
+pnpm dlx vuedc -i myVueComponent.vue -o myVueComponent.converted.vue
+# or
+npx vuedc -i myVueComponent.vue -o myVueComponent.converted.vue
+# or
+yarn dlx vuedc -i myVueComponent.vue -o myVueComponent.converted.vue
+```
+
+### Programmatically
+
+#### Install
+
+##### Dependencies
+
+If you want to use this without the cli tool you'll need to ensure you have the following packages installed
+
+- typescript@^5.2.2
+- vue@^3.3.4
+- prettier@^3.0.3
+
+Additionally vue-declassified requires Node 18+
 
 ```console
 pnpm add @heatsrc/vue-declassified
-```
-
-```console
+# or
 npm install @heatsrc/vue-declassified
-```
-
-```console
+# or
 yarn install @heatsrc/vue-declassified
 ```
 
-## Usage
+#### Code
 
 ```ts
 import { convertSfc } from "@heatsrc/vue-declassified";
@@ -80,14 +119,6 @@ const result = convertScript(input);
 console.log(result);
 // import { ref } from 'vue';
 // const myData = ref<string>('foo');
-```
-
-### vuedc CLI
-
-You can call the CLI tool to convert a file directly from a terminal. For more information see the [vuedc](https://github.com/heatsrc/vue-declassified/blob/main/cli/README.md) readme.
-
-```console
-pnpm dlx vuedc -i myVueComponent.vue -o myVueComponent.converted.vue
 ```
 
 ## Supported Features
@@ -139,7 +170,7 @@ pnpm dlx vuedc -i myVueComponent.vue -o myVueComponent.converted.vue
 </details>
 
 <details>
-<summary>`this.<property>` (11 :white_check_mark: / 3 :heavy_check_mark: / 5 :boom:)</summary>
+<summary><code>this.<property></code> (11 :white_check_mark: / 3 :heavy_check_mark: / 5 :boom:)</summary>
 
 |    `this.`     |     supported?     | notes                                                                    |
 | :------------: | :----------------: | ------------------------------------------------------------------------ |
@@ -257,7 +288,7 @@ These are options provided in the decorator call, e.g., `@Component({ components
 ### vue-property-decorator
 
 <details>
-<summary>`Decorators` (6 :white_check_mark: 1 :heavy_check_mark: / 3 :zzz:)</summary>
+<summary><code>Decorators</code> (6 :white_check_mark: 1 :heavy_check_mark: / 3 :zzz:)</summary>
 
 |     decorator      |     supported?     | notes                                                                                        |
 | :----------------: | :----------------: | -------------------------------------------------------------------------------------------- |
@@ -277,7 +308,7 @@ These are options provided in the decorator call, e.g., `@Component({ components
 ### vuex-class
 
 <details>
-<summary>`Decorators` (4 :white_check_mark:, 1 :heavy_check_mark:)</summary>
+<summary><code>Decorators</code> (4 :white_check_mark:, 1 :heavy_check_mark:)</summary>
 
 |  decorator  |     supported?     | notes |
 | :---------: | :----------------: | ----- |

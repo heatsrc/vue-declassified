@@ -1,6 +1,7 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
+    "build:demo": { "dependsOn": ["^build"], "outputs": ["dist/**"] },
     "build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**"]
@@ -8,7 +9,7 @@
     "lint": {
       "dependsOn": ["^build"]
     },
-    "test": {},
+    "test": { "outputs": ["coverage/**"] },
     "dev": {
       "cache": false
     }

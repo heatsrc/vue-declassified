@@ -57,6 +57,9 @@ importers:
 
   client:
     dependencies:
+      prettier:
+        specifier: ^3.0.3
+        version: 3.0.3
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
@@ -70,9 +73,6 @@ importers:
       '@vitest/ui':
         specifier: ^0.34.5
         version: 0.34.6(vitest@0.34.6)
-      prettier:
-        specifier: ^3.0.3
-        version: 3.0.3
       rimraf:
         specifier: ^5.0.5
         version: 5.0.5
@@ -94,6 +94,15 @@ importers:
       '@heatsrc/vue-declassified':
         specifier: workspace:*
         version: link:../client
+      prettier:
+        specifier: ^3.0.0
+        version: 3.0.3
+      typescript:
+        specifier: ^5.2.2
+        version: 5.2.2
+      vue:
+        specifier: ^3.3.4
+        version: 3.3.4
     devDependencies:
       '@babel/types':
         specifier: ^7.22.5
@@ -158,24 +167,15 @@ importers:
       path-browserify:
         specifier: ^1.0.1
         version: 1.0.1
-      prettier:
-        specifier: ^3.0.0
-        version: 3.0.3
       simple-git-hooks:
         specifier: ^2.9.0
         version: 2.9.0
       sucrase:
         specifier: ^3.34.0
         version: 3.34.0
-      typescript:
-        specifier: ^5.2.2
-        version: 5.2.2
       vite:
         specifier: ^4.4.7
         version: 4.4.11(@types/node@20.8.4)
-      vue:
-        specifier: ^3.3.4
-        version: 3.3.4
       vue-tsc:
         specifier: 1.8.6
         version: 1.8.6(typescript@5.2.2)
@@ -3372,7 +3372,7 @@ packages:
     resolution: {integrity: sha512-L/4pUDMxcNa8R/EthV08Zt42WBO4h1rarVtK0K+QJG0X187OLo7l699jWw0GKuwzkPQ//jMFA/8Xm6Fh3J/DAg==}
     engines: {node: '>=14'}
     hasBin: true
-    dev: true
+    dev: false
 
   /pretty-format@29.7.0:
     resolution: {integrity: sha512-Pdlw/oPxN+aXdmM9R00JVC9WVFoCLTKJvDVLgmJ+qAffBMxsV85l/Lu7sNx4zSzPyoL2euImuEwHhOXdEgNFZQ==}
