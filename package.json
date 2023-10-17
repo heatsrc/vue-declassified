@@ -12,7 +12,7 @@
     "lint": "turbo lint",
     "build": "turbo build",
     "dev": "turbo dev",
-    "release": "changeset version",
+    "release": "changeset publish",
     "changeset": "changeset"
   },
   "keywords": [],
