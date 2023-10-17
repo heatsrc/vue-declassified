@@ -35,6 +35,9 @@
     "transform",
     "cli"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "author": "Jared McAteer <jared.mcateer@heatsrc.com>",
   "license": "ISC",
   "dependencies": {

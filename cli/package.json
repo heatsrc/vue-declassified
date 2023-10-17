@@ -20,6 +20,9 @@
     "lint": "npx tsc --noEmit && prettier --check **/*.ts",
     "build": "rimraf dist && npx tsc"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "keywords": [
     "vue-declassified",
     "vuedc",
