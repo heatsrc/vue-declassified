@@ -1,7 +1,7 @@
 import { addTodoComment, copySyntheticComments } from "@/helpers/comments.js";
 import { createCallExpression, createConstStatement, getDecorators } from "@/helpers/tsHelpers.js";
 import { namedImports } from "@/helpers/utils";
-import { registerDecorator } from "@/transformer/registry.js";
+import { registerDecorator } from "@/registry.js";
 import { VxReferenceKind, VxResultKind, VxTransform } from "@/types.js";
 import { cloneNode } from "ts-clone-node";
 import ts from "typescript";

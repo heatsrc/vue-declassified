@@ -5,7 +5,7 @@ import {
   getDecorators,
   rocketToken,
 } from "@/helpers/tsHelpers";
-import { registerDecorator } from "@/transformer/registry";
+import { registerDecorator } from "@/registry";
 import {
   VxReferenceKind,
   VxResultKind,

@@ -6,7 +6,7 @@ import {
   isArrowFunc,
 } from "@/helpers/tsHelpers";
 import { namedImports } from "@/helpers/utils";
-import { registerDecorator } from "@/transformer/registry";
+import { registerDecorator } from "@/registry";
 import {
   VxReferenceKind,
   VxResultKind,

@@ -4,7 +4,7 @@ import {
   createConstStatement,
   getDecoratorNames,
 } from "@/helpers/tsHelpers.js";
-import { isDecoratorRegistered } from "@/transformer/registry.js";
+import { isDecoratorRegistered } from "@/registry.js";
 import { VxReferenceKind, VxResultKind, VxTransform } from "@/types.js";
 import ts from "typescript";
 
