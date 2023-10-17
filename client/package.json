@@ -1,6 +1,6 @@
 {
   "name": "@heatsrc/vue-declassified",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Transform Vue Class Components to Vue 3 script setup",
   "packageManager": "pnpm@8.7.5",
   "engines": {
