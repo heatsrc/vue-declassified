@@ -1,4 +1,5 @@
 import ts from "typescript";
+import { registerTopLevelVars } from "./helpers/collisionDetection.js";
 import { getDecoratorNames, getPackageName } from "./helpers/tsHelpers.js";
 import { runTransforms } from "./transformer.js";
 
@@ -10,11 +11,11 @@ export function convertAst(source: ts.SourceFile, program: ts.Program) {
   const defaultExportNode = getDefaultExportNode(source);
   if (!defaultExportNode) throw new Error("No default export found in this file");
 
-  const imports = getImportsFromStatements(getOutsideStatements(source));
+  registerTopLevelVars(getOutsideStatements(source));
 
   let resultStatements = [
     ...getOutsideStatements(source),
-    ...runTransforms(defaultExportNode, imports, program),
+    ...runTransforms(defaultExportNode, program),
   ];
 
   // Group imports at start
@@ -27,18 +28,6 @@ export function convertAst(source: ts.SourceFile, program: ts.Program) {
   const newSourceFile = ts.factory.updateSourceFile(source, resultStatements);
   const result = printer.printFile(newSourceFile);
   return result;
-}
-function getImportsFromStatements(statements: ts.Statement[]) {
-  const imports = statements.filter(ts.isImportDeclaration);
-  const namedImports = imports
-    .map((i) => i.importClause?.namedBindings)
-    .filter((nb): nb is ts.NamedImports => !!nb && ts.isNamedImports(nb));
-  const defaultImports = imports
-    .map((i) => i.importClause?.name)
-    .filter((n): n is ts.Identifier => !!n && ts.isIdentifier(n));
-  const namedImportsElements = namedImports.flatMap((ni) => ni.elements.map((e) => e.name));
-  const allImports = [...namedImportsElements, ...defaultImports];
-  return allImports;
 }
 
 /**

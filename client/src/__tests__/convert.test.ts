@@ -233,17 +233,6 @@ describe("convert", () => {
       const MOUNT_EVENT = 'component:mounted';
       const profile = 'profile';
       const prefs = 'userPreferences';
-      /* VUEDC_TODO: Fix naming collisions
-       
-         - \`MyComponent\` is defined in: External imports
-         - \`b\` is defined in: External imports, Other variables
-         - \`foo\` is defined in: External imports
-         - \`bar\` is defined in: External imports
-
-         It is strongly suggested you fix these prior to
-         converting the file. Usage of these variables may
-         be ambiguous in the converted code.
-      */
       const props = withDefaults(defineProps<{
           \\"fdsa\\": string;
           \\"asdf\\"?: Record<string, unknown>;
@@ -279,7 +268,7 @@ describe("convert", () => {
       const MyComponent = reactive(MyComponent);
       // Properties
       const button = ref<HTMLButtonElement>();
-      /* VUEDC_TODO: Update template, replace 'ref=\\"'aCheckbox'\\"' with 'ref=\\"checkbox\\"'*/ const checkbox = ref();
+      /* [VUEDC_TODO]: Update template, replace 'ref=\\"'aCheckbox'\\"' with 'ref=\\"checkbox\\"'*/ const checkbox = ref();
       const world = ref(\\"world\\");
       const b = ref(\\"b\\");
       const c = reactive({ d: { e: \\"f\\" } });
@@ -300,15 +289,15 @@ describe("convert", () => {
       // Vuex Actions
       const fetchUser = async (id: number): Promise<User> => store.dispatch(\\"fetchUser\\", id);
       const fetchAdmin = async (id: number): Promise<User> => store.dispatch('user/fetchUser', id);
-      /* VUEDC_TODO: Check function dispatch call signature.*/ const fetchPrefs = async (...args: unknown[]): Promise<unknown> => store.dispatch(prefs, args);
+      /* [VUEDC_TODO]: Check function dispatch call signature.*/ const fetchPrefs = async (...args: unknown[]): Promise<unknown> => store.dispatch(prefs, args);
       // Vuex Mutations
       const updateTitle = (title: string): void => store.commit(\\"updateTitle\\", title);
       const updateAdminTitle = (title: string): void => store.commit('user/updateTitle', title);
-      /* VUEDC_TODO: Check function commit call signature.*/ const updateAdminProfile = (...args: unknown[]): unknown => store.commit(profile, args);
-      /* VUEDC_TODO: Check for potential naming collisions from '$refs.divElement' conversion.*/ 
+      /* [VUEDC_TODO]: Check function commit call signature.*/ const updateAdminProfile = (...args: unknown[]): unknown => store.commit(profile, args);
+      /* [VUEDC_TODO]: Check for potential naming collisions from '$refs.divElement' conversion.*/ 
       // Template Refs
       const divElement = ref<HTMLDivElement>();
-      /* VUEDC_TODO: Check for potential naming collisions from '$refs.b' conversion.*/ const b = ref();
+      /* [VUEDC_TODO]: Check for potential naming collisions from '$refs.b' conversion.*/ const b = ref();
       console.log('beforeCreate');
       onMounted(() => {
           console.log('onMounted');
@@ -334,7 +323,7 @@ describe("convert", () => {
               hello.value = value;
           }
       });
-      /* VUEDC_TODO: setter with no getter is suspicious...*/ const bar = computed({
+      /* [VUEDC_TODO]: setter with no getter is suspicious...*/ const bar = computed({
           set: (value) => {
               router.push('');
               world.value = value;
@@ -347,7 +336,7 @@ describe("convert", () => {
           return foo.value;
       };
       const handleFoo = (value: string) => {
-          /* VUEDC_TODO: Unknown variable source for \\"this.undefinedProperty\\"*/ this.undefinedProperty = value;
+          /* [VUEDC_TODO]: Unknown variable source for \\"this.undefinedProperty\\"*/ this.undefinedProperty = value;
           const returnVal = foo.value;
           emit(\\"foo-bar\\", returnVal, value);
           return returnVal;

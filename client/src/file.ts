@@ -1,4 +1,5 @@
 import * as sfcCompiler from "vue/compiler-sfc";
+import { getCollisionsWarning } from "./helpers/collisionDetection.js";
 
 /**
  * Uses vue compiler to parse a vue file
@@ -27,8 +28,10 @@ export async function writeVueFile(vueFile: sfcCompiler.SFCParseResult, scriptCo
   if (!vueFile.descriptor.script) throw new Error("Vue file has no script!");
 
   const lang = vueFile.descriptor.script.lang;
+  let warnings = getCollisionsWarning();
+  warnings = warnings ? `\n\n/*\n${warnings}\n*/\n` : "";
 
-  let fileContent = `<script setup${addLang(lang)}>\n${scriptContent}\n</script>`;
+  let fileContent = `<script setup${addLang(lang)}>${warnings}\n${scriptContent}\n</script>`;
   fileContent += getTemplate(vueFile);
   fileContent += getStyles(vueFile);
 

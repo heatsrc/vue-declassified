@@ -5,7 +5,7 @@ export function addTodoComment<T extends ts.Node>(
   comment: string,
   trailingNewLine = false,
 ) {
-  const todo = ` VUEDC_TODO: ${comment}`;
+  const todo = ` [VUEDC_TODO]: ${comment}`;
   return ts.addSyntheticLeadingComment(
     node,
     ts.SyntaxKind.MultiLineCommentTrivia,

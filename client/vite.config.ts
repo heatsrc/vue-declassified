@@ -11,6 +11,7 @@ export default defineConfig({
       reporter: ["text", "json", "html"],
     },
     exclude: [...configDefaults.exclude],
+    setupFiles: ["test/setup.ts"],
   },
   resolve: {
     alias: {

@@ -18,6 +18,12 @@
     - [`@Component` / `@Options` (v8.0.0-rc.1)](#component--options-v800-rc1)
   - [vue-property-decorator](#vue-property-decorator)
   - [vuex-class](#vuex-class)
+  - [Misc features](#misc-features)
+- [Tips / Gotchas](#tips--gotchas)
+  - [Directives / Component names](#directives--component-names)
+  - [Naming collisions](#naming-collisions)
+    - [`$refs` with same name as class members](#refs-with-same-name-as-class-members)
+    - [Top level identifiers](#top-level-identifiers)
 
 ## Vue Class Components -> Vue 3 script setup
 
@@ -316,6 +322,160 @@ These are options provided in the decorator call, e.g., `@Component({ components
 |  `@Getter`  | :white_check_mark: |       |
 | `@Mutation` | :white_check_mark: |       |
 |  `@State`   | :white_check_mark: |       |
-|  namespace  | :heave_check_mark: |       |
+|  namespace  | :heavy_check_mark: |       |
 
 </details>
+
+### Misc features
+
+<details>
+<summary>Other features (6/6 :rocket:)</summary>
+
+- :white_check_mark: **Limited type inference**
+  - If a node is untyped, will do a best guess at type (mostly primitive types only).
+  - When encountering `$emit`s will try to infer parameter names/types.
+  - Fails back to `unknown` keyword if it's not certain.
+- :white_check_mark: **Sorting by dependencies**
+  - Will sort statements so definitions occur before uses.
+- :white_check_mark: **Merging macros/props/etc**
+  - If you're code is doing insane stuff like defining props in both the `@Component` options and as decorators, `@Props`/`@Emit`/ etc, vuedc will merge the definitions.
+- :white_check_mark: **Naming collision detection**
+  - Will detect collisions from imports, variable declarations and instance properties that have been converted to top level (e.g., `$ref.button` => `button.value`).
+- :white_check_mark: **Automatic macro definitions**
+  - Props -> `defineProps` (also will add `withDefaults` if vuedc detects defaults).
+  - Emit -> `defineEmits`.
+- :white_check_mark: **Composable definitions**
+  - When former "builtin" globals such as `$store`/`$router`/etc are found vuedc will automatically import and assign to a variable
+  - e.g., `const store = useStore()`
+
+</details>
+
+## Tips / Gotchas
+
+### Directives / Component names
+
+Vue expects directive and components to match their name (`PascalCase`/`camelCase` -> `kebab-case`).
+Currently Vuedc doesn't detect if you've used a different name and aliased it in the component options
+
+```vue
+<script lang="ts">
+import {Component, Vue} from 'vue-class-components';
+import myComponentVue from './MyComponent.vue';
+import myDirective from './MyDirective.ts';
+
+@Component({
+  components: { MyComponent: myComponentVue },
+  directives: { vMyDirective: myDirective }
+})
+export default Foo extends Vue {}
+</script>
+
+// will be converted to:
+
+<script setup lang="ts">
+import myComponentVue from "./MyComponent.vue";
+import myDirective from "./MyDirective.ts";
+</script>
+
+<template>
+  <!-- This is a problem ! -->
+  <my-component v-my-directive />
+</template>
+```
+
+So make sure to rename your imports to match what the template is calling.
+
+e.g.,
+
+```vue
+<script setup lang="ts">
+import MyComponent from "./MyComponent.vue";
+import vMyDirective from "./vMyDirective.ts";
+</script>
+
+<template>
+  <my-component v-my-directive />
+</template>
+```
+
+### Naming collisions
+
+It's strongly recommended you resolve potential naming collisions prior to converting your code, vuedc doesn't have complete knowledge of the codes intention and doesn't update templates (yet?) so it can't reliably rename variables for you.
+
+Common reasons for naming collisions:
+
+#### `$refs` with same name as class members
+
+Properties on the `$refs` object get converted to top level variable declarations and can collide with other class members sharing the same name.
+
+e.g.,
+
+```ts
+@Component
+export default class Foo extends Vue {
+  foo = "bar";
+
+  $refs!: {
+    foo: HTMLDivElement;
+  };
+}
+
+// will be converted to
+
+const foo = ref<string>("bar");
+const foo = ref<HTMLDivElement>();
+//    ^? Cannot redeclare block-scoped variable 'foo'.ts(2451)
+```
+
+#### Top level identifiers
+
+It's not uncommon for you to import a variable from another module and make it available as a class member with the same name.
+
+e.g.,
+
+```ts
+import foo from './foo';
+const bar = foo;
+const { a, b: { c } } = {a: true, b: { c: false } };
+const [d, e, {f}] = [1, 2, {f: 3}];
+
+@Component
+export default Foo {
+  foo = 'string';
+  a = 1;
+  b = 'b';
+  d = [1, 2, 3];
+  @Inject e: () => 'e';
+  @Action f: () => Promise<void>;
+
+
+  get bar() {
+  }
+
+  c() {
+  }
+}
+
+// will be converted to
+
+import foo from './foo';
+const bar = foo;
+const { a, b: { c } } = {a: true, b: { c: false } };
+const [d, e, {f}] = [1, 2, {f: 3}];
+const foo = ref('string');
+//    ^? Cannot redeclare block-scoped variable 'foo'.ts(2451)
+const a = ref(1);
+//    ^? Cannot redeclare block-scoped variable 'a'.ts(2451)
+const b = ref('b');
+//    ^? Cannot redeclare block-scoped variable 'b'.ts(2451)
+const d = reactive([1, 2, 3]);
+//    ^? Cannot redeclare block-scoped variable 'd'.ts(2451)
+const e = inject<() => 'e'>('e');
+//    ^? Cannot redeclare block-scoped variable 'e'.ts(2451)
+const f = (): Promise<void> => store.dispatch('f');
+//    ^? Cannot redeclare block-scoped variable 'f'.ts(2451)
+const bar = computed(() => 'val');
+//    ^? Cannot redeclare block-scoped variable 'bar'.ts(2451)
+const c = () => 'foo';
+//    ^? Cannot redeclare block-scoped variable 'c'.ts(2451)
+```
