@@ -1,5 +1,5 @@
 import { createIdentifier, getDecorators } from "@/helpers/tsHelpers.js";
-import { registerDecorator } from "@/transformer/registry.js";
+import { registerDecorator } from "@/registry.js";
 import { VxReferenceKind, VxResultKind, VxResultToMacro, VxTransform } from "@/types.js";
 import { cloneNode } from "ts-clone-node";
 import ts from "typescript";

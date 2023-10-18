@@ -7,7 +7,7 @@ import {
   isPrimitiveType,
 } from "@/helpers/tsHelpers.js";
 import { namedImports } from "@/helpers/utils.js";
-import { isDecoratorRegistered } from "@/transformer/registry.js";
+import { isDecoratorRegistered } from "@/registry.js";
 import { VxReferenceKind, VxResultKind, VxTransform } from "@/types.js";
 import ts from "typescript";
 

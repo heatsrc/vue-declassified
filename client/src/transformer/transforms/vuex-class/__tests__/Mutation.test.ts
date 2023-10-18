@@ -116,7 +116,7 @@ describe("Mutation decorator", () => {
     expect(result).toMatchInlineSnapshot(`
       "import { useStore } from \\"vuex\\";
       const store = useStore();
-      /* VUEDC_TODO: Check function commit call signature.*/ const foo = (...args: unknown[]): unknown => store.commit(\\"foo\\", args);
+      /* [VUEDC_TODO]: Check function commit call signature.*/ const foo = (...args: unknown[]): unknown => store.commit(\\"foo\\", args);
       "
     `);
   });

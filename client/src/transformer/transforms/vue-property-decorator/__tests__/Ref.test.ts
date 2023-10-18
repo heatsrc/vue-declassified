@@ -34,7 +34,7 @@ describe("Ref decorator", () => {
 
     expect(result).toMatchInlineSnapshot(`
       "import { ref } from \\"vue\\";
-      /* VUEDC_TODO: Update template, replace 'ref=\\"'foo'\\"' with 'ref=\\"bar\\"'*/ const bar = ref<string>();
+      /* [VUEDC_TODO]: Update template, replace 'ref=\\"'foo'\\"' with 'ref=\\"bar\\"'*/ const bar = ref<string>();
       "
     `);
   });

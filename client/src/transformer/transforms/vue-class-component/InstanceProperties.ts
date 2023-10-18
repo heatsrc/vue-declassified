@@ -42,7 +42,7 @@ export const transformDefinables: VxTransform<
     } else if (ts.isCallExpression(child.parent) && dependency.kind === VxResultKind.MACRO) {
       const parent = child.parent;
       const [firstArg, ...args] = parent.arguments;
-      let propertyName = `VUEDC_TODO $emit has unexpected first argument: ${firstArg.getText()}`;
+      let propertyName = `[VUEDC_TODO] $emit has unexpected first argument: ${firstArg.getText()}`;
       if (ts.isIdentifier(firstArg)) {
         propertyName = tryGettingEventName(firstArg, program);
       } else if (ts.isStringLiteralLike(firstArg)) {

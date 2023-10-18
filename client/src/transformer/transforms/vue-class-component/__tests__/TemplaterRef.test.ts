@@ -26,7 +26,7 @@ describe("TemplateRef", () => {
     expect(output.result.nodes.length).toBe(1);
     expect(output.result.outputVariables).toEqual(["a"]);
     expect((output.result.nodes[0] as any).emitNode.leadingComments[0].text).toContain(
-      "VUEDC_TODO: Check for potential naming collisions",
+      "[VUEDC_TODO]: Check for potential naming collisions",
     );
   });
 });

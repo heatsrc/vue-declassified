@@ -114,7 +114,7 @@ describe("Action decorator", () => {
     expect(result).toMatchInlineSnapshot(`
       "import { useStore } from \\"vuex\\";
       const store = useStore();
-      /* VUEDC_TODO: Check function dispatch call signature.*/ const foo = async (...args: unknown[]): Promise<unknown> => store.dispatch(\\"foo\\", args);
+      /* [VUEDC_TODO]: Check function dispatch call signature.*/ const foo = async (...args: unknown[]): Promise<unknown> => store.dispatch(\\"foo\\", args);
       "
     `);
   });

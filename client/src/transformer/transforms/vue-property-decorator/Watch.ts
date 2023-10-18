@@ -1,5 +1,5 @@
 import { createIdentifier, getDecorators } from "@/helpers/tsHelpers.js";
-import { registerDecorator } from "@/transformer/registry.js";
+import { registerDecorator } from "@/registry.js";
 import { VxReferenceKind, VxResultKind, VxTransform } from "@/types.js";
 import ts from "typescript";
 import { convertInitializerToWatchHandlers, getWatchCalls } from "../utils/getWatchCall.js";
