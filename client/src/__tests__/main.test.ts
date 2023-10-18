@@ -115,7 +115,7 @@ div {
 
         /*
         [VUEDC_TODO] Fix naming collisions
-
+         
           - \`baz\` (TemplateRef) was already defined in: import declarations, class body
           - \`foo\` (Data-ref) was already defined in: import declarations
           - \`qux\` (Method) was already defined in: top level variable declarations
@@ -169,7 +169,7 @@ div {
     await expect(() => convertSfc(content, { stopOnCollisions: true })).rejects
       .toThrowErrorMatchingInlineSnapshot(`
       "Fix naming collisions
-
+       
         - \`baz\` (TemplateRef) was already defined in: import declarations, class body
         - \`foo\` (Data-ref) was already defined in: import declarations
         - \`qux\` (Method) was already defined in: top level variable declarations
