@@ -1,5 +1,5 @@
 #! /usr/bin/env node
-import { convertSfc } from "@heatsrc/vue-declassified";
+import { VuedcError, convertSfc } from "@heatsrc/vue-declassified";
 import { Command } from "commander";
 import figlet from "figlet";
 import { readFile, writeFile } from "node:fs/promises";
@@ -13,6 +13,7 @@ async function main() {
   program
     .version(pkg.version)
     .description("Convert Vue Class Components to Vue 3 Composition API")
+    .option("--ignore-collisions", "Will not stop on collisions")
     .option("-i, --input <file>", "Input Vue file")
     .option("-o, --output <file>", "Output file, if not specified input file will be overwritten")
     .option("-y, --yes", "Overwrite output file without asking")
@@ -51,13 +52,18 @@ async function main() {
 
   try {
     const content = await readFile(options.input, { encoding: "utf8" });
-    const result = await convertSfc(content);
+    const opts = { stopOnCollisions: !!options.collisions };
+    const result = await convertSfc(content, opts);
 
     await writeFile(output, result, { encoding: "utf8" });
 
     console.log(`Converted file written to: ${output}`);
   } catch (err) {
-    console.error(err);
+    if (err instanceof VuedcError) {
+      console.warn(`\nAck! ${err.message}\n`);
+    } else {
+      console.error(err);
+    }
   }
 }
 
