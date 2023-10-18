@@ -12,7 +12,7 @@ export type VuedcOptions = {
   stopOnCollisions: boolean;
 };
 
-class VuedcError extends Error {
+export class VuedcError extends Error {
   constructor(collisions: string) {
     super();
     this.message = collisions;
