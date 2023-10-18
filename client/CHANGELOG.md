@@ -1,5 +1,11 @@
 # @heatsrc/vue-declassified
 
+## 2.1.0
+
+### Minor Changes
+
+- [#6](https://github.com/heatsrc/vue-declassified/pull/6) [`7e8564f`](https://github.com/heatsrc/vue-declassified/commit/7e8564fb6c9aa776c6e933b1404b31107dfeb5b4) Thanks [@jaredmcateer](https://github.com/jaredmcateer)! - Refactoring collision detection, should not introduce breaking changes
+
 ## 2.0.0
 
 ### Major Changes

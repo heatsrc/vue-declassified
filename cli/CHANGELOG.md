@@ -1,5 +1,21 @@
 # @heatsrc/vuedc
 
+## 3.0.0
+
+### Major Changes
+
+- [#6](https://github.com/heatsrc/vue-declassified/pull/6) [`659b0e6`](https://github.com/heatsrc/vue-declassified/commit/659b0e617af28bd75efebded1115e993c87987ad) Thanks [@jaredmcateer](https://github.com/jaredmcateer)! - Add flag to ignore collisions when detected and continue writing output
+
+  BREAKING CHANGE:
+
+  - The cli will now not write the output Vue file when collisions have been detected, instead it will output and error to the console
+  - The `--ignore-collisions` flag will behave as in previous versions where the warning is just printed in the script tag of the output Vue file.
+
+### Patch Changes
+
+- Updated dependencies [[`7e8564f`](https://github.com/heatsrc/vue-declassified/commit/7e8564fb6c9aa776c6e933b1404b31107dfeb5b4)]:
+  - @heatsrc/vue-declassified@2.1.0
+
 ## 2.0.0
 
 ### Major Changes
