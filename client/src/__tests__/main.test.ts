@@ -115,7 +115,7 @@ div {
 
         /*
         [VUEDC_TODO] Fix naming collisions
-         
+
           - \`baz\` (TemplateRef) was already defined in: import declarations, class body
           - \`foo\` (Data-ref) was already defined in: import declarations
           - \`qux\` (Method) was already defined in: top level variable declarations
@@ -166,11 +166,10 @@ div {
     const path = resolve(__dirname, "./fixtures/NamingCollisions.vue");
     const content = await readFile(path, { encoding: "utf8" });
 
-    await expect(() =>
-      convertSfc(content, { stopOnCollisions: true }),
-    ).rejects.toThrowErrorMatchingInlineSnapshot(`
+    await expect(() => convertSfc(content, { stopOnCollisions: true })).rejects
+      .toThrowErrorMatchingInlineSnapshot(`
       "Fix naming collisions
-       
+
         - \`baz\` (TemplateRef) was already defined in: import declarations, class body
         - \`foo\` (Data-ref) was already defined in: import declarations
         - \`qux\` (Method) was already defined in: top level variable declarations
