@@ -1,5 +1,11 @@
 # @heatsrc/vue-declassified
 
+## 2.1.2
+
+### Patch Changes
+
+- [`421ed94`](https://github.com/heatsrc/vue-declassified/commit/421ed94faf055b5c446b38a471f522bc8bfcbf41) Thanks [@jaredmcateer](https://github.com/jaredmcateer)! - Fixing Github URL in naming collisions warning.
+
 ## 2.1.1
 
 ### Patch Changes
