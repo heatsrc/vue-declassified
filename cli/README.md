@@ -1,5 +1,11 @@
 # Vue Declassified CLI tool
 
+<p align="center">
+  <a href="https://www.npmjs.com/package/@heatsrc/vuedc">npm</a><span> | </span>
+  <a href="https://github.com/heatsrc/vue-declassified/tree/main/cli">github</a><span> | </span>
+  <a href="https://heatsrc.github.io/vue-declassified/">vuedc playground</a>
+</p>
+
 This CLI tool converted Vue 2/3 Class Components, i.e., [vue-class-component](https://class-component.vuejs.org/), into Vue 3 Script Setup using [Vue Declassified](https://github.com/heatsrc/vue-declassified) ([npm](https://npmjs.com/@heatsrc/vue-declassified)). VueDc supports both Vue Class Component production (`@Component`) and the v8 RC (`@Options`) which was originally being developed to support Vue 3 but subsequently abandoned before release.
 
 ## Install

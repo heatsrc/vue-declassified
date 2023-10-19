@@ -5,6 +5,12 @@
   <span>Vue Declassified (vuedc)</span>
 </h1>
 
+<p align="center">
+  <a href="https://www.npmjs.com/package/@heatsrc/vue-declassified">npm</a><span> | </span>
+  <a href="https://github.com/heatsrc/vue-declassified">github</a><span> | </span>
+  <a href="https://heatsrc.github.io/vue-declassified/">vuedc playground</a>
+</p>
+
 - [Vue Class Components -\> Vue 3 script setup](#vue-class-components---vue-3-script-setup)
   - [Opinionated decisions](#opinionated-decisions)
 - [Usage](#usage)
