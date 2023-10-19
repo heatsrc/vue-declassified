@@ -1,6 +1,6 @@
 # Vue Declassified CLI tool
 
-This CLI tool converted Vue 2/3 Class Components, i.e., [vue-class-component](https://class-component.vuejs.org/), into Vue 3 Script Setup using Vue Declassified ([github](https://github.com/heatsrc/vue-declassified)) ([npm](https://npmjs.com/@heatsrc/vue-declassified)). VueDc supports the Vue Class Component v8 RC which was originally being developed to support Vue 3 but subsequently abandoned before release.
+This CLI tool converted Vue 2/3 Class Components, i.e., [vue-class-component](https://class-component.vuejs.org/), into Vue 3 Script Setup using [Vue Declassified](https://github.com/heatsrc/vue-declassified) ([npm](https://npmjs.com/@heatsrc/vue-declassified)). VueDc supports both Vue Class Component production (`@Component`) and the v8 RC (`@Options`) which was originally being developed to support Vue 3 but subsequently abandoned before release.
 
 ## Install
 
@@ -31,6 +31,7 @@ Convert Vue Class Components to Vue 3 Composition API
 
 Options:
   -V, --version        output the version number
+  --ignore-collisions  Will not stop on collisions
   -i, --input <file>   Input Vue file
   -o, --output <file>  Output file, if not specified input file will be overwritten
   -y, --yes            Overwrite output file without asking
