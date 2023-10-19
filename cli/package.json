@@ -23,16 +23,29 @@
   "publishConfig": {
     "access": "public"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/heatsrc/vue-declassified.git",
+    "directory": "cli"
+  },
   "keywords": [
     "vue-declassified",
+    "vue declassified",
+    "declassify",
     "vuedc",
     "vue-class-component",
+    "vue class component",
     "vue-property-decorator",
+    "vue property decorator",
     "vuex-class",
+    "vuex class",
     "composition api",
+    "composition",
     "script setup",
+    "setup api",
     "vue",
     "vue 3",
+    "migration",
     "transform",
     "cli"
   ],
