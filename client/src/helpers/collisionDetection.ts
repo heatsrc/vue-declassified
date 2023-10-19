@@ -82,6 +82,6 @@ export function getCollisionsWarning(includeTodo = true) {
     `${includeTodo ? "[VUEDC_TODO] " : ""}Fix naming collisions\n ${c}\n\n` +
     `It is strongly suggested you fix these prior to converting the file.\n` +
     `Usage of these variables may be ambiguous in the converted code.\n\n` +
-    `Tips: https://githib.com/heatsrc/vue-declassified#naming-collisions`
+    `Tips: https://github.com/heatsrc/vue-declassified#naming-collisions`
   );
 }

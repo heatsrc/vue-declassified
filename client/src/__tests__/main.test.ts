@@ -126,7 +126,7 @@ div {
         It is strongly suggested you fix these prior to converting the file.
         Usage of these variables may be ambiguous in the converted code.
 
-        Tips: https://githib.com/heatsrc/vue-declassified#naming-collisions
+        Tips: https://github.com/heatsrc/vue-declassified#naming-collisions
         */
 
         import { baz } from \\"./baz\\";
@@ -180,7 +180,7 @@ div {
       It is strongly suggested you fix these prior to converting the file.
       Usage of these variables may be ambiguous in the converted code.
 
-      Tips: https://githib.com/heatsrc/vue-declassified#naming-collisions"
+      Tips: https://github.com/heatsrc/vue-declassified#naming-collisions"
     `);
   });
 
