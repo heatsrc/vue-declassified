@@ -1,5 +1,11 @@
 # @heatsrc/vue-declassified
 
+## 2.1.1
+
+### Patch Changes
+
+- [`2a2c0b4`](https://github.com/heatsrc/vue-declassified/commit/2a2c0b43da9ff625d931ca6caa45424bd82113c1) Thanks [@jaredmcateer](https://github.com/jaredmcateer)! - documentation and package json updates
+
 ## 2.1.0
 
 ### Minor Changes
