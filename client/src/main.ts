@@ -6,7 +6,7 @@ import { convertAst } from "./convert.js";
 import { readVueFile, writeVueFile } from "./file.js";
 import { getCollisionsWarning } from "./helpers/collisionDetection.js";
 import { getSingleFileProgram } from "./parser.js";
-import { hasCollisions } from "./registry.js";
+import { hasCollisions, resetRegistry } from "./registry.js";
 
 export type VuedcOptions = {
   /** When true Vuedc will not "write" the vue file and instead return the variable collisions */
@@ -71,6 +71,8 @@ export async function convertScript(src: string, opts: Partial<VuedcOptions> = {
   if (opts.stopOnCollisions && hasCollisions()) {
     throw new VuedcError(getCollisionsWarning(false));
   }
+
+  resetRegistry();
 
   return formattedResult;
 }
