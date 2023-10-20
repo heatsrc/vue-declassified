@@ -1,10 +1,12 @@
-import ts from "typescript";
+import { createProjectSync, ts } from "@ts-morph/bootstrap";
 
 const compilerOptions: ts.CompilerOptions = {
   allowNonTsExtensions: true,
   allowJs: true,
   checkJs: true,
   noEmit: true,
+  noResolve: true,
+  target: ts.ScriptTarget.Latest,
 };
 
 /**
@@ -12,31 +14,15 @@ const compilerOptions: ts.CompilerOptions = {
  * @param content Vue script content
  * @returns AST and TS Program
  */
-export function getSingleFileProgram(content: string) {
-  const filename = "ast.ts";
-  /* c8 ignore start */
-  const compilerHost: ts.CompilerHost = {
-    fileExists: (path: string) => path.includes(filename),
-    getCanonicalFileName: () => filename,
-    getCurrentDirectory: () => "",
-    getDirectories: () => [],
-    getDefaultLibFileName: () => "lib.d.ts",
-    getNewLine: () => "\n",
-    getSourceFile: (file: string) =>
-      ts.createSourceFile(file, content, ts.ScriptTarget.Latest, true),
-    readFile: () => undefined,
-    useCaseSensitiveFileNames: () => true,
-    writeFile: () => null,
-  };
-  /* c8 ignore end */
-
-  const program = ts.createProgram(
-    [filename],
-    { noResolve: true, target: ts.ScriptTarget.Latest, ...compilerOptions },
-    compilerHost,
+export function getSingleFileProgram(content: string, tsConfigPath?: string) {
+  const project = createProjectSync(
+    tsConfigPath
+      ? { tsConfigFilePath: tsConfigPath }
+      : { compilerOptions, useInMemoryFileSystem: true },
   );
-  const ast = program.getSourceFile(filename);
-  /* c8 ignore next */
+  project.createSourceFile("ast.ts", content);
+  const program = project.createProgram();
+  const ast = program.getSourceFile("ast.ts");
   if (!ast) throw new Error("Can't convert code to TypeScript AST.");
   return { ast, program };
 }

@@ -19,7 +19,7 @@
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "coverage": "vitest --coverage",
-    "build": "rimraf dist && vite build",
+    "build": "rimraf dist/* && vite build",
     "lint": "tsc --noEmit && prettier --check ./**/*.{ts,json,vue}"
   },
   "keywords": [
@@ -54,9 +54,10 @@
   "author": "Jared McAteer <jared.mcateer@heatsrc.com>",
   "license": "ISC",
   "peerDependencies": {
+    "@ts-morph/bootstrap": "^0.21.0",
+    "prettier": "^3.0.3",
     "typescript": "^5.2.2",
-    "vue": "^3.3.4",
-    "prettier": "^3.0.3"
+    "vue": "^3.3.4"
   },
   "devDependencies": {
     "@vitest/coverage-v8": "^0.34.5",
