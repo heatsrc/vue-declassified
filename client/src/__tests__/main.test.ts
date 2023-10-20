@@ -112,7 +112,6 @@ div {
 
       expect(result).toMatchInlineSnapshot(`
         "<script setup lang=\\"ts\\">
-
         /*
         [VUEDC_TODO] Fix naming collisions
          

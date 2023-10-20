@@ -62,15 +62,19 @@ export async function convertScript(src: string, opts: Partial<VuedcOptions> = {
   }
   const { ast, program } = getSingleFileProgram(src, tsConfigPath);
   const result = convertAst(ast, program);
-  const formattedResult = await prettier.format(result, {
-    parser: "typescript",
-    printWidth: 100,
-    plugins: [parserTypescript, parserEsTree],
-  });
 
   if (opts.stopOnCollisions && hasCollisions()) {
     throw new VuedcError(getCollisionsWarning(false));
   }
+
+  let warnings = getCollisionsWarning();
+  warnings = warnings ? `\n/*\n${warnings}\n*/\n\n` : "";
+
+  const formattedResult = await prettier.format(warnings + result, {
+    parser: "typescript",
+    printWidth: 100,
+    plugins: [parserTypescript, parserEsTree],
+  });
 
   resetRegistry();
 
