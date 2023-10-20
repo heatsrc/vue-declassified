@@ -1,5 +1,17 @@
 # @heatsrc/vue-declassified
 
+## 2.2.0
+
+### Minor Changes
+
+- [#10](https://github.com/heatsrc/vue-declassified/pull/10) [`9c81095`](https://github.com/heatsrc/vue-declassified/commit/9c8109554f5daa02c6de2180da7500b66cc230ab) Thanks [@jaredmcateer](https://github.com/jaredmcateer)! - Add support for supplying a tsconfig profile file.
+
+  Note: By itself this is not super useful but the intention is to make it possible to deduce where properties on the class are being supplied by thinks like mixin or extended components. It may also make it possible to do better type inference.
+
+### Patch Changes
+
+- [#12](https://github.com/heatsrc/vue-declassified/pull/12) [`a547cf6`](https://github.com/heatsrc/vue-declassified/commit/a547cf6cfafc4505c259729463b3e322e3cd804e) Thanks [@jaredmcateer](https://github.com/jaredmcateer)! - Reset registry after converting script
+
 ## 2.1.2
 
 ### Patch Changes
