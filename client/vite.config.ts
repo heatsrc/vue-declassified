@@ -35,6 +35,7 @@ export default defineConfig({
         "prettier",
         "prettier/parser-typescript",
         "prettier/plugins/estree.js",
+        "@ts-morph/bootstrap",
       ],
       output: {
         globals: {

@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "allowNonTsExtensions": true,
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true,
+    "noResolve": true,
+    "target": "ES2022"
+  },
+  "include": ["**/*.ts"]
+}

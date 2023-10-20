@@ -4,6 +4,7 @@
     "rootDir": ".",
     "outDir": "dist",
     "declaration": true,
+    "declarationMap": true,
     "module": "CommonJS",
     "moduleResolution": "node",
     "resolveJsonModule": true,
