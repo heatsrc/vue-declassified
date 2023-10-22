@@ -9,6 +9,7 @@ class Registry {
     ["classBody", new Set()],
   ]);
   collisions = new Map<string, { tag: string; sources: Set<string> }>();
+  importNameOverrides = new Map<string, string>();
 }
 const registry = new Registry();
 
@@ -17,6 +18,7 @@ export function resetRegistry() {
   registry.variableNames.get("imports")!.clear();
   registry.variableNames.get("topLevel")!.clear();
   registry.variableNames.get("classBody")!.clear();
+  registry.importNameOverrides.clear();
   registry.collisions.clear();
 }
 
@@ -72,4 +74,16 @@ export function addCollision(varName: string, tag: string, source: string) {
 
 export function getCollisions() {
   return [...registry.collisions.entries()];
+}
+
+export function setImportNameOverride(importName: string, override: string) {
+  registry.importNameOverrides.set(importName, override);
+}
+
+export function hasImportNameOverride(importName: string) {
+  return registry.importNameOverrides.has(importName);
+}
+
+export function getImportNameOverride(importName: string) {
+  return registry.importNameOverrides.get(importName);
 }

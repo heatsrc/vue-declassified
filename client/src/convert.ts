@@ -1,6 +1,7 @@
 import ts from "typescript";
 import { registerTopLevelVars } from "./helpers/collisionDetection.js";
 import { getDecoratorNames, getPackageName } from "./helpers/tsHelpers.js";
+import { setImportNameOverride } from "./registry.js";
 import { runTransforms } from "./transformer.js";
 
 const vccPackages = ["vue-class-component", "vue-property-decorator", "vuex-class"];
@@ -13,10 +14,10 @@ export function convertAst(source: ts.SourceFile, program: ts.Program) {
 
   registerTopLevelVars(getOutsideStatements(source));
 
-  let resultStatements = [
-    ...getOutsideStatements(source),
-    ...runTransforms(defaultExportNode, program),
-  ];
+  const outsideStatements = getOutsideStatements(source);
+  registerImportNameOverrides(outsideStatements);
+
+  let resultStatements = [...outsideStatements, ...runTransforms(defaultExportNode, program)];
 
   // Group imports at start
   resultStatements = [
@@ -30,6 +31,19 @@ export function convertAst(source: ts.SourceFile, program: ts.Program) {
   return result;
 }
 
+function registerImportNameOverrides(statements: ts.Statement[]) {
+  const imports = statements.filter((s): s is ts.ImportDeclaration => ts.isImportDeclaration(s));
+  imports.forEach((imp) => {
+    const importClause = imp.importClause;
+    if (!importClause) return;
+    if (!importClause.namedBindings) return;
+    if (!ts.isNamedImports(importClause.namedBindings)) return;
+    importClause.namedBindings.elements.forEach((el) => {
+      if (!el.propertyName) return;
+      setImportNameOverride(el.name.text, el.propertyName.text);
+    });
+  });
+}
 /**
  * Get's the statements outside of the default class export
  * @param source
