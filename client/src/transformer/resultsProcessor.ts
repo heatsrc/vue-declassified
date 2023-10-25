@@ -7,8 +7,21 @@ import {
   isMacroType,
 } from "../types.js";
 
-export function getImports(results: VxTransformResult<ts.Node>[]) {
+export function getImports(
+  results: VxTransformResult<ts.Node>[],
+  outsideImports: ts.ImportDeclaration[] = [],
+) {
   const importMap = new Map<string, VxImportClause>();
+
+  outsideImports.forEach((imp) => {
+    const clause: VxImportClause = { named: new Set() };
+    const name = imp.importClause?.name?.text;
+    if (name) clause.default = name;
+    imp.importClause?.namedBindings?.forEachChild((el) => {
+      if (ts.isImportSpecifier(el)) clause.named.add(el.name.text);
+    });
+    importMap.set((imp.moduleSpecifier as ts.StringLiteral).text, clause);
+  });
 
   results.forEach(({ imports }) => {
     imports.forEach((i) => {

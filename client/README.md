@@ -48,6 +48,16 @@ These decisions are made arbitrarily, mostly for sanity and convenience. You get
 - Will reference macros by arbitrary variables (see below)
 - Will be formatted by prettier with default config
   - exception `printWidth` increased to 100 characters
+- Mixins will be renamed to match composable conventions
+  - Transform
+    - First char of mixin will be capitalized
+    - `use` will be prefixed
+    - `Mixin` will be removed (if detected)
+    - e.g., `FooMixin` -> `useFoo`;
+  - Exported variables are mapped 1:1 with public members of Mixin
+    - e.g., `const { isLoading, bar, fetchData } = useFoo();`
+  - Property/Accessors will have `.value` added to the property access
+    - e.g., `const isReady = computed(() => !isLoading.value)`
 
 ## Usage
 
@@ -148,17 +158,17 @@ console.log(result);
 <details>
 <summary>Basic class transforms (5 :white_check_mark: / 2 :heavy_check_mark:)</summary>
 
-|      feature       |     supported?     | notes                                  |
-| :----------------: | :----------------: | -------------------------------------- |
-|      methods       | :white_check_mark: | Basic method support (no decorators)   |
-|  data properties   | :white_check_mark: | Basic class properties (no decorators) |
-|  getters/setters   | :white_check_mark: | Computed refs                          |
-|       mixins       | :heavy_check_mark: |                                        |
-|       extend       | :heavy_check_mark: |                                        |
-| sort by dependency | :white_check_mark: | Will try to sort dependencies\*        |
-|  `$refs:! {...}`   | :white_check_mark: | converted to regular `Ref`s            |
+|      feature       |     supported?     | notes                                                                                                                                                                                                      |
+| :----------------: | :----------------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|      methods       | :white_check_mark: | Basic method support (no decorators)                                                                                                                                                                       |
+|  data properties   | :white_check_mark: | Basic class properties (no decorators)                                                                                                                                                                     |
+|  getters/setters   | :white_check_mark: | Computed refs                                                                                                                                                                                              |
+|       mixins       | :white_check_mark: | :exclamation:Requires `basePath` option to be set <br /> so the program can reverse lookup the owner of unknown property accesses. <br> Also requires `tsconfig.json` to be somewhere along the `basePath` |
+|       extend       | :heavy_check_mark: |                                                                                                                                                                                                            |
+| sort by dependency | :white_check_mark: | Will try to sort dependencies\*                                                                                                                                                                            |
+|  `$refs:! {...}`   | :white_check_mark: | converted to regular `Ref`s                                                                                                                                                                                |
 
-<sup>\* VueDc does it best to sort dependencies to avoid used before defined issues. It requires processing essentially a directed acyclic graph and it's complicated so please raise issues if found.</sup>
+<sup>\* VueDc does it best to sort dependencies to avoid "used before defined" issues. It requires processing essentially a directed acyclic graph and it's complicated so please raise issues if found.</sup>
 
 </details>
 

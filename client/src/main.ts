@@ -6,7 +6,7 @@ import { convertAst } from "./convert.js";
 import { readVueFile, writeVueFile } from "./file.js";
 import { getCollisionsWarning } from "./helpers/collisionDetection.js";
 import { getSingleFileProgram } from "./parser.js";
-import { hasCollisions, resetRegistry } from "./registry.js";
+import { getGlobalWarnings, hasCollisions, resetRegistry } from "./registry.js";
 
 export type VuedcOptions = {
   /** When true Vuedc will not "write" the vue file and instead return the variable collisions */
@@ -20,7 +20,7 @@ export type VuedcOptions = {
    * need to compile your entire project and uses the file system rather than an
    * in-memory file system when no project is provided.
    */
-  tsConfigPath?: string;
+  basePath?: string;
 };
 
 export class VuedcError extends Error {
@@ -53,14 +53,11 @@ export async function convertSfc(src: string, opts: Partial<VuedcOptions> = {}) 
 export async function convertScript(src: string, opts: Partial<VuedcOptions> = {}) {
   let compilerOptions: ts.CompilerOptions | undefined;
   let tsConfigPath = "";
-  if (opts.tsConfigPath) {
-    const pathParts = opts.tsConfigPath.split("/");
-    const fileName = pathParts.pop();
-    const searchPathStart = pathParts.join("/");
-    const configFile = ts.findConfigFile(searchPathStart, ts.sys.fileExists, fileName);
+  if (opts.basePath) {
+    const configFile = ts.findConfigFile(opts.basePath, ts.sys.fileExists, "tsconfig.json");
     if (configFile) tsConfigPath = configFile;
   }
-  const { ast, program } = getSingleFileProgram(src, tsConfigPath);
+  const { ast, program } = getSingleFileProgram(src, opts.basePath, tsConfigPath);
   const result = convertAst(ast, program);
 
   if (opts.stopOnCollisions && hasCollisions()) {
@@ -68,6 +65,8 @@ export async function convertScript(src: string, opts: Partial<VuedcOptions> = {
   }
 
   let warnings = getCollisionsWarning();
+  const globalWarnings = getGlobalWarnings();
+  warnings += globalWarnings.length > 0 ? `\n - ${globalWarnings.join("\n - ")}\n` : "";
   warnings = warnings ? `\n/*\n${warnings}\n*/\n\n` : "";
 
   const formattedResult = await prettier.format(warnings + result, {

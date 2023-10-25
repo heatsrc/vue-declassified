@@ -1,4 +1,5 @@
 import { createProjectSync, ts } from "@ts-morph/bootstrap";
+import { join } from "node:path";
 
 const compilerOptions: ts.CompilerOptions = {
   allowNonTsExtensions: true,
@@ -14,15 +15,16 @@ const compilerOptions: ts.CompilerOptions = {
  * @param content Vue script content
  * @returns AST and TS Program
  */
-export function getSingleFileProgram(content: string, tsConfigPath?: string) {
+export function getSingleFileProgram(content: string, basePath = "", tsConfigPath?: string) {
   const project = createProjectSync(
     tsConfigPath
       ? { tsConfigFilePath: tsConfigPath }
       : { compilerOptions, useInMemoryFileSystem: true },
   );
-  project.createSourceFile("ast.ts", content);
+  const filePath = join(basePath, "/ast.ts");
+  project.createSourceFile(filePath, content);
   const program = project.createProgram();
-  const ast = program.getSourceFile("ast.ts");
+  const ast = program.getSourceFile(filePath);
   if (!ast) throw new Error("Can't convert code to TypeScript AST.");
   return { ast, program };
 }

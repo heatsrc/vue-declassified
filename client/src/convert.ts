@@ -17,7 +17,7 @@ export function convertAst(source: ts.SourceFile, program: ts.Program) {
   const outsideStatements = getOutsideStatements(source);
   registerImportNameOverrides(outsideStatements);
 
-  let resultStatements = [...outsideStatements, ...runTransforms(defaultExportNode, program)];
+  let resultStatements = runTransforms(defaultExportNode, outsideStatements, program);
 
   // Group imports at start
   resultStatements = [

@@ -10,6 +10,7 @@ class Registry {
   ]);
   collisions = new Map<string, { tag: string; sources: Set<string> }>();
   importNameOverrides = new Map<string, string>();
+  warnings = new Set<string>();
 }
 const registry = new Registry();
 
@@ -20,6 +21,7 @@ export function resetRegistry() {
   registry.variableNames.get("classBody")!.clear();
   registry.importNameOverrides.clear();
   registry.collisions.clear();
+  registry.warnings.clear();
 }
 
 export function isDecoratorRegistered(decorator: string) {
@@ -86,4 +88,12 @@ export function hasImportNameOverride(importName: string) {
 
 export function getImportNameOverride(importName: string) {
   return registry.importNameOverrides.get(importName);
+}
+
+export function addGlobalWarning(message: string) {
+  registry.warnings.add(message);
+}
+
+export function getGlobalWarnings() {
+  return [...registry.warnings];
 }

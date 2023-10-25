@@ -15,14 +15,15 @@ import { transformMethod } from "./transforms/vue-class-component/Method.js";
 import { transformTemplateRef } from "./transforms/vue-class-component/TemplateRef.js";
 import { transformOptionsEmits } from "./transforms/vue-class-component/decorator-options/Emits.js";
 import { transformOptionsExpose } from "./transforms/vue-class-component/decorator-options/Expose.js";
-import { transformDecoratorInject } from "./transforms/vue-property-decorator/Inject.js";
 import { transformOptionsProps } from "./transforms/vue-class-component/decorator-options/Props.js";
-import { transformDecoratorProvide } from "./transforms/vue-property-decorator/Provide.js";
 import { transformOptionsWatch } from "./transforms/vue-class-component/decorator-options/Watches.js";
 import { transformEmitDecorator } from "./transforms/vue-property-decorator/Emit.js";
+import { transformDecoratorInject } from "./transforms/vue-property-decorator/Inject.js";
 import { transformDecoratorProp } from "./transforms/vue-property-decorator/Prop.js";
+import { transformDecoratorProvide } from "./transforms/vue-property-decorator/Provide.js";
 import { transformDecoratorRef } from "./transforms/vue-property-decorator/Ref.js";
 import { transformWatchDecorator } from "./transforms/vue-property-decorator/Watch.js";
+import { transformMixins } from "./transforms/vue-property-decorator/mixins.js";
 import { transformVuexAction } from "./transforms/vuex-class/Action.js";
 import { transformVuexGetter } from "./transforms/vuex-class/Getter.js";
 import { transformVuexMutation } from "./transforms/vuex-class/Mutation.js";
@@ -45,7 +46,7 @@ export const classTransforms: VxClassTransforms = {
   /** Class name */
   [ts.SyntaxKind.Identifier]: [],
   /** extends Vue | Mixins */
-  [ts.SyntaxKind.HeritageClause]: [],
+  [ts.SyntaxKind.HeritageClause]: [transformMixins],
   /** Data properties, @Model, @Prop, @Watch, @Provide, @Inject, @Ref, @State, @Getter, @Action, @Mutation */
   [ts.SyntaxKind.PropertyDeclaration]: [
     // Vue Class Component
