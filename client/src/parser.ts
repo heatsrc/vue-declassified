@@ -1,5 +1,4 @@
 import { createProjectSync, ts } from "@ts-morph/bootstrap";
-import { join } from "node:path";
 
 const compilerOptions: ts.CompilerOptions = {
   allowNonTsExtensions: true,
@@ -15,13 +14,11 @@ const compilerOptions: ts.CompilerOptions = {
  * @param content Vue script content
  * @returns AST and TS Program
  */
-export function getSingleFileProgram(content: string, basePath = "", tsConfigPath?: string) {
+export function getSingleFileProgram(content: string, basePath = ".", tsConfigFilePath?: string) {
   const project = createProjectSync(
-    tsConfigPath
-      ? { tsConfigFilePath: tsConfigPath }
-      : { compilerOptions, useInMemoryFileSystem: true },
+    tsConfigFilePath ? { tsConfigFilePath } : { compilerOptions, useInMemoryFileSystem: true },
   );
-  const filePath = join(basePath, "/ast.ts");
+  const filePath = `${basePath}/ast.ts`;
   project.createSourceFile(filePath, content);
   const program = project.createProgram();
   const ast = program.getSourceFile(filePath);
