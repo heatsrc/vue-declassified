@@ -36,14 +36,14 @@ Usage: vuedc [options]
 Convert Vue Class Components to Vue 3 Composition API
 
 Options:
-  -V, --version                 output the version number
-  --ignore-collisions           Will not stop on collisions
-  -p, --project [tsconfigPath]  Use compiler options from specified tsconfig.json file, if no file path specified with the flag vuedc will attempt to derive it from the input file.
-                                WARNING: this option is significantly slower than not using it, only enable if you need external references (e.g., deriving sources of properties from mixins)!
-  -i, --input <file>            Input Vue file
-  -o, --output <file>           Output file, if not specified input file will be overwritten
-  -y, --yes                     Overwrite output file without asking
-  -h, --help                    display help for command
+  -V, --version        output the version number
+  --ignore-collisions  Will not stop on collisions
+  -p, --project        Use compiler options from tsconfig.json file, vuedc will attempt to derive the `tsconfig.json` from the input file.
+                       WARNING: this option is significantly slower than not using it, only enable if you need external references (e.g., deriving sources of properties from mixins)!
+  -i, --input <file>   Input Vue file
+  -o, --output <file>  Output file, if not specified input file will be overwritten
+  -y, --yes            Overwrite output file without asking
+  -h, --help           display help for command
 ```
 
 ### Hot loading

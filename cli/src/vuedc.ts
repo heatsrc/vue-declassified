@@ -17,8 +17,8 @@ async function main() {
     .description("Convert Vue Class Components to Vue 3 Composition API")
     .option("--ignore-collisions", "Will not stop on collisions")
     .option(
-      "-p, --project [tsconfigPath]",
-      "Use compiler options from specified tsconfig.json file, if no file path specified with the flag vuedc will attempt to derive it from the input file." +
+      "-p, --project",
+      "Use compiler options from tsconfig.json file, vuedc will attempt to derive the `tsconfig.json` from the input file." +
         "\nWARNING: this option is significantly slower than not using it, only enable if you need external references (e.g., deriving sources of properties from mixins)!",
     )
     .requiredOption("-i, --input <file>", "Input Vue file")
@@ -55,21 +55,17 @@ async function main() {
     return readline.close();
   }
 
-  let tsConfigPath = "";
+  let basePath = "";
   if (options.project === true) {
-    const basePath = options.input.split("/").slice(0, -1).join("/");
-    tsConfigPath = basePath + "/tsconfig.json";
-    console.log(`Will look for tsconfig starting at: ${highlightFile(basePath)}`);
-  } else if (typeof options.project === "string") {
-    tsConfigPath = options.project;
-    console.log(`Using tsconfig file: ${highlightFile(tsConfigPath)}`);
+    basePath = options.input.split("/").slice(0, -1).join("/");
+    console.log(`Will look for tsconfig.json starting at: ${highlightFile(basePath)}`);
   }
 
   console.log(`Converting: ${highlightFile(options.input)}...`);
 
   try {
     const content = await readFile(options.input, { encoding: "utf8" });
-    const opts: VuedcOptions = { stopOnCollisions: !options.collisions, tsConfigPath };
+    const opts: VuedcOptions = { stopOnCollisions: !options.collisions, basePath };
     const result = await convertSfc(content, opts);
 
     await writeFile(output, result, { encoding: "utf8" });
