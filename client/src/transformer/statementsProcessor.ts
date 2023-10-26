@@ -67,7 +67,7 @@ export function processClassDecorator(
 }
 
 function processUnknownOption(node: ts.Node) {
-  debug(`Could not convert unknown decorator option: ${node.getText()}`);
+  debug(`Could not convert unknown decorator option: ${ts.SyntaxKind[node.kind]}}`);
   return {
     imports: [],
     kind: VxResultKind.OPTIONS,
