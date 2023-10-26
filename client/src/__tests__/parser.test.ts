@@ -21,6 +21,7 @@ describe("test parser", function () {
     let content = "@Component\nexport class Test {}";
     let { ast, program } = getSingleFileProgram(
       content,
+      resolve(__dirname + "/fixtures/"),
       resolve(__dirname + "/fixtures/tsconfig.json"),
     );
     expect(ast.kind).toEqual(ts.SyntaxKind.SourceFile);

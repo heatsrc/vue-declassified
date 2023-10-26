@@ -1,3 +1,5 @@
+import Debug from "debug";
+const debug = Debug("vuedc:registry");
 /**
  * Global registry singleton for file level metadata that can be useful
  */
@@ -9,15 +11,20 @@ class Registry {
     ["classBody", new Set()],
   ]);
   collisions = new Map<string, { tag: string; sources: Set<string> }>();
+  importNameOverrides = new Map<string, string>();
+  warnings = new Set<string>();
 }
 const registry = new Registry();
 
 export function resetRegistry() {
+  debug("Resetting registry");
   registry.decorators.clear();
   registry.variableNames.get("imports")!.clear();
   registry.variableNames.get("topLevel")!.clear();
   registry.variableNames.get("classBody")!.clear();
+  registry.importNameOverrides.clear();
   registry.collisions.clear();
+  registry.warnings.clear();
 }
 
 export function isDecoratorRegistered(decorator: string) {
@@ -25,10 +32,12 @@ export function isDecoratorRegistered(decorator: string) {
 }
 
 export function registerDecorator(decorator: string) {
+  debug(`Registering decorator: ${decorator}`);
   registry.decorators.add(decorator);
 }
 
 export function registerTopLevelVariables(ids: string[], isImport = false) {
+  debug(`Registering top level variables: ${ids.join(", ")}`);
   const topLevelIds = registry.variableNames.get(isImport ? "imports" : "topLevel")!;
   ids.forEach(topLevelIds.add, topLevelIds);
 }
@@ -41,10 +50,12 @@ export function isTopLevelVariableRegistered(id: string) {
 }
 
 export function registerClassBodyVariable(id: string) {
+  debug(`Registering class body variable: ${id}`);
   registry.variableNames.get("classBody")!.add(id);
 }
 
 export function registeredVariableTypes(id: string) {
+  debug(`Getting registered variable types: ${id}`);
   const registeredIn = [];
   if (registry.variableNames.get("imports")!.has(id)) registeredIn.push("import declarations");
   if (registry.variableNames.get("topLevel")!.has(id))
@@ -65,6 +76,7 @@ export function hasCollision(varName: string) {
 }
 
 export function addCollision(varName: string, tag: string, source: string) {
+  debug(`Adding collision for: ${varName}`);
   const collision = registry.collisions.get(varName) ?? { tag, sources: new Set() };
   collision.sources.add(source);
   registry.collisions.set(varName, collision);
@@ -72,4 +84,27 @@ export function addCollision(varName: string, tag: string, source: string) {
 
 export function getCollisions() {
   return [...registry.collisions.entries()];
+}
+
+export function setImportNameOverride(importName: string, override: string) {
+  debug(`Setting import name override: ${importName} -> ${override}`);
+  registry.importNameOverrides.set(importName, override);
+}
+
+export function hasImportNameOverride(importName: string) {
+  return registry.importNameOverrides.has(importName);
+}
+
+export function getImportNameOverride(importName: string) {
+  debug(`Getting import name override: ${importName}`);
+  return registry.importNameOverrides.get(importName);
+}
+
+export function addGlobalWarning(message: string) {
+  debug(`Adding global warning: ${message}`);
+  registry.warnings.add(message);
+}
+
+export function getGlobalWarnings() {
+  return [...registry.warnings];
 }

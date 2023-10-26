@@ -10,8 +10,8 @@ type TransformerResult = {
   readonly astResult: Exclude<VxTransformResult<ts.Node>, VxResultToImport>;
   readonly dependsOn: string[];
 };
-export const processPropertyAccessAndSort: VxPostProcessor = (astResults) => {
-  const variableHandlers = getVariableHandlers(astResults);
+export const processPropertyAccessAndSort: VxPostProcessor = (astResults, program) => {
+  const variableHandlers = getVariableHandlers(astResults, program);
 
   const transformerResults = astResults
     .map((astResult) => {
@@ -33,7 +33,7 @@ export const processPropertyAccessAndSort: VxPostProcessor = (astResults) => {
 };
 
 type VariableHandlers = ReturnType<typeof getVariableHandlers>;
-function getVariableHandlers(astResults: VxTransformResult<ts.Node>[]) {
+function getVariableHandlers(astResults: VxTransformResult<ts.Node>[], program: ts.Program) {
   const getReferences = (ref: VxReferenceKind) => {
     return astResults
       .filter((node) => node.reference === ref)

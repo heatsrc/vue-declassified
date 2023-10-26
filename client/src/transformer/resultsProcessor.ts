@@ -1,3 +1,4 @@
+import Debug from "debug";
 import ts from "typescript";
 import {
   VxImportClause,
@@ -7,8 +8,24 @@ import {
   isMacroType,
 } from "../types.js";
 
-export function getImports(results: VxTransformResult<ts.Node>[]) {
+const debug = Debug("vuedc:transformer:resultsProcessor");
+
+export function getImports(
+  results: VxTransformResult<ts.Node>[],
+  outsideImports: ts.ImportDeclaration[] = [],
+) {
+  debug("Collating imports");
   const importMap = new Map<string, VxImportClause>();
+
+  outsideImports.forEach((imp) => {
+    const clause: VxImportClause = { named: new Set() };
+    const name = imp.importClause?.name?.text;
+    if (name) clause.default = name;
+    imp.importClause?.namedBindings?.forEachChild((el) => {
+      if (ts.isImportSpecifier(el)) clause.named.add(el.name.text);
+    });
+    importMap.set((imp.moduleSpecifier as ts.StringLiteral).text, clause);
+  });
 
   results.forEach(({ imports }) => {
     imports.forEach((i) => {
@@ -30,6 +47,7 @@ export function getImports(results: VxTransformResult<ts.Node>[]) {
     const namedImports =
       importElements.length > 0 ? ts.factory.createNamedImports(importElements) : undefined;
 
+    debug(`Creating import declaration for: ${key}`);
     return ts.factory.createImportDeclaration(
       undefined,
       ts.factory.createImportClause(false, name, namedImports),
@@ -39,13 +57,16 @@ export function getImports(results: VxTransformResult<ts.Node>[]) {
 }
 
 export function getBody(results: VxTransformResult<ts.Node>[]) {
+  debug("Collating body");
   return results.filter(isCompositionType).flatMap((el) => el.nodes);
 }
 
 export function getMacros(results: VxTransformResult<ts.Node>[]) {
+  debug("Collating Macros");
   return results.filter(isMacroType).flatMap((el) => el.nodes);
 }
 
 export function getComposables(results: VxTransformResult<ts.Node>[]) {
+  debug("Collating Composables");
   return results.filter(isComposableType).flatMap((el) => el.nodes);
 }

@@ -76,7 +76,7 @@ describe("Prop decorator", () => {
     const result = convertAst(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
-      "import Bar from './Bar';
+      "import Bar from \\"./Bar\\";
       const props = withDefaults(defineProps<{
           \\"foo\\"?: string;
           \\"bar\\": Bar;

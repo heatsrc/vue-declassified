@@ -1,4 +1,7 @@
+import Debug from "debug";
 import * as sfcCompiler from "vue/compiler-sfc";
+
+const debug = Debug("vuedc:parser");
 
 /**
  * Uses vue compiler to parse a vue file
@@ -7,6 +10,7 @@ import * as sfcCompiler from "vue/compiler-sfc";
  * @returns the parsed vue file
  */
 export async function readVueFile(content: string) {
+  debug(`Parsing vue file`);
   const vueFile = sfcCompiler.parse(content);
 
   if (vueFile.errors.length > 0)
@@ -24,6 +28,7 @@ export async function readVueFile(content: string) {
  * @param scriptContent Script content to write
  */
 export async function writeVueFile(vueFile: sfcCompiler.SFCParseResult, scriptContent: string) {
+  debug(`Compiling vue file`);
   if (!vueFile.descriptor.script) throw new Error("Vue file has no script!");
 
   const lang = vueFile.descriptor.script.lang;

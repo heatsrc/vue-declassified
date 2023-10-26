@@ -1,3 +1,4 @@
+import Debug from "debug";
 import ts from "typescript";
 import { addTodoComment } from "../helpers/comments.js";
 import {
@@ -9,6 +10,8 @@ import {
   VxTransformResult,
 } from "../types.js";
 import { classTransforms } from "./config.js";
+
+const debug = Debug("vuedc:transformer:statementsProcessor");
 
 const {
   [ts.SyntaxKind.Decorator]: decoratorTransforms,
@@ -51,6 +54,7 @@ export function processClassDecorator(
 
     if (isTransformable(property.kind)) {
       const optionTransforms = transforms[property.kind];
+      debug(`Transforming ${ts.SyntaxKind[property.kind]}}`);
       const opts = processNode(property, program, optionTransforms);
 
       if (opts) results.push(...opts);
@@ -63,6 +67,7 @@ export function processClassDecorator(
 }
 
 function processUnknownOption(node: ts.Node) {
+  debug(`Could not convert unknown decorator option: ${ts.SyntaxKind[node.kind]}}`);
   return {
     imports: [],
     kind: VxResultKind.OPTIONS,

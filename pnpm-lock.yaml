@@ -60,6 +60,9 @@ importers:
       '@ts-morph/bootstrap':
         specifier: ^0.21.0
         version: 0.21.0
+      debug:
+        specifier: ^4.3.4
+        version: 4.3.4
       prettier:
         specifier: ^3.0.3
         version: 3.0.3
@@ -70,6 +73,9 @@ importers:
         specifier: ^3.3.4
         version: 3.3.4
     devDependencies:
+      '@types/debug':
+        specifier: ^4.1.10
+        version: 4.1.10
       '@vitest/coverage-v8':
         specifier: ^0.34.5
         version: 0.34.6(vitest@0.34.6)
@@ -91,6 +97,12 @@ importers:
       vitest:
         specifier: ^0.34.4
         version: 0.34.6(@vitest/ui@0.34.6)
+      vue-class-component:
+        specifier: 8.0.0-rc.1
+        version: 8.0.0-rc.1(vue@3.3.4)
+      vue-property-decorator:
+        specifier: 10.0.0-rc.3
+        version: 10.0.0-rc.3(vue-class-component@8.0.0-rc.1)(vue@3.3.4)
 
   demo:
     dependencies:
@@ -968,6 +980,12 @@ packages:
       '@types/tern': 0.23.5
     dev: true
 
+  /@types/debug@4.1.10:
+    resolution: {integrity: sha512-tOSCru6s732pofZ+sMv9o4o3Zc+Sa8l3bxd/tweTQudFn06vAzb13ZX46Zi6m6EJ+RUbRTHvgQJ1gBtSgkaUYA==}
+    dependencies:
+      '@types/ms': 0.7.33
+    dev: true
+
   /@types/estree@1.0.2:
     resolution: {integrity: sha512-VeiPZ9MMwXjO32/Xu7+OwflfmeoRwkE/qzndw42gGtgJwZopBnzy2gD//NN1+go1mADzkDcqf/KnFRSjTJ8xJA==}
     dev: true
@@ -988,6 +1006,10 @@ packages:
 
   /@types/minimist@1.2.4:
     resolution: {integrity: sha512-Kfe/D3hxHTusnPNRbycJE1N77WHDsdS4AjUYIzlDzhDrS47NrwuL3YW4VITxwR7KCVpzwgy4Rbj829KSSQmwXQ==}
+    dev: true
+
+  /@types/ms@0.7.33:
+    resolution: {integrity: sha512-AuHIyzR5Hea7ij0P9q7vx7xu4z0C28ucwjAZC0ja7JhINyCnOw8/DnvAPQQ9TfOlCtZAmCERKQX9+o1mgQhuOQ==}
     dev: true
 
   /@types/node@12.20.55:
@@ -1826,7 +1848,6 @@ packages:
         optional: true
     dependencies:
       ms: 2.1.2
-    dev: true
 
   /decamelize-keys@1.1.1:
     resolution: {integrity: sha512-WiPxgEirIV0/eIOMcnFBA3/IJZAZqKnwAwWyvvdi4lsr1WCN22nhdf/3db3DoZcUjTV2SqfzIwNyp6y2xs3nmg==}
@@ -3093,7 +3114,6 @@ packages:
 
   /ms@2.1.2:
     resolution: {integrity: sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==}
-    dev: true
 
   /muggle-string@0.3.1:
     resolution: {integrity: sha512-ckmWDJjphvd/FvZawgygcUeQCxzvohjFO5RxTjj4eq8kw359gFF3E1brjfI+viLMxss5JrHTDRHZvu2/tuy0Qg==}
@@ -4571,6 +4591,24 @@ packages:
 
   /vscode-uri@3.0.8:
     resolution: {integrity: sha512-AyFQ0EVmsOZOlAnxoFOGOq1SQDWAB7C6aqMGS23svWAllfOaxbuFvcT8D1i8z3Gyn8fraVeZNNmN6e9bxxXkKw==}
+    dev: true
+
+  /vue-class-component@8.0.0-rc.1(vue@3.3.4):
+    resolution: {integrity: sha512-w1nMzsT/UdbDAXKqhwTmSoyuJzUXKrxLE77PCFVuC6syr8acdFDAq116xgvZh9UCuV0h+rlCtxXolr3Hi3HyPQ==}
+    peerDependencies:
+      vue: ^3.0.0
+    dependencies:
+      vue: 3.3.4
+    dev: true
+
+  /vue-property-decorator@10.0.0-rc.3(vue-class-component@8.0.0-rc.1)(vue@3.3.4):
+    resolution: {integrity: sha512-EGqjf8Lq+kTausZzfLB1ynWOcyay8ZLAc5p2VlKGEX2q+BjYw84oZxr6IcdwuxGIdNmriZqPUX6AlAluBdnbEg==}
+    peerDependencies:
+      vue: '*'
+      vue-class-component: '*'
+    dependencies:
+      vue: 3.3.4
+      vue-class-component: 8.0.0-rc.1(vue@3.3.4)
     dev: true
 
   /vue-template-compiler@2.7.14:
