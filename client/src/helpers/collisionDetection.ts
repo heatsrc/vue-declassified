@@ -1,5 +1,6 @@
 import { instancePropertyKeyMap } from "@/transformer/transforms/utils/instancePropertyAccess.js";
 import { VxTransformResult } from "@/types.js";
+import Debug from "debug";
 import ts from "typescript";
 import {
   addCollision,
@@ -11,6 +12,8 @@ import {
   registerTopLevelVariables,
   registeredVariableTypes,
 } from "../registry.js";
+
+const debug = Debug("vuedc:transformer:helpers:collisionDetection");
 
 export function registerTopLevelVars(statements: ts.Statement[]) {
   const imports = statements.filter(ts.isImportDeclaration);
@@ -56,6 +59,7 @@ function traverseObjBindings(obj: ts.ObjectBindingPattern | ts.ArrayBindingPatte
 }
 
 export function detectNamingCollisions(results: VxTransformResult<ts.Node>[]) {
+  debug("Detecting naming collisions");
   results.forEach((result) => {
     result.outputVariables.forEach((name) => {
       if (isTopLevelVariableRegistered(name)) {
@@ -63,6 +67,7 @@ export function detectNamingCollisions(results: VxTransformResult<ts.Node>[]) {
       }
 
       if (hasClassBodyVariable(name) && !instancePropertyKeyMap.has(`$${name}`)) {
+        debug(`Collision detected for: ${name}`);
         addCollision(name, result.tag, "class body");
       }
 

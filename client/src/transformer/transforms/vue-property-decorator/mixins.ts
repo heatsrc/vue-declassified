@@ -7,9 +7,11 @@ import {
 import { namedImports } from "@/helpers/utils";
 import { addGlobalWarning, getImportNameOverride } from "@/registry";
 import { VxReferenceKind, VxResultKind, VxResultToComposable, VxTransform } from "@/types";
+import Debug from "debug";
 import ts from "typescript";
 import { instancePropertyKeyMap } from "../utils/instancePropertyAccess";
 
+const debug = Debug("vuedc:transformer:transforms:vue-property-decorator:mixins");
 const CLAUSE = "mixins";
 const u = undefined;
 
@@ -25,6 +27,7 @@ export const transformMixins: VxTransform<ts.HeritageClause> = (clause, program)
   if (!ts.isIdentifier(typeIdent)) return { shouldContinue: true };
 
   let clauseName = getImportNameOverride(CLAUSE) ?? CLAUSE;
+  debug(`Mixin var: ${clauseName}`);
   if (typeIdent.text !== clauseName) return { shouldContinue: true };
 
   const args = typeExpr.arguments;
@@ -34,21 +37,44 @@ export const transformMixins: VxTransform<ts.HeritageClause> = (clause, program)
   const mixins = args.reduce((acc, arg) => {
     if (!ts.isIdentifier(arg)) return acc;
 
+    debug(`Found Mixin: ${arg.text}`);
     const rest = arg.text.slice(1);
     let name = "use" + arg.text.charAt(0).toUpperCase() + rest;
     name = name.replace("Mixin", "");
 
     const type = checker.getSymbolAtLocation(arg);
+    if (!type) debug(`Could not find type for mixin: ${arg.text}`);
     const decl = type?.declarations?.[0];
-    if (!decl || !ts.isImportClause(decl)) return acc;
+    debug(`Creating composable from mixin: ${name}`);
+    if (!decl) {
+      debug(`Could not find declaration for mixin: ${arg.text}`);
+      return acc;
+    }
 
-    let importFileName = (decl.parent.moduleSpecifier as ts.StringLiteral).text;
+    let moduleSpecifier: ts.StringLiteral | undefined;
+    let parent = decl.parent;
+    while (parent && !moduleSpecifier) {
+      if (ts.isImportDeclaration(parent)) {
+        moduleSpecifier = parent.moduleSpecifier as ts.StringLiteral;
+      }
+      parent = parent.parent;
+    }
+
+    if (!moduleSpecifier) {
+      debug(`Could not find module specifier for mixin: ${arg.text}`);
+      return acc;
+    }
+
+    let importFileName = moduleSpecifier.text;
+    debug(`Import file name: ${importFileName}`);
     addGlobalWarning(
       `Mixin "${arg.text}" was assumed to have composable "${name}" in the same file and public members mapped 1:1 with exported variables/functions.`,
     );
 
     const mixinClass = checker.getTypeOfSymbolAtLocation(type, arg).symbol.valueDeclaration;
     if (!mixinClass || !ts.isClassDeclaration(mixinClass)) return acc;
+
+    debug(`Getting public members of mixin: ${mixinClass.name?.text}`);
     let referenceVars: string[] = [];
     const bindingElements = mixinClass.members.reduce((acc, member) => {
       if (
@@ -65,6 +91,8 @@ export const transformMixins: VxTransform<ts.HeritageClause> = (clause, program)
       const memberVal = ts.isPropertyDeclaration(member)
         ? createPropertyAccess(memberName, "value")
         : memberName;
+
+      debug(`Adding member to instancePropertyKeyMap: ${memberName}`);
       instancePropertyKeyMap.set(memberName, memberVal);
       referenceVars.push(memberName);
 

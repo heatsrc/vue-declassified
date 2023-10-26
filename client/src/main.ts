@@ -1,3 +1,4 @@
+import Debug from "debug";
 import * as prettier from "prettier";
 import * as parserTypescript from "prettier/parser-typescript";
 import * as parserEsTree from "prettier/plugins/estree.js";
@@ -7,6 +8,8 @@ import { readVueFile, writeVueFile } from "./file.js";
 import { getCollisionsWarning } from "./helpers/collisionDetection.js";
 import { getSingleFileProgram } from "./parser.js";
 import { getGlobalWarnings, hasCollisions, resetRegistry } from "./registry.js";
+
+const debug = Debug("vuedc");
 
 export type VuedcOptions = {
   /** When true Vuedc will not "write" the vue file and instead return the variable collisions */
@@ -42,6 +45,7 @@ export async function convertSfc(src: string, opts: Partial<VuedcOptions> = {}) 
   const { script, vueFile } = await readVueFile(src);
   const results = await convertScript(script.content, opts);
   const fileContent = await writeVueFile(vueFile, results);
+  debug("Finished converting sfc");
   return fileContent;
 }
 
@@ -55,6 +59,7 @@ export async function convertScript(src: string, opts: Partial<VuedcOptions> = {
   let tsConfigPath = "";
   if (opts.basePath) {
     const configFile = ts.findConfigFile(opts.basePath, ts.sys.fileExists, "tsconfig.json");
+    debug(`Using basePath to look for tsconfig.json: ${opts.basePath}, found ${configFile}`);
     if (configFile) tsConfigPath = configFile;
   }
   const { ast, program } = getSingleFileProgram(src, opts.basePath, tsConfigPath);
@@ -69,6 +74,7 @@ export async function convertScript(src: string, opts: Partial<VuedcOptions> = {
   warnings += globalWarnings.length > 0 ? `\n - ${globalWarnings.join("\n - ")}\n` : "";
   warnings = warnings ? `\n/*\n${warnings}\n*/\n\n` : "";
 
+  debug("Formatting result");
   const formattedResult = await prettier.format(warnings + result, {
     parser: "typescript",
     printWidth: 100,
@@ -77,5 +83,6 @@ export async function convertScript(src: string, opts: Partial<VuedcOptions> = {
 
   resetRegistry();
 
+  debug("Finished converting script");
   return formattedResult;
 }
