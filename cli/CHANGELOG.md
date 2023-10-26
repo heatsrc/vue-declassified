@@ -1,5 +1,18 @@
 # @heatsrc/vuedc
 
+## 3.2.0
+
+### Minor Changes
+
+- [#13](https://github.com/heatsrc/vue-declassified/pull/13) [`d7dd6d0`](https://github.com/heatsrc/vue-declassified/commit/d7dd6d06124b2a73fd9908aa59139f76ee872a25) Thanks [@jaredmcateer](https://github.com/jaredmcateer)! - Remove tsConfig filepath from project flag
+
+  vue-declassified now infers the tsconfig from the sfc file path
+
+### Patch Changes
+
+- Updated dependencies [[`fba13cc`](https://github.com/heatsrc/vue-declassified/commit/fba13cc61c600ecfd3bf3892b2d7343edca7e75b)]:
+  - @heatsrc/vue-declassified@3.0.0
+
 ## 3.1.0
 
 ### Minor Changes
