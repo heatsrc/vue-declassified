@@ -12,16 +12,20 @@ import { getGlobalWarnings, hasCollisions, resetRegistry } from "./registry.js";
 const debug = Debug("vuedc");
 
 export type VuedcOptions = {
-  /** When true Vuedc will not "write" the vue file and instead return the variable collisions */
+  /**
+   * When true Vuedc will not stringify the final vue file and instead return
+   * the variable collisions
+   */
   stopOnCollisions?: boolean;
   /**
-   * When provided will use the compiler options from this file rather than
-   * simple defaults.
+   * When provided Vuedc will attempt to find a tsconfig.json project file along
+   * the path. If found it will use the compiler options from this file rather
+   * than simple defaults.
    *
-   * Note: Unless you need external file references, it's recommended not
-   * providing this. Using your project can be *significantly* slower as TS will
-   * need to compile your entire project and uses the file system rather than an
-   * in-memory file system when no project is provided.
+   * Note: Unless you need external file references (e.g., mixins), it's
+   * recommended not providing this. Using your project can be *significantly*
+   * slower as TS will need to compile your entire project and uses the file
+   * system rather than an in-memory file system when no project is provided.
    */
   basePath?: string;
 };

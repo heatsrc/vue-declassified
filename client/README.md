@@ -19,6 +19,7 @@
     - [Install](#install)
       - [Dependencies](#dependencies)
     - [Code](#code)
+      - [Options](#options)
 - [Supported Features](#supported-features)
   - [vue-class-component](#vue-class-component)
     - [`@Component` / `@Options` (v8.0.0-rc.1)](#component--options-v800-rc1)
@@ -30,6 +31,8 @@
   - [Naming collisions](#naming-collisions)
     - [`$refs` with same name as class members](#refs-with-same-name-as-class-members)
     - [Top level identifiers](#top-level-identifiers)
+    - [Reactive Variables](#reactive-variables)
+    - [Mixins](#mixins)
 
 ## Vue Class Components -> Vue 3 script setup
 
@@ -39,7 +42,7 @@ Vue Declassified is an opinionated tool that will format Vue class components (i
 
 These decisions are made arbitrarily, mostly for sanity and convenience. You get what you get and you don't get upset.
 
-- No/Limited configuration
+- Limited configuration
   - There is a lot of different edge cases to test and adding configuration options tends to act as a multiplier for those cases.
 - Will only support TS
 - Won't support esoteric/redundant `@Component`/`@Options` options
@@ -48,16 +51,7 @@ These decisions are made arbitrarily, mostly for sanity and convenience. You get
 - Will reference macros by arbitrary variables (see below)
 - Will be formatted by prettier with default config
   - exception `printWidth` increased to 100 characters
-- Mixins will be renamed to match composable conventions
-  - Transform
-    - First char of mixin will be capitalized
-    - `use` will be prefixed
-    - `Mixin` will be removed (if detected)
-    - e.g., `FooMixin` -> `useFoo`;
-  - Exported variables are mapped 1:1 with public members of Mixin
-    - e.g., `const { isLoading, bar, fetchData } = useFoo();`
-  - Property/Accessors will have `.value` added to the property access
-    - e.g., `const isReady = computed(() => !isLoading.value)`
+- Mixins will be renamed to match composable conventions (see [Tips/Gotchas: Mixins](#mixins))
 
 ## Usage
 
@@ -109,9 +103,35 @@ yarn install @heatsrc/vue-declassified
 
 #### Code
 
+##### Options
+
+Vuedc provides a very limited set of options to keep maintainability of the program sustainable.
+
+```ts
+export type VuedcOptions = {
+  /**
+   * When true Vuedc will not stringify the vue file but instead return the
+   * variable collisions
+   */
+  stopOnCollisions?: boolean;
+  /**
+   * When provided Vuedc will attempt to find a tsconfig.json project file along
+   * the path. If found it will use the compiler options from this file rather
+   * than simple defaults.
+   *
+   * Note: Unless you need external file references (e.g., mixins), it's
+   * recommended not providing this. Using your project can be *significantly*
+   * slower as TS will need to compile your entire project and uses the file
+   * system rather than an in-memory file system when no project is provided.
+   */
+  basePath?: string;
+};
+```
+
 ```ts
 import { convertSfc } from "@heatsrc/vue-declassified";
 import {readFile, writeFile} from 'node:fs/promises';
+import { dirname } from 'node:path';
 
 const input = "./myVueComponent.vue";
 const output = "./myVueComponent.converted.vue";
@@ -120,7 +140,9 @@ const output = "./myVueComponent.converted.vue";
   const encoding = {encoding: 'utf8'};
   const inputFile = await readFile(input, encoding);
 
-  const result = await convertSfc(input, output);
+  const result = await convertSfc(input);
+  // or with options
+  // const result = await convertSfc(input, {stopOnCollisions: true, basePath: dirname(input)});
 
   await writeFile(output, encoding);
 }());
@@ -156,17 +178,17 @@ console.log(result);
 ### vue-class-component
 
 <details>
-<summary>Basic class transforms (5 :white_check_mark: / 2 :heavy_check_mark:)</summary>
+<summary>Basic class transforms (6 :white_check_mark: / 1 :heavy_check_mark:)</summary>
 
-|      feature       |     supported?     | notes                                                                                                                                                                                                      |
-| :----------------: | :----------------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|      methods       | :white_check_mark: | Basic method support (no decorators)                                                                                                                                                                       |
-|  data properties   | :white_check_mark: | Basic class properties (no decorators)                                                                                                                                                                     |
-|  getters/setters   | :white_check_mark: | Computed refs                                                                                                                                                                                              |
-|       mixins       | :white_check_mark: | :exclamation:Requires `basePath` option to be set <br /> so the program can reverse lookup the owner of unknown property accesses. <br> Also requires `tsconfig.json` to be somewhere along the `basePath` |
-|       extend       | :heavy_check_mark: |                                                                                                                                                                                                            |
-| sort by dependency | :white_check_mark: | Will try to sort dependencies\*                                                                                                                                                                            |
-|  `$refs:! {...}`   | :white_check_mark: | converted to regular `Ref`s                                                                                                                                                                                |
+|      feature       |     supported?     | notes                                                                                   |
+| :----------------: | :----------------: | --------------------------------------------------------------------------------------- |
+|      methods       | :white_check_mark: | Basic method support (no decorators)                                                    |
+|  data properties   | :white_check_mark: | Basic class properties (no decorators)                                                  |
+|  getters/setters   | :white_check_mark: | Computed refs                                                                           |
+|       mixins       | :white_check_mark: | :exclamation:Requires `basePath` option to be set (see [Tips/Gotchas: Mixins](#mixins)) |
+|       extend       | :heavy_check_mark: |                                                                                         |
+| sort by dependency | :white_check_mark: | Will try to sort dependencies\*                                                         |
+|  `$refs:! {...}`   | :white_check_mark: | converted to regular `Ref`s                                                             |
 
 <sup>\* VueDc does it best to sort dependencies to avoid "used before defined" issues. It requires processing essentially a directed acyclic graph and it's complicated so please raise issues if found.</sup>
 
@@ -205,7 +227,7 @@ console.log(result);
 |   `$parent`    |       :boom:       | Refactor your code. Prop/Emits or Provide/Inject<sup>\*</sup>            |
 |  `$children`   |       :boom:       | -                                                                        |
 |    `$props`    | :white_check_mark: | Via `const props = defineProps<...>()`                                   |
-|    `$refs`     | :white_check_mark: |                                                                          |
+|    `$refs`     | :white_check_mark: | Converted to standard `Ref<T>                                            |
 |    `$route`    | :white_check_mark: | Via `const route = useRoute();`                                          |
 |   `$router`    | :white_check_mark: | Via `const router = useRouter();`                                        |
 |    `$slots`    | :heavy_check_mark: | Via `const slots = defineSlots<...>()`                                   |
@@ -495,3 +517,29 @@ const bar = computed(() => 'val');
 const c = () => 'foo';
 //    ^? Cannot redeclare block-scoped variable 'c'.ts(2451)
 ```
+
+#### Reactive Variables
+
+When Vuedc encounters a data property assigned to an Array or Object it will assume you want to wrap it in `reactive`. This can be a problem if you're reassigning the variable in the code. Vuedc will assign the variable to a `const` so it should be immediately apparently that something is wrong and it's up to you how to refactor it.
+
+You can convert the `reactive` to `ref` and add `.value` to the reassignments but you will lose deep reactivity of those variables (which may be the intention.)
+
+#### Mixins
+
+:exclamation: **Note:** Mixins support only works when you provide `convertSfc` with a `basePath` in the VuedcOptions (or with the `-p | --project` flag in the Vuedc cli tool).
+
+When mixins are detected Vuedc will assume you've created a composable analog in the same file and perform the following
+
+- Transform
+  - First char of mixin will be capitalized: (`fooMixin` -> `FooMixin`)
+  - `use` will be prefixed: (`FooMixin` -> `useFooMixin`)
+  - `Mixin` will be removed (if detected): (`useFooMixin` -> `useFoo`)
+- Exported variables are mapped 1:1 with public members of Mixin
+  - e.g., `const { isLoading, bar, fetchData } = useFoo();`
+- All public members belonging to the mixin will be imported by the component
+- Property/Accessors will have `.value` added to the property access
+  - e.g., `const isReady = computed(() => !isLoading.value)`
+
+:information_source: Vuedc cannot (yet) detect which mixin members have been used in the template so will just import them all and you should refactor to remove unused variables.
+
+:information_source: The old mixin isn't deleted from the import so it's up to you to clean it up.
