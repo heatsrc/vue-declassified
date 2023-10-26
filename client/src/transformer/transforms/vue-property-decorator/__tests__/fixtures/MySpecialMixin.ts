@@ -1,6 +1,7 @@
 import { Options, Vue } from "vue-class-component";
 
 export type MySpecialType = "foo" | "bar";
+// @ts-ignore
 @Options({})
 export default class MySpecialMixin extends Vue {
   foo: MySpecialType = "bar";
