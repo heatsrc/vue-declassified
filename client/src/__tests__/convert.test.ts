@@ -279,12 +279,12 @@ describe("convert", () => {
       }>(\\"optional\\", () => ({ foo: \\"bar\\" }));
       // Vuex State
       const title = computed<string>(() => store.state.title);
-      const vehicle = computed(() => store.state['car']);
+      const vehicle = computed(() => store.state.car);
       const userProfile = computed<Profile>(() => store.state[userProfile]);
       const isAdmin = computed<boolean>(() => store.state.user.isAdmin);
       // Vuex Getters
       const direction = computed<string>(() => store.getters.direction);
-      const velocity = computed<number>(() => store.getters['speed']);
+      const velocity = computed<number>(() => store.getters.speed);
       const adminProfile = computed<(id: number) => Profile>(() => store.getters[profile]);
       // Vuex Actions
       const fetchUser = async (id: number): Promise<User> => store.dispatch(\\"fetchUser\\", id);

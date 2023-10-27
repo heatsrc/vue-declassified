@@ -1,4 +1,5 @@
 import Debug from "debug";
+import ts from "typescript";
 const debug = Debug("vuedc:registry");
 /**
  * Global registry singleton for file level metadata that can be useful
@@ -13,6 +14,7 @@ class Registry {
   collisions = new Map<string, { tag: string; sources: Set<string> }>();
   importNameOverrides = new Map<string, string>();
   warnings = new Set<string>();
+  vuexNamespacedDecorators = new Map<string, ts.StringLiteral | ts.Identifier>();
 }
 const registry = new Registry();
 
@@ -25,6 +27,7 @@ export function resetRegistry() {
   registry.importNameOverrides.clear();
   registry.collisions.clear();
   registry.warnings.clear();
+  registry.vuexNamespacedDecorators.clear();
 }
 
 export function isDecoratorRegistered(decorator: string) {
@@ -107,4 +110,14 @@ export function addGlobalWarning(message: string) {
 
 export function getGlobalWarnings() {
   return [...registry.warnings];
+}
+
+export function setVuexNamespace(decorator: string, namespace: ts.StringLiteral | ts.Identifier) {
+  debug(`Setting vuex namespace for @${decorator}: ${namespace.text}`);
+  registry.vuexNamespacedDecorators.set(decorator, namespace);
+}
+
+export function getVuexNamespace(decorator: string) {
+  debug(`Getting vuex namespace for @${decorator}`);
+  return registry.vuexNamespacedDecorators.get(decorator);
 }

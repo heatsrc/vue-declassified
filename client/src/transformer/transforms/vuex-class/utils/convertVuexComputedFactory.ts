@@ -1,12 +1,7 @@
 import { copySyntheticComments } from "@/helpers/comments";
-import {
-  createConstStatement,
-  createIdentifier,
-  getDecorators,
-  isArrowFunc,
-} from "@/helpers/tsHelpers";
+import { createConstStatement, createIdentifier, getDecorators } from "@/helpers/tsHelpers";
 import { namedImports } from "@/helpers/utils";
-import { registerDecorator } from "@/registry";
+import { getVuexNamespace, registerDecorator } from "@/registry";
 import {
   VxReferenceKind,
   VxResultKind,
@@ -14,18 +9,22 @@ import {
   VxTransform,
   VxTransformResult,
 } from "@/types";
-import { cloneNode } from "ts-clone-node";
 import ts, { isCallExpression } from "typescript";
 import { instanceDependencies } from "../../utils/instancePropertyAccess";
-import { isValidIdentifier } from "../../utils/isValidIdentifier";
+import { isValidVuexNsKey } from "./isValidVuexDecoratorArg";
+
+export type AccessExpressionGetter = (
+  property: string | ts.Expression,
+  namespace?: ts.Identifier | ts.StringLiteral,
+) => ts.ElementAccessExpression | ts.PropertyAccessExpression;
 
 export function convertVuexComputedFactory(
   decoratorName: "State" | "Getter",
-  storeProperty: "state" | "getters",
+  getAccessExpression: AccessExpressionGetter,
 ): VxTransform<ts.PropertyDeclaration> {
   return (node) => {
     const decorators = getDecorators(node, decoratorName);
-    const computedName = node.name.getText();
+    const computedName = (node.name as ts.Identifier).text;
 
     if (!decorators || decorators.length <= 0) return { shouldContinue: true };
     if (decorators.length > 1)
@@ -35,8 +34,24 @@ export function convertVuexComputedFactory(
 
     const decorator = decorators[0];
     let decoratorArgs: ts.Expression | undefined;
-    if (isCallExpression(decorator.expression)) {
-      decoratorArgs = decorator.expression.arguments[0];
+    let propExpr: ts.PropertyAccessExpression | undefined;
+    const decoratorExpr = decorator.expression;
+
+    if (isCallExpression(decoratorExpr)) {
+      decoratorArgs = decoratorExpr.arguments[0];
+
+      if (ts.isPropertyAccessExpression(decoratorExpr.expression)) {
+        propExpr = decoratorExpr.expression;
+      }
+    } else if (ts.isPropertyAccessExpression(decoratorExpr)) {
+      propExpr = decoratorExpr;
+    }
+
+    let namespace: ts.Identifier | ts.StringLiteral | undefined;
+    let nsKey = propExpr?.expression;
+
+    if (isValidVuexNsKey(nsKey)) {
+      namespace = getVuexNamespace(nsKey.text);
     }
 
     const typeArgs = node.type ? [node.type] : [];
@@ -44,14 +59,11 @@ export function convertVuexComputedFactory(
 
     const path = decoratorArgs ?? computedName;
 
-    const accessExpr = getAccessExpression(path, storeProperty);
+    const accessExpr = getAccessExpression(path, namespace);
     arrowFunction = createSimpleArrowFunction(accessExpr);
 
-    const computedCallExpr = ts.factory.createCallExpression(
-      createIdentifier("computed"),
-      typeArgs,
-      [arrowFunction],
-    );
+    const computedId = createIdentifier("computed");
+    const computedCallExpr = ts.factory.createCallExpression(computedId, typeArgs, [arrowFunction]);
     const constStatement = createConstStatement(computedName, computedCallExpr);
     const computedStatement = copySyntheticComments(constStatement, node);
 
@@ -75,76 +87,8 @@ export function convertVuexComputedFactory(
   };
 }
 
-/**
- * Converts the decorator id to an arrow function with an access expression
- * @param property
- *
- * @example
- * \@State("foo") bar: string; -> (): string => store.state.foo
- * \@Getter("ns/foo") bar: boolean; -> (): boolean => store.getters["ns/foo"]
- */
-function getAccessExpression(property: string | ts.Expression, storeProperty: "state" | "getters") {
-  // @State(s => s.foo.bar) bar: string; -> store.state.foo.bar
-  if (isArrowFunc(property) && storeProperty === "state") {
-    const transformer = getArrowFnTransformer(property, storeProperty);
-    const transformedArrowFn = ts.transform(property, [transformer]).transformed[0];
-    const accessExpr = cloneNode(transformedArrowFn.body) as ts.PropertyAccessExpression;
-    return accessExpr;
-  } else if (isArrowFunc(property) && storeProperty === "getters") {
-    throw new Error("[vuex-class] Arrow functions are not supported for @Getter");
-  }
-
-  const storeId = createIdentifier("store");
-  const storePropertyId = createIdentifier(storeProperty);
-  const accessExpr = ts.factory.createPropertyAccessExpression(storeId, storePropertyId);
-
-  if (typeof property === "string") {
-    if (!isValidIdentifier(property)) {
-      // @State('ns/foo') bar: string; -> store.state['ns/foo']
-      const propertyId = ts.factory.createStringLiteral(property);
-      return ts.factory.createElementAccessExpression(accessExpr, propertyId);
-    }
-
-    // @State('foo') bar: string; -> store.state.foo
-    const propertyId = createIdentifier(property);
-    return ts.factory.createPropertyAccessExpression(accessExpr, propertyId);
-  }
-
-  // @Getter(someVar) foo: string; -> store.getters[someVar]
-  return ts.factory.createElementAccessExpression(accessExpr, property);
-}
-
 function createSimpleArrowFunction(returnValueExpr: ts.Expression) {
   const u = undefined;
   const arrowFunction = ts.factory.createArrowFunction(u, u, [], u, u, returnValueExpr);
   return arrowFunction;
-}
-
-/**
- * Takes an arrow function, visits each node of the PropertyAccessExpression
- * until it files the arrow function parameter identifier and replaces it with
- * the store.<propertyName>
- *
- * TODO this currently only supports a concise body, I don't wanna deal with more complex bodies
- *
- * @example
- * (s) => s.foo.bar; // -> store.state.foo.bar
- */
-function getArrowFnTransformer(arrowFn: ts.ArrowFunction, propertyName: "state" | "getters") {
-  const [param] = arrowFn.parameters;
-  if (!param) throw new Error("Expected an arrow function with a single parameter");
-  const propertyId = createIdentifier(propertyName);
-  const storeId = createIdentifier("store");
-  const storeStateAccess = ts.factory.createPropertyAccessExpression(storeId, propertyId);
-
-  return ((ctx) => {
-    const visitor = (node: ts.Node): ts.Node => {
-      if (ts.isIdentifier(node) && node.getText() === param.name.getText()) {
-        return storeStateAccess;
-      }
-      return ts.visitEachChild(node, visitor, ctx);
-    };
-
-    return (node) => ts.visitNode(arrowFn, visitor);
-  }) as ts.TransformerFactory<ts.ArrowFunction>;
 }

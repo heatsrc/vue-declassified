@@ -17,11 +17,21 @@ export function getDecorators(node: ts.Node, name: string) {
   if (!ts.canHaveDecorators(node)) return undefined;
 
   const decorators = ts.getDecorators(node) ?? [];
-  return decorators.filter((decorator) =>
-    ts.isCallExpression(decorator.expression)
-      ? decorator.expression.expression.getText() === name
-      : decorator.expression.getText() === name,
-  );
+  return decorators.filter((decorator) => {
+    let expr = decorator.expression;
+    if (ts.isCallExpression(expr)) {
+      if (!ts.isIdentifier(expr.expression) && !ts.isPropertyAccessExpression(expr.expression)) {
+        return false;
+      }
+      expr = expr.expression;
+    }
+
+    if (ts.isPropertyAccessExpression(expr)) {
+      return expr.name.text === name;
+    } else if (ts.isIdentifier(expr)) {
+      return expr.text === name;
+    }
+  });
 }
 
 export function getPackageName(node: ts.Node) {
@@ -225,6 +235,10 @@ export function isObjLitExpr(node: ts.Node | unknown): node is ts.ObjectLiteralE
 
 export function isStringLit(node: ts.Node | unknown): node is ts.StringLiteral {
   return isTypeOfNode<ts.StringLiteral>(node, "isStringLiteral");
+}
+
+export function isId(node: ts.Node | unknown): node is ts.Identifier {
+  return isTypeOfNode<ts.Identifier>(node, "isIdentifier");
 }
 
 export function isPropertyAccessExpr(node: ts.Node | unknown): node is ts.PropertyAccessExpression {

@@ -6,10 +6,15 @@ describe("Getter decorator", () => {
   it("should transform getter", () => {
     const { ast, program } = getSingleFileProgram(`
       import { Component, Vue } from 'vue-property-decorator';
-      import { Getter } from 'vuex-class';
+      import { Getter, namespace } from 'vuex-class';
+      const ns1 = namespace('moduleB');
+      const moduleC = 'moduleC';
+      const ns2 = namespace(moduleC);
       @Component
       export default class Foo {
         @Getter bar: string;
+        @ns1.Getter baz: string;
+        @ns2.Getter qux: string;
       }
     `);
     const result = convertAst(ast, program);
@@ -17,8 +22,69 @@ describe("Getter decorator", () => {
     expect(result).toMatchInlineSnapshot(`
       "import { useStore } from \\"vuex\\";
       import { computed } from \\"vue\\";
+      const moduleC = 'moduleC';
       const store = useStore();
       const bar = computed<string>(() => store.getters.bar);
+      const baz = computed<string>(() => store.getters[\\"moduleB/baz\\"]);
+      const qux = computed<string>(() => store.getters[\`\${moduleC}/qux\`]);
+      "
+    `);
+  });
+
+  it("should transform getter with string property argument", () => {
+    const { ast, program } = getSingleFileProgram(`
+      import { Component, Vue } from 'vue-property-decorator';
+      import { State } from 'vuex-class';
+      const ns1 = namespace('moduleB');
+      const moduleC = 'moduleC';
+      const ns2 = namespace(moduleC);
+      @Component
+      export default class Foo {
+        @Getter('foo') bar: string;
+        @ns1.Getter('foo') baz: string;
+        @ns2.Getter('foo') qux: string;
+      }
+    `);
+    const result = convertAst(ast, program);
+
+    expect(result).toMatchInlineSnapshot(`
+      "import { useStore } from \\"vuex\\";
+      import { computed } from \\"vue\\";
+      const moduleC = 'moduleC';
+      const store = useStore();
+      const bar = computed<string>(() => store.getters.foo);
+      const baz = computed<string>(() => store.getters[\\"moduleB/foo\\"]);
+      const qux = computed<string>(() => store.getters[\`\${moduleC}/foo\`]);
+      "
+    `);
+  });
+
+  it("should transform getter with variable property argument", () => {
+    const { ast, program } = getSingleFileProgram(`
+      import { Component, Vue } from 'vue-property-decorator';
+      import { State, namespace } from 'vuex-class';
+      const ns1 = namespace('moduleB');
+      const moduleC = 'moduleC';
+      const ns2 = namespace(moduleC);
+      const foo = 'foo';
+      @Component
+      export default class Foo {
+        @Getter(foo) bar: string;
+        @ns1.Getter(foo) baz: string;
+        @ns2.Getter(foo) qux: string;
+      }
+    `);
+    const result = convertAst(ast, program);
+
+    expect(result).toMatchInlineSnapshot(`
+      "import { useStore } from \\"vuex\\";
+      import { computed } from \\"vue\\";
+      const moduleC = 'moduleC';
+      const foo = 'foo';
+      const store = useStore();
+      const bar = computed<string>(() => store.getters[foo]);
+      const baz = computed<string>(() => store.getters[\`moduleB/\${foo}\`]);
+      const qux = computed<string>(() => store.getters[\`\${moduleC}/\${foo}\`]);
       "
     `);
   });
@@ -65,7 +131,7 @@ describe("Getter decorator", () => {
     `);
   });
 
-  it("should transform getter with variable", () => {
+  it("should throw if provided an arrow function", () => {
     const { ast, program } = getSingleFileProgram(`
       import { Component, Vue } from 'vue-property-decorator';
       import { Getter } from 'vuex-class';
@@ -76,7 +142,7 @@ describe("Getter decorator", () => {
     `);
 
     expect(() => convertAst(ast, program)).toThrowError(
-      `[vuex-class] Arrow functions are not supported for @Getter`,
+      `[vuex-class] Unexpected decorator argument, expected String or Identifier got ArrowFunction`,
     );
   });
 });

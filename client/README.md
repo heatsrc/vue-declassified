@@ -352,7 +352,7 @@ These are options provided in the decorator call, e.g., `@Component({ components
 ### vuex-class
 
 <details>
-<summary><code>Decorators</code> (4 :white_check_mark:, 1 :heavy_check_mark:)</summary>
+<summary><code>Decorators</code> (5/5 :rocket:)</summary>
 
 |  decorator  |     supported?     | notes |
 | :---------: | :----------------: | ----- |
@@ -360,7 +360,7 @@ These are options provided in the decorator call, e.g., `@Component({ components
 |  `@Getter`  | :white_check_mark: |       |
 | `@Mutation` | :white_check_mark: |       |
 |  `@State`   | :white_check_mark: |       |
-|  namespace  | :heavy_check_mark: |       |
+|  namespace  | :white_check_mark: |       |
 
 </details>
 

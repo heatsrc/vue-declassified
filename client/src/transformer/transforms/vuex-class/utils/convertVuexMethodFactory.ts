@@ -3,9 +3,10 @@ import {
   createConstStatement,
   createIdentifier,
   getDecorators,
+  isStringLit,
   rocketToken,
 } from "@/helpers/tsHelpers";
-import { registerDecorator } from "@/registry";
+import { getVuexNamespace, registerDecorator } from "@/registry";
 import {
   VxReferenceKind,
   VxResultKind,
@@ -15,6 +16,9 @@ import {
 } from "@/types";
 import ts, { isCallExpression } from "typescript";
 import { instanceDependencies } from "../../utils/instancePropertyAccess";
+import { isValidVuexDecoratorArg } from "./isValidVuexDecoratorArg";
+import { namespacedStoreKey } from "./namespacedStoreKey";
+import { VuexPropertyTypeBase } from "./vuexClass.types";
 
 const u = undefined;
 
@@ -36,11 +40,30 @@ export function transformVuexMethodFactory(
 
     const decorator = decorators[0];
     let decoratorArgs: ts.Expression | undefined;
-    if (isCallExpression(decorator.expression)) {
-      decoratorArgs = decorator.expression.arguments[0];
+    let propExpr: ts.PropertyAccessExpression | undefined;
+    const decoratorExpr = decorator.expression;
+
+    if (isCallExpression(decoratorExpr)) {
+      decoratorArgs = decoratorExpr.arguments[0];
+
+      if (ts.isPropertyAccessExpression(decoratorExpr.expression)) {
+        propExpr = decoratorExpr.expression;
+      }
+    } else if (ts.isPropertyAccessExpression(decoratorExpr)) {
+      propExpr = decoratorExpr;
     }
 
-    const storeKeyName = decoratorArgs ?? ts.factory.createStringLiteral(methodName);
+    let namespace: ts.Identifier | ts.StringLiteral | undefined;
+    if (
+      propExpr &&
+      (ts.isIdentifier(propExpr.expression) || ts.isStringLiteral(propExpr.expression))
+    ) {
+      namespace = getVuexNamespace(propExpr.expression.text);
+    }
+
+    const key = decoratorArgs ?? methodName;
+    if (!isValidVuexDecoratorArg(key)) throw new Error("Invalid decorator @Action argument");
+    const storeKeyName = getStoreKeyName(key, namespace) ?? key;
     const value = createArrowFn(methodName, storeKeyName, storeProperty, isAsync, node.type);
     const constStatement = createConstStatement(methodName, value);
     copySyntheticComments(constStatement, node);
@@ -69,9 +92,48 @@ export function transformVuexMethodFactory(
   };
 }
 
+function getStoreKeyName(
+  baseKey: VuexPropertyTypeBase,
+  namespace?: ts.Identifier | ts.StringLiteral,
+) {
+  if (!namespace) {
+    if (typeof baseKey !== "string" && (ts.isIdentifier(baseKey) || ts.isStringLiteral(baseKey))) {
+    }
+    // @Action foo: () => string; -> store.dispatch('foo');
+    // @Action('foo/bar') foo: () => string; -> store.dispatch('foo/bar');
+    // @Action('foo/' + bar) foo: () => string; -> store.dispatch('foo/' + bar);
+    // @Action(someVar) foo: () => string; -> store.dispatch(someVar)
+    return typeof baseKey === "string" ? ts.factory.createStringLiteral(baseKey) : baseKey;
+  }
+
+  if (typeof baseKey === "string" || ts.isStringLiteral(baseKey)) {
+    // const ns1 = namespace('moduleB');
+    // @ns1.Action() foo: string; -> 'moduleB/foo'
+    // const ns2 = namespace(moduleC);
+    // @ns2.Action() foo: string; -> `${moduleC}/foo`
+    // @ns2.Action('foo/bar') foo: string; -> `${moduleC}/foo/bar`
+    const prop = isStringLit(baseKey) ? baseKey : ts.factory.createStringLiteral(baseKey);
+    const nsProp = namespacedStoreKey(namespace, prop);
+    return nsProp;
+  }
+
+  if (ts.isBinaryExpression(baseKey)) {
+    // const ns = namespace('moduleB');
+    // @ns.Action('foo/' + bar) foo: () => string; -> ERROR
+    throw new Error("Mixing namespace and binary expressions is not supported");
+  }
+
+  // const ns1 = namespace('moduleB');
+  // @ns1.Action(someVar) foo: string; -> store.dispatch(`moduleB/${someVar}`);
+  // const ns2 = namespace(moduleC);
+  // @ns2.Getter(someVar) foo: string; -> store.dispatch(`${moduleC}/${someVar}`)
+  const nsProp = namespacedStoreKey(namespace, baseKey);
+  return nsProp;
+}
+
 function createArrowFn(
   methodName: string,
-  storeKeyName: ts.Identifier | ts.Expression,
+  storeKeyName: ts.Expression,
   storeProperty: "dispatch" | "commit",
   isAsync: boolean,
   nodeType: ts.TypeNode | undefined,
