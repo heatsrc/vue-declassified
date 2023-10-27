@@ -1,5 +1,11 @@
 # @heatsrc/vuedc
 
+## 3.2.3
+
+### Patch Changes
+
+- [`42b8b09`](https://github.com/heatsrc/vue-declassified/commit/42b8b098689e2ecf598508eee75bc702671de8a7) Thanks [@jaredmcateer](https://github.com/jaredmcateer)! - Fix implied output options
+
 ## 3.2.2
 
 ### Patch Changes
