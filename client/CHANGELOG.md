@@ -1,5 +1,11 @@
 # @heatsrc/vue-declassified
 
+## 3.1.1
+
+### Patch Changes
+
+- [`c74b54b`](https://github.com/heatsrc/vue-declassified/commit/c74b54be7a6d1c76b93dcf7f50fe0ac34e937cd4) Thanks [@jaredmcateer](https://github.com/jaredmcateer)! - Fix emits transform when using object/array literals as payload
+
 ## 3.1.0
 
 ### Minor Changes
