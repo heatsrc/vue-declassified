@@ -1,5 +1,13 @@
 # @heatsrc/vue-declassified
 
+## 3.1.0
+
+### Minor Changes
+
+- [#15](https://github.com/heatsrc/vue-declassified/pull/15) [`fc2ed0e`](https://github.com/heatsrc/vue-declassified/commit/fc2ed0e218b3526e9c0a956a90e24427d2d2ce30) Thanks [@jaredmcateer](https://github.com/jaredmcateer)! - Add support for vuex-class namespacing of Getter and State decorators
+
+- [#15](https://github.com/heatsrc/vue-declassified/pull/15) [`d1d0a39`](https://github.com/heatsrc/vue-declassified/commit/d1d0a399486b73510d9b1aebecf5c08e6802c9a3) Thanks [@jaredmcateer](https://github.com/jaredmcateer)! - Add support for vuex-class namespacing of Action and Mutation decorators
+
 ## 3.0.0
 
 ### Major Changes
