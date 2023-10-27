@@ -7,17 +7,25 @@ describe("Mutation decorator", () => {
     const { ast, program } = getSingleFileProgram(`
       import {Component} from 'vue-property-decorator';
       import {Mutation} from 'vuex-class';
+      const ns1 = namespace('moduleB');
+      const moduleC = 'moduleC';
+      const ns2 = namespace(moduleC);
       @Component
       export default class Foo {
         @Mutation foo: () => void;
+        @ns1.Mutation baz: () => void;
+        @ns2.Mutation qux: () => void;
       }
     `);
     const result = convertAst(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { useStore } from \\"vuex\\";
+      const moduleC = 'moduleC';
       const store = useStore();
       const foo = (): void => store.commit(\\"foo\\");
+      const baz = (): void => store.commit(\\"moduleB/baz\\");
+      const qux = (): void => store.commit(\`\${moduleC}/qux\`);
       "
     `);
   });
@@ -26,17 +34,25 @@ describe("Mutation decorator", () => {
     const { ast, program } = getSingleFileProgram(`
       import {Component} from 'vue-property-decorator';
       import {Mutation} from 'vuex-class';
+      const ns1 = namespace('moduleB');
+      const moduleC = 'moduleC';
+      const ns2 = namespace(moduleC);
       @Component
       export default class Foo {
         @Mutation('bar') foo: () => void;
+        @ns1.Mutation('bar') baz: () => void;
+        @ns2.Mutation('bar') qux: () => void;
       }
     `);
     const result = convertAst(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { useStore } from \\"vuex\\";
+      const moduleC = 'moduleC';
       const store = useStore();
       const foo = (): void => store.commit('bar');
+      const baz = (): void => store.commit(\\"moduleB/bar\\");
+      const qux = (): void => store.commit(\`\${moduleC}/bar\`);
       "
     `);
   });
@@ -45,17 +61,25 @@ describe("Mutation decorator", () => {
     const { ast, program } = getSingleFileProgram(`
       import {Component} from 'vue-property-decorator';
       import {Mutation} from 'vuex-class';
+      const ns1 = namespace('moduleB');
+      const moduleC = 'moduleC';
+      const ns2 = namespace(moduleC);
       @Component
       export default class Foo {
         @Mutation('baz/foo') foo: () => void;
+        @ns1.Mutation('baz/foo') baz: () => void;
+        @ns2.Mutation('baz/foo') qux: () => void;
       }
     `);
     const result = convertAst(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { useStore } from \\"vuex\\";
+      const moduleC = 'moduleC';
       const store = useStore();
       const foo = (): void => store.commit('baz/foo');
+      const baz = (): void => store.commit(\\"moduleB/baz/foo\\");
+      const qux = (): void => store.commit(\`\${moduleC}/baz/foo\`);
       "
     `);
   });
@@ -64,19 +88,27 @@ describe("Mutation decorator", () => {
     const { ast, program } = getSingleFileProgram(`
       import {Component} from 'vue-property-decorator';
       import {Mutation} from 'vuex-class';
+      const ns1 = namespace('moduleB');
+      const moduleC = 'moduleC';
+      const ns2 = namespace(moduleC);
       @Component
       export default class Foo {
         // This is bad practice, mutations should not return anything
         @Mutation('baz/foo') foo: () => string;
+        @ns1.Mutation('baz/foo') baz: () => string;
+        @ns2.Mutation('baz/foo') qux: () => string;
       }
     `);
     const result = convertAst(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { useStore } from \\"vuex\\";
+      const moduleC = 'moduleC';
       const store = useStore();
       // This is bad practice, mutations should not return anything
       const foo = (): string => store.commit('baz/foo');
+      const baz = (): string => store.commit(\\"moduleB/baz/foo\\");
+      const qux = (): string => store.commit(\`\${moduleC}/baz/foo\`);
       "
     `);
   });
@@ -85,19 +117,27 @@ describe("Mutation decorator", () => {
     const { ast, program } = getSingleFileProgram(`
       import {Component} from 'vue-property-decorator';
       import {Mutation} from 'vuex-class';
+      const ns1 = namespace('moduleB');
+      const moduleC = 'moduleC';
+      const ns2 = namespace(moduleC);
       const foo = 'foo';
       @Component
       export default class Foo {
         @Mutation(foo) bar: (a: string) => void;
+        @ns1.Mutation(foo) baz: (a: string) => void;
+        @ns2.Mutation(foo) qux: (a: string) => void;
       }
     `);
     const result = convertAst(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { useStore } from \\"vuex\\";
+      const moduleC = 'moduleC';
       const foo = 'foo';
       const store = useStore();
       const bar = (a: string): void => store.commit(foo, a);
+      const baz = (a: string): void => store.commit(\`moduleB/\${foo}\`, a);
+      const qux = (a: string): void => store.commit(\`\${moduleC}/\${foo}\`, a);
       "
     `);
   });
@@ -106,28 +146,39 @@ describe("Mutation decorator", () => {
     const { ast, program } = getSingleFileProgram(`
       import {Component} from 'vue-property-decorator';
       import {Mutation} from 'vuex-class';
+      const ns1 = namespace('moduleB');
+      const moduleC = 'moduleC';
+      const ns2 = namespace(moduleC);
       @Component
       export default class Foo {
         @Mutation foo;
+        @ns1.Mutation baz;
+        @ns2.Mutation qux;
       }
     `);
     const result = convertAst(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { useStore } from \\"vuex\\";
+      const moduleC = 'moduleC';
       const store = useStore();
       /* [VUEDC_TODO]: Check function commit call signature.*/ const foo = (...args: unknown[]): unknown => store.commit(\\"foo\\", args);
+      /* [VUEDC_TODO]: Check function commit call signature.*/ const baz = (...args: unknown[]): unknown => store.commit(\\"moduleB/baz\\", args);
+      /* [VUEDC_TODO]: Check function commit call signature.*/ const qux = (...args: unknown[]): unknown => store.commit(\`\${moduleC}/qux\`, args);
       "
     `);
   });
 
-  it("should throw if duplicate mutation decorator", () => {
+  it.each(["", "ns1.", "ns2."])("should throw if duplicate mutation decorator", (prefix) => {
     const { ast, program } = getSingleFileProgram(`
       import {Component} from 'vue-property-decorator';
       import {Mutation} from 'vuex-class';
+      const ns1 = namespace('moduleB');
+      const moduleC = 'moduleC';
+      const ns2 = namespace(moduleC);
       @Component
       export default class Foo {
-        @Mutation @Mutation foo: () => void;
+        @${prefix}Mutation @${prefix}Mutation foo: () => void;
       }
     `);
     expect(() => convertAst(ast, program)).toThrowError(
@@ -135,17 +186,23 @@ describe("Mutation decorator", () => {
     );
   });
 
-  it("should throw if function signature contains more than 1 parameter", () => {
-    const { ast, program } = getSingleFileProgram(`
+  it.each(["", "ns1.", "ns2."])(
+    "should throw if function signature contains more than 1 parameter",
+    (prefix) => {
+      const { ast, program } = getSingleFileProgram(`
       import {Component} from 'vue-property-decorator';
       import {Mutation} from 'vuex-class';
+      const ns1 = namespace('moduleB');
+      const moduleC = 'moduleC';
+      const ns2 = namespace(moduleC);
       @Component
       export default class Foo {
-        @Mutation foo: (a: string, b: string) => void;
+        @${prefix}Mutation foo: (a: string, b: string) => void;
       }
     `);
-    expect(() => convertAst(ast, program)).toThrowError(
-      "[vuex-class] foo commit signature has more than 1 parameter.",
-    );
-  });
+      expect(() => convertAst(ast, program)).toThrowError(
+        "[vuex-class] foo commit signature has more than 1 parameter.",
+      );
+    },
+  );
 });

@@ -2,36 +2,10 @@ import { createIdentifier, isArrowFunc } from "@/helpers/tsHelpers";
 import { cloneNode } from "ts-clone-node";
 import ts from "typescript";
 import { isValidIdentifier } from "../utils/isValidIdentifier";
-import {
-  VuexPropertyTypeBase,
-  convertVuexComputedFactory,
-} from "./utils/convertVuexComputedFactory";
+import { convertVuexComputedFactory } from "./utils/convertVuexComputedFactory";
+import { VuexStatePropertyType } from "./utils/vuexClass.types";
 
 export const transformVuexState = convertVuexComputedFactory("State", getAccessExpression);
-
-/**
- * - `string` indicates that the class property name is being used as the store property name
- * ```ts
- *    ⁣@State() foo: boolean; // string : 'foo'
- * ```
- * - `Identifier` indicates that a variable has been passed as a parameter to the decorator
- * ```ts
- *    ⁣@State(bar) foo: boolean; // Identifier : bar
- * ```
- * - `StringLiteral` indicates that a string has been passed as a parameter to the decorator
- * ```ts
- *    ⁣@State('bar') foo: boolean; // StringLiteral : 'bar'
- * ```
- * - `BinaryExpression` indicates that a string concatenation has been passed as a parameter to the decorator
- * ```ts
- *    ⁣@State('foo/' + bar) foo: boolean; // BinaryExpression : 'foo/' + bar
- * ```
- * - `ArrowFunction` indicates that an arrow function has been passed as a parameter to the decorator
- * ```ts
- *    ⁣@State(s => s.foo.bar) foo: boolean; // ArrowFunction : s => s.foo.bar
- * ```
- */
-type VuexStatePropertyType = VuexPropertyTypeBase | ts.ArrowFunction;
 
 /**
  * Converts the decorator id to an arrow function with an access expression

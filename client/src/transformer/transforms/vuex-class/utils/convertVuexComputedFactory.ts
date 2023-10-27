@@ -11,6 +11,7 @@ import {
 } from "@/types";
 import ts, { isCallExpression } from "typescript";
 import { instanceDependencies } from "../../utils/instancePropertyAccess";
+import { isValidVuexNsKey } from "./isValidVuexDecoratorArg";
 
 export type AccessExpressionGetter = (
   property: string | ts.Expression,
@@ -47,11 +48,10 @@ export function convertVuexComputedFactory(
     }
 
     let namespace: ts.Identifier | ts.StringLiteral | undefined;
-    if (
-      propExpr &&
-      (ts.isIdentifier(propExpr.expression) || ts.isStringLiteral(propExpr.expression))
-    ) {
-      namespace = getVuexNamespace(propExpr.expression.text);
+    let nsKey = propExpr?.expression;
+
+    if (isValidVuexNsKey(nsKey)) {
+      namespace = getVuexNamespace(nsKey.text);
     }
 
     const typeArgs = node.type ? [node.type] : [];
@@ -62,11 +62,8 @@ export function convertVuexComputedFactory(
     const accessExpr = getAccessExpression(path, namespace);
     arrowFunction = createSimpleArrowFunction(accessExpr);
 
-    const computedCallExpr = ts.factory.createCallExpression(
-      createIdentifier("computed"),
-      typeArgs,
-      [arrowFunction],
-    );
+    const computedId = createIdentifier("computed");
+    const computedCallExpr = ts.factory.createCallExpression(computedId, typeArgs, [arrowFunction]);
     const constStatement = createConstStatement(computedName, computedCallExpr);
     const computedStatement = copySyntheticComments(constStatement, node);
 
@@ -89,8 +86,6 @@ export function convertVuexComputedFactory(
     };
   };
 }
-
-export type VuexPropertyTypeBase = string | ts.Identifier | ts.StringLiteral | ts.BinaryExpression;
 
 function createSimpleArrowFunction(returnValueExpr: ts.Expression) {
   const u = undefined;
