@@ -2,4 +2,4 @@
 "@heatsrc/vue-declassified": minor
 ---
 
-Add support for vuex-class namespaing of Getter and State decorators
+Add support for vuex-class namespacing of Getter and State decorators
