@@ -3,7 +3,11 @@ import { cloneNode } from "ts-clone-node";
 import ts from "typescript";
 
 export function tryToFindType(
-  node: ts.Expression | ts.PropertyDeclaration | ts.ParameterDeclaration,
+  node:
+    | ts.Expression
+    | ts.PropertyDeclaration
+    | ts.ParameterDeclaration
+    | ts.ObjectLiteralElementLike,
   program: ts.Program,
 ) {
   // If current node is a Keyword Literal we can use default to that for now
@@ -17,7 +21,13 @@ export function tryToFindType(
   }
 
   const checker = program.getTypeChecker();
-  const declaration = checker.getSymbolAtLocation(node)?.valueDeclaration;
+  const symbol = checker.getSymbolAtLocation(node);
+  const declaration = symbol?.valueDeclaration;
+  if (symbol) {
+    const type = checker.getTypeOfSymbol(symbol);
+    const typeNode = checker.typeToTypeNode(type, undefined, undefined);
+    if (typeNode) return cloneNode(typeNode);
+  }
 
   // Check the declaration of the node to see if it has a type
   if (

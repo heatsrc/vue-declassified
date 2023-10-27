@@ -56,8 +56,46 @@ export const transformDefinables: VxTransform<
           argN = `_${arg.name.text}${argCount}`;
           argCount += 1;
         }
+        let tupleType: ts.TypeNode;
+
+        if (ts.isObjectLiteralExpression(arg)) {
+          const types = arg.properties.reduce((acc, prop) => {
+            if (!prop.name || !ts.isIdentifier(prop.name)) return acc;
+            const propName = prop.name.getText();
+            const propType = tryToFindType(prop.name, program);
+            const propSig = ts.factory.createPropertySignature(
+              undefined,
+              propName,
+              undefined,
+              propType,
+            );
+            argN = `_payload${argCount}`;
+            argCount += 1;
+            acc.push(propSig);
+            return acc;
+          }, [] as ts.PropertySignature[]);
+          tupleType = ts.factory.createTypeLiteralNode(types);
+        } else if (ts.isArrayLiteralExpression(arg)) {
+          const types = arg.elements.reduce((acc, prop) => {
+            if (!prop || !ts.isIdentifier(prop)) return acc;
+            const propType = tryToFindType(prop, program);
+            const propMember = ts.factory.createNamedTupleMember(
+              undefined,
+              prop,
+              undefined,
+              propType,
+            );
+            argN = `_payload${argCount}`;
+            argCount += 1;
+            acc.push(propMember);
+            return acc;
+          }, [] as ts.NamedTupleMember[]);
+          tupleType = ts.factory.createTupleTypeNode(types);
+        } else {
+          tupleType = tryToFindType(arg, program);
+        }
+
         const argName = createIdentifier(argN);
-        const tupleType = tryToFindType(arg, program);
         const tupleElement = ts.factory.createNamedTupleMember(
           undefined,
           argName,

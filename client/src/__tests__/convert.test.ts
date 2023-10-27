@@ -138,8 +138,9 @@ describe("convert", () => {
       @Mutation(profile) updateAdminProfile;
 
       // Accessors
-      get hello() {
+      get hello(foo: number; bar: string) {
         this.$props.fdsa;
+        this.$emit('qux', {foo, bar});
         return this.propC;
       }
 
@@ -254,6 +255,12 @@ describe("convert", () => {
           \\"something-new\\": [
               ...args: unknown[]
           ];
+          \\"qux\\": [
+              _payload1: {
+                  foo: number;
+                  bar: string;
+              }
+          ];
           \\"foo:changed\\": [
               newVal: string,
               oldVal: string
@@ -309,8 +316,9 @@ describe("convert", () => {
           console.log('destroyed');
       });
       // Accessors
-      const hello = computed(() => {
+      const hello = computed((foo: number, bar: string) => {
           props.fdsa;
+          emit('qux', { foo, bar });
           return props.propC;
       });
       const foo = computed({
