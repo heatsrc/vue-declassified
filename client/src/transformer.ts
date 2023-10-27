@@ -17,9 +17,9 @@ export function runTransforms(
   debug("Running transforms");
   const results = getAstResults(node, program);
 
-  const outsideImports = outsideStatements.filter((s) =>
+  const outsideImports = outsideStatements.filter((s): s is ts.ImportDeclaration =>
     ts.isImportDeclaration(s),
-  ) as ts.ImportDeclaration[];
+  );
   const outsideStatementsWithoutImports = outsideStatements.filter(
     (s) => !ts.isImportDeclaration(s),
   );
