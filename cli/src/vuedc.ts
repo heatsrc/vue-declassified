@@ -35,24 +35,26 @@ async function main() {
 
   let output = options.output;
 
-  if (!options.output && !options.yes) {
-    const readline = Readline.createInterface({
-      input: process.stdin,
-      output: process.stdout,
-    });
-    const answer = await readline.question(
-      "Output file is not specified, do you want to overwrite input file? (y/n) ",
-    );
+  if (!options.output) {
+    if (!options.yes) {
+      const readline = Readline.createInterface({
+        input: process.stdin,
+        output: process.stdout,
+      });
+      const answer = await readline.question(
+        "Output file is not specified, do you want to overwrite input file? (y/n) ",
+      );
 
-    if (!answer.match(/^[yY]$/)) {
-      console.log("Exiting...");
-      process.exit(0);
-      return;
+      if (!answer.match(/^[yY]$/)) {
+        console.log("Exiting...");
+        process.exit(0);
+        return;
+      }
+      readline.close();
     }
 
     console.log(`Overwriting input file: ${highlightFile(options.input)}`);
     output = options.input;
-    return readline.close();
   }
 
   let basePath = "";
