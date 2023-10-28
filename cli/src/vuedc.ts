@@ -67,7 +67,7 @@ async function main() {
 
   try {
     const content = await readFile(options.input, { encoding: "utf8" });
-    const opts: VuedcOptions = { stopOnCollisions: !options.collisions, basePath };
+    const opts: VuedcOptions = { stopOnCollisions: !options.ignoreCollisions, basePath };
     const result = await convertSfc(content, opts);
 
     await writeFile(output, result, { encoding: "utf8" });
