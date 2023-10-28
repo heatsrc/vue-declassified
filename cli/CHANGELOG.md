@@ -1,5 +1,11 @@
 # @heatsrc/vuedc
 
+## 3.2.4
+
+### Patch Changes
+
+- [`bcf4a48`](https://github.com/heatsrc/vue-declassified/commit/bcf4a48939d896c600353e4f22b11e32a38189dc) Thanks [@jaredmcateer](https://github.com/jaredmcateer)! - Fix `--ignore-collisions` flag
+
 ## 3.2.3
 
 ### Patch Changes
