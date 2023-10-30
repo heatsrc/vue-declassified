@@ -121,11 +121,15 @@ describe("Mutation decorator", () => {
       const moduleC = 'moduleC';
       const ns2 = namespace(moduleC);
       const foo = 'foo';
+      const keys = { mutations: { foo: 'foo' } };
       @Component
       export default class Foo {
         @Mutation(foo) bar: (a: string) => void;
         @ns1.Mutation(foo) baz: (a: string) => void;
         @ns2.Mutation(foo) qux: (a: string) => void;
+        @Mutation(keys.mutations.foo) voluptatum: (a: string) => void;
+        @ns1.Mutation(keys.mutations.foo) qui: (a: string) => void;
+        @ns2.Mutation(keys.mutations.foo) impedit: (a: string) => void;
       }
     `);
     const result = convertAst(ast, program);
@@ -134,10 +138,14 @@ describe("Mutation decorator", () => {
       "import { useStore } from \\"vuex\\";
       const moduleC = 'moduleC';
       const foo = 'foo';
+      const keys = { mutations: { foo: 'foo' } };
       const store = useStore();
       const bar = (a: string): void => store.commit(foo, a);
       const baz = (a: string): void => store.commit(\`moduleB/\${foo}\`, a);
       const qux = (a: string): void => store.commit(\`\${moduleC}/\${foo}\`, a);
+      const voluptatum = (a: string): void => store.commit(keys.mutations.foo, a);
+      const qui = (a: string): void => store.commit(\`moduleB/\${keys.mutations.foo}\`, a);
+      const impedit = (a: string): void => store.commit(\`\${moduleC}/\${keys.mutations.foo}\`, a);
       "
     `);
   });

@@ -15,6 +15,7 @@ function getAccessExpression(
     typeof property !== "string" &&
     !ts.isIdentifier(property) &&
     !ts.isStringLiteral(property) &&
+    !ts.isPropertyAccessExpression(property) &&
     !ts.isBinaryExpression(property)
   ) {
     throw new Error(
@@ -49,7 +50,8 @@ function getGetterAccessExpression(
     }
 
     // @Getter(someVar) foo: string; -> store.getters[someVar]
-    if (ts.isIdentifier(property))
+    // @Getter(ns.getters.someVar) foo: string; -> store.getters[ns.getters.someVar]
+    if (ts.isIdentifier(property) || ts.isPropertyAccessExpression(property))
       return ts.factory.createElementAccessExpression(storeGetterAcs, property);
 
     // @Getter foo: string; -> store.getters.foo

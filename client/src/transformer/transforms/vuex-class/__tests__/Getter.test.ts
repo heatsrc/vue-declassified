@@ -67,11 +67,15 @@ describe("Getter decorator", () => {
       const moduleC = 'moduleC';
       const ns2 = namespace(moduleC);
       const foo = 'foo';
+      const storeKeys = { getters: { foo: 'foo' } };
       @Component
       export default class Foo {
         @Getter(foo) bar: string;
         @ns1.Getter(foo) baz: string;
         @ns2.Getter(foo) qux: string;
+        @Getter(storeKeys.getters.foo) harum: string;
+        @ns1.Getter(storeKeys.getters.foo) ipsa: string;
+        @ns2.Getter(storeKeys.getters.foo) officiis: string;
       }
     `);
     const result = convertAst(ast, program);
@@ -81,10 +85,14 @@ describe("Getter decorator", () => {
       import { computed } from \\"vue\\";
       const moduleC = 'moduleC';
       const foo = 'foo';
+      const storeKeys = { getters: { foo: 'foo' } };
       const store = useStore();
       const bar = computed<string>(() => store.getters[foo]);
       const baz = computed<string>(() => store.getters[\`moduleB/\${foo}\`]);
       const qux = computed<string>(() => store.getters[\`\${moduleC}/\${foo}\`]);
+      const harum = computed<string>(() => store.getters[storeKeys.getters.foo]);
+      const ipsa = computed<string>(() => store.getters[\`moduleB/\${storeKeys.getters.foo}\`]);
+      const officiis = computed<string>(() => store.getters[\`\${moduleC}/\${storeKeys.getters.foo}\`]);
       "
     `);
   });

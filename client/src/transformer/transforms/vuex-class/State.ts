@@ -24,6 +24,7 @@ function getAccessExpression(
     typeof property !== "string" &&
     !ts.isIdentifier(property) &&
     !ts.isStringLiteral(property) &&
+    !ts.isPropertyAccessExpression(property) &&
     !ts.isBinaryExpression(property) &&
     !isArrowFunc(property)
   ) {
@@ -40,6 +41,9 @@ function getStateAccessExpression(
   property: VuexStatePropertyType,
   namespace?: ts.StringLiteral | ts.Identifier,
 ) {
+  const propIsVar =
+    typeof property !== "string" &&
+    (ts.isIdentifier(property) || ts.isPropertyAccessExpression(property));
   // @State(s => s.foo.bar) bar: string; -> store.state.foo.bar
   // const ns = namespace('myNamespace');
   // @ns.State(s => s.foo.bar) bar: string; -> store.state.myNamespace.foo.bar
@@ -56,10 +60,7 @@ function getStateAccessExpression(
   const storePropId = createIdentifier("state");
   const storePropAcs = ts.factory.createPropertyAccessExpression(storeId, storePropId);
 
-  if (
-    typeof property !== "string" &&
-    (ts.isIdentifier(property) || ts.isBinaryExpression(property))
-  ) {
+  if (typeof property !== "string" && (propIsVar || ts.isBinaryExpression(property))) {
     // @State(someVar) foo: string; -> store.state[someVar]
     if (!namespace) return ts.factory.createElementAccessExpression(storePropAcs, property);
 

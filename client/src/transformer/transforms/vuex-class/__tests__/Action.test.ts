@@ -119,11 +119,15 @@ describe("Action decorator", () => {
       const moduleC = 'moduleC';
       const ns2 = namespace(moduleC);
       const foo = 'foo';
+      const keys = {actions: { foo: 'foo' } };
       @Component
       export default class Foo {
         @Action(foo) bar: (a: string) => void;
         @ns1.Action(foo) baz: (a: string) => void;
         @ns2.Action(foo) qux: (a: string) => void;
+        @Action(keys.actions.foo) ipsa: (a: string) => void;
+        @ns1.Action(keys.actions.foo) eveniet: (a: string) => void;
+        @ns2.Action(keys.actions.foo) inventore: (a: string) => void;
       }
     `);
     const result = convertAst(ast, program);
@@ -132,10 +136,14 @@ describe("Action decorator", () => {
       "import { useStore } from \\"vuex\\";
       const moduleC = 'moduleC';
       const foo = 'foo';
+      const keys = { actions: { foo: 'foo' } };
       const store = useStore();
       const bar = async (a: string): Promise<void> => store.dispatch(foo, a);
       const baz = async (a: string): Promise<void> => store.dispatch(\`moduleB/\${foo}\`, a);
       const qux = async (a: string): Promise<void> => store.dispatch(\`\${moduleC}/\${foo}\`, a);
+      const ipsa = async (a: string): Promise<void> => store.dispatch(keys.actions.foo, a);
+      const eveniet = async (a: string): Promise<void> => store.dispatch(\`moduleB/\${keys.actions.foo}\`, a);
+      const inventore = async (a: string): Promise<void> => store.dispatch(\`\${moduleC}/\${keys.actions.foo}\`, a);
       "
     `);
   });

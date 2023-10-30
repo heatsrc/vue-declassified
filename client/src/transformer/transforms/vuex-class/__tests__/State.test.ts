@@ -67,11 +67,15 @@ describe("State decorator", () => {
       const moduleC = 'moduleC';
       const ns2 = namespace(moduleC);
       const foo = 'foo';
+      const keys = { state: { foo: 'foo' } };
       @Component
       export default class Foo {
         @State(foo) bar: string;
         @ns1.State(foo) baz: string;
         @ns2.State(foo) qux: string;
+        @State(keys.state.foo) quis: string;
+        @ns1.State(keys.state.foo) maxime: string;
+        @ns2.State(keys.state.foo) eius: string;
       }
     `);
     const result = convertAst(ast, program);
@@ -81,10 +85,14 @@ describe("State decorator", () => {
       import { computed } from \\"vue\\";
       const moduleC = 'moduleC';
       const foo = 'foo';
+      const keys = { state: { foo: 'foo' } };
       const store = useStore();
       const bar = computed<string>(() => store.state[foo]);
       const baz = computed<string>(() => store.state.moduleB[foo]);
       const qux = computed<string>(() => store.state[moduleC][foo]);
+      const quis = computed<string>(() => store.state[keys.state.foo]);
+      const maxime = computed<string>(() => store.state.moduleB[keys.state.foo]);
+      const eius = computed<string>(() => store.state[moduleC][keys.state.foo]);
       "
     `);
   });

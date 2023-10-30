@@ -18,7 +18,12 @@ import ts from "typescript";
  *    ⁣@Getter('foo/' + bar) foo: boolean; // BinaryExpression : 'foo/' + bar
  * ```
  */
-export type VuexPropertyTypeBase = string | ts.Identifier | ts.StringLiteral | ts.BinaryExpression;
+export type VuexPropertyTypeBase =
+  | string
+  | ts.Identifier
+  | ts.StringLiteral
+  | ts.BinaryExpression
+  | ts.PropertyAccessExpression;
 
 /**
  * - `string` indicates that the class property name is being used as the store property name
