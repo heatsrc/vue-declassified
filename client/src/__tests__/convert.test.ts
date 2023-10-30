@@ -149,7 +149,7 @@ describe("convert", () => {
         return this.hello + this.world;
       }
       set foo(value: string) {
-        this.divElement.innerText = value;
+        this.$refs.divElement.innerText = value;
         this.hello = value;
       }
 

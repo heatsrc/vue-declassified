@@ -79,10 +79,14 @@ function transformInstanceProperties(name: string, variables: string[], methods:
 }
 
 function getTransformer(variableHandlers: VariableHandlers, dependents: Set<string>) {
+  const isThisProperty = (node: ts.Node) => ts.SyntaxKind.ThisKeyword === node.kind;
+  const isRefsProperty = (node: ts.Node): node is ts.PropertyAccessExpression =>
+    ts.isPropertyAccessExpression(node) && node.name.text === "$refs";
   return ((ctx) => {
     const visitor: ts.Visitor<ts.Node, ts.Node> = (node) => {
       if (!ts.isPropertyAccessExpression(node)) return ts.visitEachChild(node, visitor, ctx);
-      if (node.expression.kind !== ts.SyntaxKind.ThisKeyword)
+      const nodeExpr = node.expression;
+      if (!(isThisProperty(nodeExpr) || isRefsProperty(nodeExpr)))
         return ts.visitEachChild(node, visitor, ctx);
 
       const name = node.name.text;
