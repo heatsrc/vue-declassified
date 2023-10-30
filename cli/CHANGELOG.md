@@ -1,5 +1,12 @@
 # @heatsrc/vuedc
 
+## 3.2.6
+
+### Patch Changes
+
+- Updated dependencies [[`a53e33e`](https://github.com/heatsrc/vue-declassified/commit/a53e33eb241a5966e7b27199bb2b81b286b7367b)]:
+  - @heatsrc/vue-declassified@3.1.3
+
 ## 3.2.5
 
 ### Patch Changes
