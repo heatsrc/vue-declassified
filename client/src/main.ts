@@ -75,7 +75,7 @@ export async function convertScript(src: string, opts: Partial<VuedcOptions> = {
 
   let warnings = getCollisionsWarning();
   const globalWarnings = getGlobalWarnings();
-  warnings += globalWarnings.length > 0 ? `\n - ${globalWarnings.join("\n - ")}\n` : "";
+  warnings += globalWarnings.length > 0 ? `\nWarnings:\n - ${globalWarnings.join("\n - ")}\n` : "";
   warnings = warnings ? `\n/*\n${warnings}\n*/\n\n` : "";
 
   debug("Formatting result");

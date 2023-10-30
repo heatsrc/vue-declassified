@@ -67,12 +67,22 @@ export const transformMixins: VxTransform<ts.HeritageClause> = (clause, program)
 
     let importFileName = moduleSpecifier.text;
     debug(`Import file name: ${importFileName}`);
-    addGlobalWarning(
-      `Mixin "${arg.text}" was assumed to have composable "${name}" in the same file and public members mapped 1:1 with exported variables/functions.`,
-    );
 
     const mixinClass = checker.getTypeOfSymbolAtLocation(type, arg).symbol?.valueDeclaration;
-    if (!mixinClass || !ts.isClassDeclaration(mixinClass)) return acc;
+    if (!mixinClass || !ts.isClassDeclaration(mixinClass)) {
+      addGlobalWarning(
+        `Could not find class declaration for mixin: ${arg.text}.\n` +
+          `    You must supply a basePath (or -p | --project from cli) in\n` +
+          `    order for vuedc to see symbols from external files.`,
+      );
+      return acc;
+    }
+
+    addGlobalWarning(
+      `Mixin "${arg.text}" was assumed to have composable "${name}"\n` +
+        `    in the same file and public members mapped 1:1 with\n` +
+        `    exported variables/functions.`,
+    );
 
     debug(`Getting public members of mixin: ${mixinClass.name?.text}`);
     let referenceVars: string[] = [];
