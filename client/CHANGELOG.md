@@ -1,5 +1,11 @@
 # @heatsrc/vue-declassified
 
+## 3.1.3
+
+### Patch Changes
+
+- [`a53e33e`](https://github.com/heatsrc/vue-declassified/commit/a53e33eb241a5966e7b27199bb2b81b286b7367b) Thanks [@jaredmcateer](https://github.com/jaredmcateer)! - Fix instances of `this.$refs...` not converting
+
 ## 3.1.2
 
 ### Patch Changes
