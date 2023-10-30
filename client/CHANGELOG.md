@@ -1,5 +1,13 @@
 # @heatsrc/vue-declassified
 
+## 3.1.2
+
+### Patch Changes
+
+- [`d73db3e`](https://github.com/heatsrc/vue-declassified/commit/d73db3efa5d3a1d428ba8c5f57fdf7f7624923f6) Thanks [@jaredmcateer](https://github.com/jaredmcateer)! - Fix type check in mixins when project is not defined
+
+- [`3d30743`](https://github.com/heatsrc/vue-declassified/commit/3d30743dc0199909f09215578832e0220c079b88) Thanks [@jaredmcateer](https://github.com/jaredmcateer)! - Fix property access expresion as vuex-class decorator params
+
 ## 3.1.1
 
 ### Patch Changes
