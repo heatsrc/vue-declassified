@@ -71,7 +71,7 @@ export const transformMixins: VxTransform<ts.HeritageClause> = (clause, program)
       `Mixin "${arg.text}" was assumed to have composable "${name}" in the same file and public members mapped 1:1 with exported variables/functions.`,
     );
 
-    const mixinClass = checker.getTypeOfSymbolAtLocation(type, arg).symbol.valueDeclaration;
+    const mixinClass = checker.getTypeOfSymbolAtLocation(type, arg).symbol?.valueDeclaration;
     if (!mixinClass || !ts.isClassDeclaration(mixinClass)) return acc;
 
     debug(`Getting public members of mixin: ${mixinClass.name?.text}`);
