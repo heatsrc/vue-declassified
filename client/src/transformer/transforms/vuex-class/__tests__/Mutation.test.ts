@@ -1,4 +1,4 @@
-import { convertAst } from "@/convert";
+import { convertDefaultClassComponent } from "@/convert";
 import { getSingleFileProgram } from "@/parser";
 import { describe, expect, it } from "vitest";
 
@@ -17,7 +17,7 @@ describe("Mutation decorator", () => {
         @ns2.Mutation qux: () => void;
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { useStore } from \\"vuex\\";
@@ -44,7 +44,7 @@ describe("Mutation decorator", () => {
         @ns2.Mutation('bar') qux: () => void;
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { useStore } from \\"vuex\\";
@@ -71,7 +71,7 @@ describe("Mutation decorator", () => {
         @ns2.Mutation('baz/foo') qux: () => void;
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { useStore } from \\"vuex\\";
@@ -99,7 +99,7 @@ describe("Mutation decorator", () => {
         @ns2.Mutation('baz/foo') qux: () => string;
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { useStore } from \\"vuex\\";
@@ -132,7 +132,7 @@ describe("Mutation decorator", () => {
         @ns2.Mutation(keys.mutations.foo) impedit: (a: string) => void;
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { useStore } from \\"vuex\\";
@@ -164,7 +164,7 @@ describe("Mutation decorator", () => {
         @ns2.Mutation qux;
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { useStore } from \\"vuex\\";
@@ -189,7 +189,7 @@ describe("Mutation decorator", () => {
         @${prefix}Mutation @${prefix}Mutation foo: () => void;
       }
     `);
-    expect(() => convertAst(ast, program)).toThrowError(
+    expect(() => convertDefaultClassComponent(ast, program)).toThrowError(
       "[vuex-class] Duplicate @Mutation decorators for foo",
     );
   });
@@ -208,7 +208,7 @@ describe("Mutation decorator", () => {
         @${prefix}Mutation foo: (a: string, b: string) => void;
       }
     `);
-      expect(() => convertAst(ast, program)).toThrowError(
+      expect(() => convertDefaultClassComponent(ast, program)).toThrowError(
         "[vuex-class] foo commit signature has more than 1 parameter.",
       );
     },

@@ -1,6 +1,6 @@
-import { convertAst } from "@/convert";
+import { convertDefaultClassComponent } from "@/convert";
 import { getSingleFileProgram } from "@/parser";
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 
 describe("Emit decorator", () => {
   it("should transform emit decorator using method name as event name", () => {
@@ -13,7 +13,7 @@ describe("Emit decorator", () => {
         }
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "const emit = defineEmits<{
@@ -37,7 +37,7 @@ describe("Emit decorator", () => {
         }
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "const emit = defineEmits<{
@@ -63,7 +63,7 @@ describe("Emit decorator", () => {
         }
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "const emit = defineEmits<{
@@ -88,7 +88,7 @@ describe("Emit decorator", () => {
         }
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "const emit = defineEmits<{
@@ -118,7 +118,7 @@ describe("Emit decorator", () => {
         }
       }
     `);
-    expect(() => convertAst(ast, program)).toThrowError(
+    expect(() => convertDefaultClassComponent(ast, program)).toThrowError(
       `[vue-property-decorator] Multiple @Emit decorators found on foo`,
     );
   });
@@ -133,7 +133,7 @@ describe("Emit decorator", () => {
         }
       }
     `);
-    expect(() => convertAst(ast, program)).toThrowError(
+    expect(() => convertDefaultClassComponent(ast, program)).toThrowError(
       `[vue-property-decorator] Expected @Emit to be a call expression`,
     );
   });

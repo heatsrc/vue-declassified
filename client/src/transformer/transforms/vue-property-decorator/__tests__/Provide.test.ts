@@ -1,6 +1,6 @@
-import { convertAst } from "@/convert";
+import { convertDefaultClassComponent } from "@/convert";
 import { getSingleFileProgram } from "@/parser";
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 
 describe("Provide decorator", () => {
   it("should transform provide decorator using local name as provide name", () => {
@@ -12,7 +12,7 @@ describe("Provide decorator", () => {
         foo = 'bar';
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { ref, provide } from \\"vue\\";
@@ -31,7 +31,7 @@ describe("Provide decorator", () => {
         bar = 'baz';
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { ref, provide } from \\"vue\\";
@@ -50,7 +50,7 @@ describe("Provide decorator", () => {
         bar = 'baz';
       }
     `);
-    expect(() => convertAst(ast, program)).toThrowError(
+    expect(() => convertDefaultClassComponent(ast, program)).toThrowError(
       `[vue-class-component] Expected @Provide to be a string literal`,
     );
   });
@@ -65,7 +65,7 @@ describe("Provide decorator", () => {
         baz = 'baz';
       }
     `);
-    expect(() => convertAst(ast, program)).toThrowError(
+    expect(() => convertDefaultClassComponent(ast, program)).toThrowError(
       `[vue-class-component] Duplicate @Provide decorators for baz`,
     );
   });

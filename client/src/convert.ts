@@ -13,7 +13,7 @@ import { runTransforms } from "./transformer.js";
 const debug = Debug("vuedc:convert");
 const vccPackages = ["vue-class-component", "vue-property-decorator", "vuex-class"];
 
-export function convertAst(source: ts.SourceFile, program: ts.Program) {
+export function convertDefaultClassComponent(source: ts.SourceFile, program: ts.Program) {
   if (!hasVccImports(source)) throw new Error("No vue class component import found in this file");
 
   const defaultExportNode = getDefaultExportNode(source);
@@ -35,6 +35,33 @@ export function convertAst(source: ts.SourceFile, program: ts.Program) {
 
   debug("Running transforms");
   let resultStatements = runTransforms(defaultExportNode, filteredOutsideStatements, program);
+
+  // Group imports at start
+  resultStatements = [
+    ...resultStatements.filter((s) => ts.isImportDeclaration(s)),
+    ...resultStatements.filter((s) => !ts.isImportDeclaration(s)),
+  ];
+
+  debug("Updating source file");
+  const printer = ts.createPrinter();
+  const newSourceFile = ts.factory.updateSourceFile(source, resultStatements);
+  const result = printer.printFile(newSourceFile);
+  return result;
+}
+
+export function convertMixinClassComponents(source: ts.SourceFile, program: ts.Program) {
+  if (!hasVccImports(source)) throw new Error("No vue class component import found in this file");
+
+  const classes = getClassComponents(source);
+  if (!classes) throw new Error("No vue class components found in this file");
+
+  const outsideStatements = getOutsideStatements(source);
+  registerTopLevelVars(outsideStatements);
+  registerImportNameOverrides(outsideStatements);
+  registerVuexNamespaces(outsideStatements);
+
+  debug("Running transforms");
+  let resultStatements = runTransforms(null, outsideStatements, program);
 
   // Group imports at start
   resultStatements = [
@@ -109,17 +136,20 @@ function hasVccImports(source: ts.SourceFile) {
 
 function getDefaultExportNode(sourceFile: ts.SourceFile) {
   debug("Checking for default export");
-  const classes = sourceFile.statements.filter((s): s is ts.ClassDeclaration =>
-    ts.isClassDeclaration(s),
-  );
-  const defExport = classes.find(
-    (c) => c.modifiers?.find((m) => m.kind === ts.SyntaxKind.DefaultKeyword),
-  );
-
-  if (!defExport) return;
-
-  const decorators = getDecoratorNames(defExport);
-  if (!decorators?.some((d) => /(Options|Component)/.test(d))) return;
+  const classes = getClassComponents(sourceFile);
+  const defaultKeywordKind = ts.SyntaxKind.DefaultKeyword;
+  const defaultExport = (c: ts.ClassDeclaration) =>
+    c.modifiers?.find((m) => m.kind === defaultKeywordKind);
+  const defExport = classes.find(defaultExport);
 
   return defExport;
+}
+
+function getClassComponents(sourceFile: ts.SourceFile) {
+  debug("Finding all class components");
+  const classes = sourceFile.statements
+    .filter((s): s is ts.ClassDeclaration => ts.isClassDeclaration(s))
+    .filter((c) => getDecoratorNames(c)?.some((d) => /(Options|Component)/.test(d)));
+
+  return classes;
 }

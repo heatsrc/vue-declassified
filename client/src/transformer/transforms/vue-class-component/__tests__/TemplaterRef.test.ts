@@ -1,4 +1,4 @@
-import { convertAst } from "@/convert.js";
+import { convertDefaultClassComponent } from "@/convert.js";
 import { getSingleFileProgram } from "@/parser.js";
 import { describe, expect, it } from "vitest";
 
@@ -17,7 +17,7 @@ describe("TemplateRef", () => {
 
 
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { ref } from \\"vue\\";

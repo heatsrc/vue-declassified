@@ -1,4 +1,4 @@
-import { convertAst } from "@/convert";
+import { convertDefaultClassComponent } from "@/convert";
 import { getSingleFileProgram } from "@/parser";
 import { describe, expect, it } from "vitest";
 
@@ -17,7 +17,7 @@ describe("Getter decorator", () => {
         @ns2.Getter qux: string;
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { useStore } from \\"vuex\\";
@@ -45,7 +45,7 @@ describe("Getter decorator", () => {
         @ns2.Getter('foo') qux: string;
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { useStore } from \\"vuex\\";
@@ -78,7 +78,7 @@ describe("Getter decorator", () => {
         @ns2.Getter(storeKeys.getters.foo) officiis: string;
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { useStore } from \\"vuex\\";
@@ -106,7 +106,7 @@ describe("Getter decorator", () => {
         @Getter('ns/foo') bar: string;
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { useStore } from \\"vuex\\";
@@ -127,7 +127,7 @@ describe("Getter decorator", () => {
         @Getter('ns/' + foo) bar: () => string;
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { useStore } from \\"vuex\\";
@@ -149,7 +149,7 @@ describe("Getter decorator", () => {
       }
     `);
 
-    expect(() => convertAst(ast, program)).toThrowError(
+    expect(() => convertDefaultClassComponent(ast, program)).toThrowError(
       `[vuex-class] Unexpected decorator argument, expected String or Identifier got ArrowFunction`,
     );
   });

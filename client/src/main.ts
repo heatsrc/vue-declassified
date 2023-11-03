@@ -3,7 +3,7 @@ import * as prettier from "prettier";
 import * as parserTypescript from "prettier/parser-typescript";
 import * as parserEsTree from "prettier/plugins/estree.js";
 import ts from "typescript";
-import { convertAst } from "./convert.js";
+import { convertDefaultClassComponent } from "./convert.js";
 import { readVueFile, writeVueFile } from "./file.js";
 import { getCollisionsWarning } from "./helpers/collisionDetection.js";
 import { getSingleFileProgram } from "./parser.js";
@@ -54,7 +54,17 @@ export async function convertSfc(src: string, opts: Partial<VuedcOptions> = {}) 
 }
 
 /**
- * Accepts a Vue SFC Script body in string format and returns the converted Script Setup syntax
+ * Takes a TypeScript file creates a composable analogue of any mixins found in
+ * the file
+ *
+ * @param src
+ * @param opts
+ */
+export async function convertMixin(src: string, opts: Partial<VuedcOptions> = {}) {}
+
+/**
+ * Accepts a Vue SFC Script body in string format and returns the converted
+ * Script Setup syntax
  * @param src A single file containing a Vue Class Component
  * @returns Converted Script Setup syntax
  */
@@ -67,7 +77,7 @@ export async function convertScript(src: string, opts: Partial<VuedcOptions> = {
     if (configFile) tsConfigPath = configFile;
   }
   const { ast, program } = getSingleFileProgram(src, opts.basePath, tsConfigPath);
-  const result = convertAst(ast, program);
+  const result = convertDefaultClassComponent(ast, program);
 
   if (opts.stopOnCollisions && hasCollisions()) {
     throw new VuedcError(getCollisionsWarning(false));

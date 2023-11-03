@@ -1,6 +1,6 @@
-import { convertAst } from "@/convert";
+import { convertDefaultClassComponent } from "@/convert";
 import { getSingleFileProgram } from "@/parser";
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 
 describe("@Component props definition", () => {
   it("should transform a array of strings", () => {
@@ -9,7 +9,7 @@ describe("@Component props definition", () => {
       @Options({ props: ['a', 'b', 'c'] })
       export default class Foo {}
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "const props = defineProps<{
@@ -27,7 +27,7 @@ describe("@Component props definition", () => {
       @Options({ props: { a: String, b: Boolean, c: Number } })
       export default class Foo {}
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "const props = defineProps<{
@@ -49,7 +49,7 @@ describe("@Component props definition", () => {
       } })
       export default class Foo {}
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "const props = withDefaults(defineProps<{
@@ -74,7 +74,7 @@ describe("@Component props definition", () => {
       } })
       export default class Foo {}
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "const props = withDefaults(defineProps<{
@@ -94,7 +94,7 @@ describe("@Component props definition", () => {
       @Options({ props: 'a' })
       export default class Foo {}
     `);
-    expect(() => convertAst(ast, program)).toThrowError(
+    expect(() => convertDefaultClassComponent(ast, program)).toThrowError(
       "[vue-class-component] props option expecting `string[] | Object`",
     );
   });

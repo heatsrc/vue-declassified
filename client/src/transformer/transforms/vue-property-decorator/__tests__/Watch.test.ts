@@ -1,4 +1,4 @@
-import { convertAst } from "@/convert";
+import { convertDefaultClassComponent } from "@/convert";
 import { getSingleFileProgram } from "@/parser";
 import { describe, expect, it } from "vitest";
 
@@ -14,7 +14,7 @@ describe("Watch decorator", () => {
         bar() {}
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { ref } from \\"vue\\";
@@ -38,7 +38,7 @@ describe("Watch decorator", () => {
         baz() {}
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { ref } from \\"vue\\";
@@ -62,7 +62,7 @@ describe("Watch decorator", () => {
         bar() {}
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { ref } from \\"vue\\";
@@ -84,7 +84,7 @@ describe("Watch decorator", () => {
         bar() {}
       }
     `);
-    expect(() => convertAst(ast, program)).toThrowError(
+    expect(() => convertDefaultClassComponent(ast, program)).toThrowError(
       `[vue-property-decorator] Expected @Watch for bar to be a call expression`,
     );
   });
@@ -100,7 +100,7 @@ describe("Watch decorator", () => {
         bar() {}
       }
     `);
-    expect(() => convertAst(ast, program)).toThrowError(
+    expect(() => convertDefaultClassComponent(ast, program)).toThrowError(
       `[vue-property-decorator] Expected @Watch for bar to be called with a string as first argument`,
     );
   });
