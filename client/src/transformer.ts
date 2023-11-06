@@ -9,37 +9,8 @@ import { VxTransformResult } from "./types.js";
 
 const debug = Debug("vuedc:transformer");
 
-export function runTransforms(
-  node: ts.ClassDeclaration,
-  outsideStatements: ts.Statement[],
-  program: ts.Program,
-) {
+export function runTransforms(node: ts.ClassDeclaration, program: ts.Program) {
   debug("Running transforms");
-  const results = getAstResults(node, program);
-
-  const outsideImports = outsideStatements.filter((s): s is ts.ImportDeclaration =>
-    ts.isImportDeclaration(s),
-  );
-  const outsideStatementsWithoutImports = outsideStatements.filter(
-    (s) => !ts.isImportDeclaration(s),
-  );
-  const imports = getImports(results, outsideImports);
-  const macros = getMacros(results);
-  const composables = getComposables(results);
-  const body = getBody(results);
-
-  prependSyntheticComments(imports[0], node);
-
-  return [
-    ...imports,
-    ...outsideStatementsWithoutImports,
-    ...macros,
-    ...composables,
-    ...body,
-  ] as ts.Statement[];
-}
-
-function getAstResults(node: ts.ClassDeclaration, program: ts.Program) {
   let results: VxTransformResult<ts.Node>[] = [];
 
   debug("Processing class component");
@@ -61,4 +32,38 @@ function getAstResults(node: ts.ClassDeclaration, program: ts.Program) {
   detectNamingCollisions(results);
 
   return results;
+}
+
+export function organizeSfcScript(
+  node: ts.ClassDeclaration,
+  results: VxTransformResult<ts.Node>[],
+  outsideStatements: ts.Statement[],
+) {
+  debug("Organizing statements in SFC script block");
+  const outsideImports = outsideStatements.filter((s): s is ts.ImportDeclaration =>
+    ts.isImportDeclaration(s),
+  );
+  const outsideStatementsWithoutImports = outsideStatements.filter(
+    (s) => !ts.isImportDeclaration(s),
+  );
+  const imports = getImports(results, outsideImports);
+  const macros = getMacros(results);
+  const composables = getComposables(results);
+  const body = getBody(results);
+
+  prependSyntheticComments(imports[0], node);
+
+  const resultStatements = [
+    ...imports,
+    ...outsideStatementsWithoutImports,
+    ...macros,
+    ...composables,
+    ...body,
+  ] as ts.Statement[];
+
+  // Group all imports at start
+  return [
+    ...resultStatements.filter((s) => ts.isImportDeclaration(s)),
+    ...resultStatements.filter((s) => !ts.isImportDeclaration(s)),
+  ];
 }

@@ -100,7 +100,7 @@ export function hasImportNameOverride(importName: string) {
 
 export function getImportNameOverride(importName: string) {
   debug(`Getting import name override: ${importName}`);
-  return registry.importNameOverrides.get(importName);
+  return registry.importNameOverrides.get(importName) ?? importName;
 }
 
 export function addGlobalWarning(message: string) {
