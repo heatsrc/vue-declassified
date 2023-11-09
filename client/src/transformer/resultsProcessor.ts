@@ -70,3 +70,10 @@ export function getComposables(results: VxTransformResult<ts.Node>[]) {
   debug("Collating Composables");
   return results.filter(isComposableType).flatMap((el) => el.nodes);
 }
+
+export function getUsedDefinables(results: VxTransformResult<ts.Node>[]) {
+  debug("Collating Used Composables & Macros");
+  return results
+    .filter((r) => isComposableType(r) || isMacroType(r))
+    .map((el) => el.outputVariables);
+}

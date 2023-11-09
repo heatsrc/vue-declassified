@@ -1,6 +1,6 @@
-import Debug from "debug";
+import getDebug from "debug";
 import ts from "typescript";
-const debug = Debug("vuedc:registry");
+const debug = getDebug("vuedc:registry");
 /**
  * Global registry singleton for file level metadata that can be useful
  */
@@ -15,6 +15,7 @@ class Registry {
   importNameOverrides = new Map<string, string>();
   warnings = new Set<string>();
   vuexNamespacedDecorators = new Map<string, ts.StringLiteral | ts.Identifier>();
+  isMixin = false;
 }
 const registry = new Registry();
 
@@ -28,6 +29,7 @@ export function resetRegistry() {
   registry.collisions.clear();
   registry.warnings.clear();
   registry.vuexNamespacedDecorators.clear();
+  registry.isMixin = false;
 }
 
 export function isDecoratorRegistered(decorator: string) {
@@ -120,4 +122,13 @@ export function setVuexNamespace(decorator: string, namespace: ts.StringLiteral 
 export function getVuexNamespace(decorator: string) {
   debug(`Getting vuex namespace for @${decorator}`);
   return registry.vuexNamespacedDecorators.get(decorator);
+}
+
+export function setIsMixin() {
+  debug(`Setting isMixin flag to true`);
+  registry.isMixin = true;
+}
+
+export function isMixin() {
+  return registry.isMixin;
 }

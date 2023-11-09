@@ -3,11 +3,17 @@ import * as prettier from "prettier";
 import * as parserTypescript from "prettier/parser-typescript";
 import * as parserEsTree from "prettier/plugins/estree.js";
 import ts from "typescript";
-import { convertDefaultClassComponent } from "./convert.js";
+import { convertDefaultClassComponent, convertMixinClassComponents } from "./convert.js";
 import { readVueFile, writeVueFile } from "./file.js";
 import { getCollisionsWarning } from "./helpers/collisionDetection.js";
 import { getSingleFileProgram } from "./parser.js";
-import { getGlobalWarnings, hasCollisions, resetRegistry } from "./registry.js";
+import {
+  getGlobalWarnings,
+  hasCollisions,
+  isMixin,
+  resetRegistry,
+  setIsMixin,
+} from "./registry.js";
 
 const debug = Debug("vuedc");
 
@@ -60,7 +66,12 @@ export async function convertSfc(src: string, opts: Partial<VuedcOptions> = {}) 
  * @param src
  * @param opts
  */
-export async function convertMixin(src: string, opts: Partial<VuedcOptions> = {}) {}
+export async function convertMixin(src: string, opts: Partial<VuedcOptions> = {}) {
+  setIsMixin();
+  const results = await convertScript(src, opts);
+  debug("Finished converting mixin");
+  return results;
+}
 
 /**
  * Accepts a Vue SFC Script body in string format and returns the converted
@@ -69,7 +80,6 @@ export async function convertMixin(src: string, opts: Partial<VuedcOptions> = {}
  * @returns Converted Script Setup syntax
  */
 export async function convertScript(src: string, opts: Partial<VuedcOptions> = {}) {
-  let compilerOptions: ts.CompilerOptions | undefined;
   let tsConfigPath = "";
   if (opts.basePath) {
     const configFile = ts.findConfigFile(opts.basePath, ts.sys.fileExists, "tsconfig.json");
@@ -77,7 +87,13 @@ export async function convertScript(src: string, opts: Partial<VuedcOptions> = {
     if (configFile) tsConfigPath = configFile;
   }
   const { ast, program } = getSingleFileProgram(src, opts.basePath, tsConfigPath);
-  const result = convertDefaultClassComponent(ast, program);
+
+  let result: string | undefined;
+  if (!isMixin()) {
+    result = convertDefaultClassComponent(ast, program);
+  } else {
+    result = convertMixinClassComponents(ast, program);
+  }
 
   if (opts.stopOnCollisions && hasCollisions()) {
     throw new VuedcError(getCollisionsWarning(false));

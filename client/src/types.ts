@@ -150,6 +150,7 @@ export type VxTransform<T extends ts.Node> = (
 export type VxPostProcessor = (
   astResults: VxTransformResult<ts.Node>[],
   program: ts.Program,
+  classNode: ts.ClassDeclaration,
 ) => VxTransformResult<ts.Node>[];
 
 export interface VxClassTransforms {

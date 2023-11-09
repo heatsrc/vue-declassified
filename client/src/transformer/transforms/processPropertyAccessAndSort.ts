@@ -2,16 +2,20 @@ import { addTodoComment } from "@/helpers/comments.js";
 import { createIdentifier, createPropertyAccess } from "@/helpers/tsHelpers.js";
 import { isString } from "@/helpers/utils.js";
 import { VxPostProcessor, VxReferenceKind, VxResultToImport, VxTransformResult } from "@/types.js";
+import getDebug from "debug";
 import { cloneNode } from "ts-clone-node";
 import ts from "typescript";
 import { instancePropertyKeyMap } from "./utils/instancePropertyAccess.js";
+
+const debug = getDebug("vuedc:transformer:processPropertyAccessAndSort");
 
 type TransformerResult = {
   readonly astResult: Exclude<VxTransformResult<ts.Node>, VxResultToImport>;
   readonly dependsOn: string[];
 };
-export const processPropertyAccessAndSort: VxPostProcessor = (astResults, program) => {
-  const variableHandlers = getVariableHandlers(astResults, program);
+export const processPropertyAccessAndSort: VxPostProcessor = (astResults) => {
+  debug("Transforming property access expressions in bodies of methods");
+  const variableHandlers = getVariableHandlers(astResults);
 
   const transformerResults = astResults
     .map((astResult) => {
@@ -33,7 +37,7 @@ export const processPropertyAccessAndSort: VxPostProcessor = (astResults, progra
 };
 
 type VariableHandlers = ReturnType<typeof getVariableHandlers>;
-function getVariableHandlers(astResults: VxTransformResult<ts.Node>[], program: ts.Program) {
+function getVariableHandlers(astResults: VxTransformResult<ts.Node>[]) {
   const getReferences = (ref: VxReferenceKind) => {
     return astResults
       .filter((node) => node.reference === ref)

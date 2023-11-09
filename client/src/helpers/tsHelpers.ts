@@ -252,3 +252,13 @@ export function isIdent(node: ts.Node | unknown): node is ts.Identifier {
 export function isArrowFunc(node: ts.Node | unknown): node is ts.ArrowFunction {
   return isTypeOfNode<ts.ArrowFunction>(node, "isArrowFunction");
 }
+
+/**
+ * This is a workaround for the TS compiler not having a good way to create a
+ * newline
+ * @returns new line identifier disguised as a statement
+ */
+export function newLineNode() {
+  // converting this to a "statement" so ts won't complain
+  return factory.createIdentifier("\n") as unknown as ts.Statement;
+}
