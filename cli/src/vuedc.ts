@@ -1,9 +1,10 @@
 #! /usr/bin/env node
-import { VuedcError, VuedcOptions, convertSfc } from "@heatsrc/vue-declassified";
+import { VuedcError, VuedcOptions, convertMixin, convertSfc } from "@heatsrc/vue-declassified";
 import chalk from "chalk";
 import { Command } from "commander";
 import figlet from "figlet";
 import { readFile, writeFile } from "node:fs/promises";
+import { extname } from "node:path";
 import Readline from "node:readline/promises";
 import pkg from "../package.json";
 
@@ -68,7 +69,15 @@ async function main() {
   try {
     const content = await readFile(options.input, { encoding: "utf8" });
     const opts: VuedcOptions = { stopOnCollisions: !options.ignoreCollisions, basePath };
-    const result = await convertSfc(content, opts);
+
+    let result: string;
+    if (extname(options.input) === ".vue") {
+      console.log("Detected Vue file, converting to script setup");
+      result = await convertSfc(content, opts);
+    } else {
+      console.log("Detected TypeScript file, converting mixin(s) to composable");
+      result = await convertMixin(content, opts);
+    }
 
     await writeFile(output, result, { encoding: "utf8" });
 
