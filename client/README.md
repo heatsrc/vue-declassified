@@ -32,7 +32,7 @@
     - [`$refs` with same name as class members](#refs-with-same-name-as-class-members)
     - [Top level identifiers](#top-level-identifiers)
     - [Reactive Variables](#reactive-variables)
-    - [Mixins](#mixins)
+    - [Transforming Components extending Mixins](#transforming-components-extending-mixins)
 
 ## Vue Class Components -> Vue 3 script setup
 
@@ -51,7 +51,8 @@ These decisions are made arbitrarily, mostly for sanity and convenience. You get
 - Will reference macros by arbitrary variables (see below)
 - Will be formatted by prettier with default config
   - exception `printWidth` increased to 100 characters
-- Mixins will be renamed to match composable conventions (see [Tips/Gotchas: Mixins](#mixins))
+- Mixins will be renamed to match composable conventions (see [Tips/Gotchas: Mixins](#transforming-components-extending-mixins))
+- When transforming TypeScript files containing mixins a new composable will be appended to the file but the existing mixin will be left
 
 ## Usage
 
@@ -367,7 +368,7 @@ These are options provided in the decorator call, e.g., `@Component({ components
 ### Misc features
 
 <details>
-<summary>Other features (6/6 :rocket:)</summary>
+<summary>Other features (7/7 :rocket:)</summary>
 
 - :white_check_mark: **Limited type inference**
   - If a node is untyped, will do a best guess at type (mostly primitive types only).
@@ -385,6 +386,8 @@ These are options provided in the decorator call, e.g., `@Component({ components
 - :white_check_mark: **Composable definitions**
   - When former "builtin" globals such as `$store`/`$router`/etc are found vuedc will automatically import and assign to a variable
   - e.g., `const store = useStore()`
+- :white_check_mark: **Transforming Mixin**
+  - Typescript files can be provided to `convertMixin` and any mixin found in that file will have a composable analogue created and appended to the file.
 
 </details>
 
@@ -524,7 +527,7 @@ When Vuedc encounters a data property assigned to an Array or Object it will ass
 
 You can convert the `reactive` to `ref` and add `.value` to the reassignments but you will lose deep reactivity of those variables (which may be the intention.)
 
-#### Mixins
+#### Transforming Components extending Mixins
 
 :exclamation: **Note:** Mixins support only works when you provide `convertSfc` with a `basePath` in the VuedcOptions (or with the `-p | --project` flag in the Vuedc cli tool).
 
