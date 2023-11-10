@@ -1,5 +1,15 @@
 # @heatsrc/vue-declassified
 
+## 3.2.0
+
+### Minor Changes
+
+- [#24](https://github.com/heatsrc/vue-declassified/pull/24) [`87b0081`](https://github.com/heatsrc/vue-declassified/commit/87b0081c9e1c57bf8d868dcabc973b6b88d50e79) Thanks [@jaredmcateer](https://github.com/jaredmcateer)! - Add support for creating Composable analogues of VCC Mixins found in provided TypeScript file
+
+### Patch Changes
+
+- [#24](https://github.com/heatsrc/vue-declassified/pull/24) [`a94e2fd`](https://github.com/heatsrc/vue-declassified/commit/a94e2fd5bd21141e1b85177e2f5f915458a2563d) Thanks [@jaredmcateer](https://github.com/jaredmcateer)! - add docs
+
 ## 3.1.3
 
 ### Patch Changes

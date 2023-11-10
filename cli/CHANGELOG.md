@@ -1,5 +1,18 @@
 # @heatsrc/vuedc
 
+## 3.3.0
+
+### Minor Changes
+
+- [#24](https://github.com/heatsrc/vue-declassified/pull/24) [`87b0081`](https://github.com/heatsrc/vue-declassified/commit/87b0081c9e1c57bf8d868dcabc973b6b88d50e79) Thanks [@jaredmcateer](https://github.com/jaredmcateer)! - Try to create composables when provided a .ts file
+
+### Patch Changes
+
+- [#24](https://github.com/heatsrc/vue-declassified/pull/24) [`a94e2fd`](https://github.com/heatsrc/vue-declassified/commit/a94e2fd5bd21141e1b85177e2f5f915458a2563d) Thanks [@jaredmcateer](https://github.com/jaredmcateer)! - add docs
+
+- Updated dependencies [[`a94e2fd`](https://github.com/heatsrc/vue-declassified/commit/a94e2fd5bd21141e1b85177e2f5f915458a2563d), [`87b0081`](https://github.com/heatsrc/vue-declassified/commit/87b0081c9e1c57bf8d868dcabc973b6b88d50e79)]:
+  - @heatsrc/vue-declassified@3.2.0
+
 ## 3.2.6
 
 ### Patch Changes
