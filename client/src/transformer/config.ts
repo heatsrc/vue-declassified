@@ -3,6 +3,7 @@ import ts from "typescript";
 import { mergeComposables } from "./transforms/mergeComposables.js";
 import { mergeMacros } from "./transforms/mergeMacros.js";
 import { processPropertyAccessAndSort } from "./transforms/processPropertyAccessAndSort.js";
+import { transformVccToComposable } from "./transforms/transformVccToComposable.js";
 import {
   mergeComputed,
   transformGetter,
@@ -79,5 +80,11 @@ export const classTransforms: VxClassTransforms = {
     transformMethod,
   ],
   /** Post processing transforms */
-  after: [mergeMacros, mergeComposables, mergeComputed, processPropertyAccessAndSort],
+  after: [
+    mergeMacros,
+    mergeComposables,
+    mergeComputed,
+    processPropertyAccessAndSort,
+    transformVccToComposable,
+  ],
 };

@@ -1,4 +1,4 @@
-import { convertAst } from "@/convert";
+import { convertDefaultClassComponent } from "@/convert";
 import { getSingleFileProgram } from "@/parser";
 import { describe, expect, it } from "vitest";
 
@@ -12,7 +12,7 @@ describe("Inject decorator", () => {
         foo: string;
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { inject } from \\"vue\\";
@@ -30,7 +30,7 @@ describe("Inject decorator", () => {
         bar: string;
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { inject } from \\"vue\\";
@@ -48,7 +48,7 @@ describe("Inject decorator", () => {
         bar: string;
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { inject } from \\"vue\\";
@@ -66,7 +66,7 @@ describe("Inject decorator", () => {
         bar: { bar: string };
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { inject } from \\"vue\\";
@@ -86,7 +86,7 @@ describe("Inject decorator", () => {
         bar: number[];
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { inject } from \\"vue\\";
@@ -105,7 +105,7 @@ describe("Inject decorator", () => {
         bar: string;
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { inject } from \\"vue\\";
@@ -125,7 +125,7 @@ describe("Inject decorator", () => {
         foo: string;
       }
     `);
-    expect(() => convertAst(ast, program)).toThrowError(
+    expect(() => convertDefaultClassComponent(ast, program)).toThrowError(
       `[vue-property-decorator] Duplicate @Inject decorators for foo`,
     );
   });

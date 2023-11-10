@@ -1,12 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { convertAst } from "../convert.js";
+import { convertDefaultClassComponent } from "../convert.js";
 import { getSingleFileProgram } from "../parser.js";
 
 describe("convert", () => {
   it("should throw if no vue class component import", () => {
     let content = "@Component\nexport class Test {}";
     const { ast, program } = getSingleFileProgram(content);
-    expect(() => convertAst(ast, program)).toThrowError(
+    expect(() => convertDefaultClassComponent(ast, program)).toThrowError(
       "No vue class component import found in this file",
     );
   });
@@ -20,7 +20,9 @@ describe("convert", () => {
         @Prop() hello!: string;
       }`;
       const { ast, program } = getSingleFileProgram(content);
-      expect(() => convertAst(ast, program)).toThrowError("No default export found in this file");
+      expect(() => convertDefaultClassComponent(ast, program)).toThrowError(
+        "No default export found in this file",
+      );
     });
 
     it("should throw if default export is not a class", () => {
@@ -31,7 +33,9 @@ describe("convert", () => {
         return <div>Hello</div>
       }`;
       const { ast, program } = getSingleFileProgram(content);
-      expect(() => convertAst(ast, program)).toThrowError("No default export found in this file");
+      expect(() => convertDefaultClassComponent(ast, program)).toThrowError(
+        "No default export found in this file",
+      );
     });
 
     it('should throw if default export is not decorated with "@Component" or "@Options"', () => {
@@ -41,7 +45,9 @@ describe("convert", () => {
         @Prop() hello!: string;
       }`;
       const { ast, program } = getSingleFileProgram(content);
-      expect(() => convertAst(ast, program)).toThrowError("No default export found in this file");
+      expect(() => convertDefaultClassComponent(ast, program)).toThrowError(
+        "No default export found in this file",
+      );
     });
 
     it('should not throw if default export is decorated with "@Component"', () => {
@@ -52,7 +58,7 @@ describe("convert", () => {
         @Prop() hello!: string;
       }`;
       const { ast, program } = getSingleFileProgram(content);
-      expect(() => convertAst(ast, program)).not.toThrow();
+      expect(() => convertDefaultClassComponent(ast, program)).not.toThrow();
     });
 
     it('should not throw if default export is decorated with "@Options"', () => {
@@ -63,7 +69,7 @@ describe("convert", () => {
         @Prop() hello!: string;
       }`;
       const { ast, program } = getSingleFileProgram(content);
-      expect(() => convertAst(ast, program)).not.toThrow();
+      expect(() => convertDefaultClassComponent(ast, program)).not.toThrow();
     });
   });
 
@@ -221,7 +227,7 @@ describe("convert", () => {
     import foo from "foo";`;
 
     const { ast, program } = getSingleFileProgram(content);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     // XXX this snapshot is a WIP, it's not the final result
     expect(result).toMatchInlineSnapshot(`

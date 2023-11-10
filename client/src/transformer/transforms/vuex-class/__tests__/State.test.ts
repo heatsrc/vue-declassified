@@ -1,4 +1,4 @@
-import { convertAst } from "@/convert";
+import { convertDefaultClassComponent } from "@/convert";
 import { getSingleFileProgram } from "@/parser";
 import { describe, expect, it } from "vitest";
 
@@ -17,7 +17,7 @@ describe("State decorator", () => {
         @ns2.State qux: string;
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { useStore } from \\"vuex\\";
@@ -45,7 +45,7 @@ describe("State decorator", () => {
         @ns2.State('foo') qux: string;
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { useStore } from \\"vuex\\";
@@ -78,7 +78,7 @@ describe("State decorator", () => {
         @ns2.State(keys.state.foo) eius: string;
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { useStore } from \\"vuex\\";
@@ -106,7 +106,7 @@ describe("State decorator", () => {
         @State('ns/foo') bar: string;
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { useStore } from \\"vuex\\";
@@ -127,7 +127,7 @@ describe("State decorator", () => {
         @State('ns/' + foo) bar: () => string;
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { useStore } from \\"vuex\\";
@@ -154,7 +154,7 @@ describe("State decorator", () => {
       }
     `);
 
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
     expect(result).toMatchInlineSnapshot(`
       "import { useStore } from \\"vuex\\";
       import { computed } from \\"vue\\";
@@ -176,7 +176,7 @@ describe("State decorator", () => {
         @State @State foo: string;
       }
     `);
-    expect(() => convertAst(ast, program)).toThrowError(
+    expect(() => convertDefaultClassComponent(ast, program)).toThrowError(
       "[vuex-class] Duplicate @State decorators for foo",
     );
   });
@@ -191,7 +191,7 @@ describe("State decorator", () => {
         @ns.State @ns.State foo: string;
       }
     `);
-    expect(() => convertAst(ast, program)).toThrowError(
+    expect(() => convertDefaultClassComponent(ast, program)).toThrowError(
       "[vuex-class] Duplicate @State decorators for foo",
     );
   });

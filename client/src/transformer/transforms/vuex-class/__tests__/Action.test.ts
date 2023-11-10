@@ -1,4 +1,4 @@
-import { convertAst } from "@/convert";
+import { convertDefaultClassComponent } from "@/convert";
 import { getSingleFileProgram } from "@/parser";
 import { describe, expect, it } from "vitest";
 
@@ -17,7 +17,7 @@ describe("Action decorator", () => {
         @ns2.Action qux: () => void;
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { useStore } from \\"vuex\\";
@@ -44,7 +44,7 @@ describe("Action decorator", () => {
         @ns2.Action('bar') qux: () => void;
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { useStore } from \\"vuex\\";
@@ -71,7 +71,7 @@ describe("Action decorator", () => {
         @ns2.Action('baz/foo') qux: () => void;
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { useStore } from \\"vuex\\";
@@ -98,7 +98,7 @@ describe("Action decorator", () => {
         @ns2.Action('baz/foo') qux: () => string;
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { useStore } from \\"vuex\\";
@@ -130,7 +130,7 @@ describe("Action decorator", () => {
         @ns2.Action(keys.actions.foo) inventore: (a: string) => void;
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { useStore } from \\"vuex\\";
@@ -162,7 +162,7 @@ describe("Action decorator", () => {
         @ns2.Action qux;
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { useStore } from \\"vuex\\";
@@ -187,7 +187,7 @@ describe("Action decorator", () => {
         @${prefix}Action @${prefix}Action foo: () => void;
       }
     `);
-    expect(() => convertAst(ast, program)).toThrowError(
+    expect(() => convertDefaultClassComponent(ast, program)).toThrowError(
       "[vuex-class] Duplicate @Action decorators for foo",
     );
   });
@@ -203,7 +203,7 @@ describe("Action decorator", () => {
         @${prefix}Action foo: (a: string, b: string) => void;
       }
     `);
-      expect(() => convertAst(ast, program)).toThrowError(
+      expect(() => convertDefaultClassComponent(ast, program)).toThrowError(
         "[vuex-class] foo dispatch signature has more than 1 parameter.",
       );
     },

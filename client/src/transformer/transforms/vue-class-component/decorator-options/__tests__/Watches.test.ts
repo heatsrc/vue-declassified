@@ -1,4 +1,4 @@
-import { convertAst } from "@/convert";
+import { convertDefaultClassComponent } from "@/convert";
 import { getSingleFileProgram } from "@/parser";
 import { describe, expect, it } from "vitest";
 
@@ -9,7 +9,7 @@ describe("@Component watches definition", () => {
       @Options({ watch: { a: function () {} } })
       export default class Foo {}
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { watch } from \\"vue\\";
@@ -26,7 +26,7 @@ describe("@Component watches definition", () => {
         a: { b: { c: string } } = { b: { c: 'c' } };
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { reactive, watch } from \\"vue\\";
@@ -49,7 +49,7 @@ describe("@Component watches definition", () => {
         getA() {}
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { reactive, watch } from \\"vue\\";
@@ -68,7 +68,7 @@ describe("@Component watches definition", () => {
       } })
       export default class Foo {}
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { watch } from \\"vue\\";
@@ -92,7 +92,7 @@ describe("@Component watches definition", () => {
         getA() {}
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { reactive, watch } from \\"vue\\";
@@ -111,7 +111,7 @@ describe("@Component watches definition", () => {
       @Options({ watch: 'a' })
       export default class Foo {}
     `);
-    expect(() => convertAst(ast, program)).toThrowError(
+    expect(() => convertDefaultClassComponent(ast, program)).toThrowError(
       `[vue-class-component] watch option should be an object`,
     );
   });

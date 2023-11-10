@@ -1,4 +1,4 @@
-import { convertAst } from "@/convert";
+import { convertDefaultClassComponent } from "@/convert";
 import { getSingleFileProgram } from "@/parser";
 import { describe, expect, it } from "vitest";
 
@@ -12,7 +12,7 @@ describe("Ref decorator", () => {
         foo: string;
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { ref } from \\"vue\\";
@@ -30,7 +30,7 @@ describe("Ref decorator", () => {
         bar: string;
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { ref } from \\"vue\\";
@@ -48,7 +48,7 @@ describe("Ref decorator", () => {
         bar: string;
       }
     `);
-    expect(() => convertAst(ast, program)).toThrowError(
+    expect(() => convertDefaultClassComponent(ast, program)).toThrowError(
       `[vue-property-decorator] Expected @Ref to be a string literal`,
     );
   });
@@ -63,7 +63,7 @@ describe("Ref decorator", () => {
         bar: string;
       }
     `);
-    expect(() => convertAst(ast, program)).toThrowError(
+    expect(() => convertDefaultClassComponent(ast, program)).toThrowError(
       `[vue-property-decorator] Duplicate @Ref decorators for bar`,
     );
   });

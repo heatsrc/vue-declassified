@@ -1,4 +1,4 @@
-import { convertAst } from "@/convert";
+import { convertDefaultClassComponent } from "@/convert";
 import { readVueFile } from "@/file";
 import { getSingleFileProgram } from "@/parser";
 import { setImportNameOverride } from "@/registry";
@@ -16,7 +16,7 @@ describe("mixins test", () => {
       resolve(__dirname, "./fixtures"),
       resolve(__dirname, "./fixtures/tsconfig.json"),
     );
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import MyOther, { useMyOther } from \\"./MyOther\\";

@@ -1,4 +1,4 @@
-import { convertAst } from "@/convert.js";
+import { convertDefaultClassComponent } from "@/convert.js";
 import { getSingleFileProgram } from "@/parser.js";
 import { describe, expect, it } from "vitest";
 
@@ -9,7 +9,7 @@ describe("Emits", () => {
       @Component({ emits: ['a', 'b', 'c'] })
       export default class Foo { }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "const emit = defineEmits<{
@@ -39,7 +39,7 @@ describe("Emits", () => {
         }
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "const emit = defineEmits<{
@@ -72,7 +72,7 @@ describe("Emits", () => {
         }
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "const emit = defineEmits<{
@@ -101,7 +101,7 @@ describe("Emits", () => {
         }
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "const emit = defineEmits<{
@@ -126,7 +126,7 @@ describe("Emits", () => {
       @Component({ emits: 'a' })
       export default class Foo { }
     `);
-    expect(() => convertAst(ast, program)).toThrowError(
+    expect(() => convertDefaultClassComponent(ast, program)).toThrowError(
       `[vue-class-component] emits option should be string[]`,
     );
   });

@@ -26,7 +26,7 @@ export const transformMixins: VxTransform<ts.HeritageClause> = (clause, program)
   const typeIdent = typeExpr.expression;
   if (!ts.isIdentifier(typeIdent)) return { shouldContinue: true };
 
-  let clauseName = getImportNameOverride(CLAUSE) ?? CLAUSE;
+  let clauseName = getImportNameOverride(CLAUSE);
   debug(`Mixin var: ${clauseName}`);
   if (typeIdent.text !== clauseName) return { shouldContinue: true };
 

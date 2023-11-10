@@ -1,4 +1,4 @@
-import { convertAst } from "@/convert";
+import { convertDefaultClassComponent } from "@/convert";
 import { getSingleFileProgram } from "@/parser";
 import { describe, expect, it } from "vitest";
 
@@ -12,7 +12,7 @@ describe("Prop decorator", () => {
         foo: string;
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "const props = defineProps<{
@@ -31,7 +31,7 @@ describe("Prop decorator", () => {
         foo;
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "const props = defineProps<{
@@ -50,7 +50,7 @@ describe("Prop decorator", () => {
         foo;
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "const props = withDefaults(defineProps<{
@@ -73,7 +73,7 @@ describe("Prop decorator", () => {
         @Prop bar: Bar;
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import Bar from \\"./Bar\\";
@@ -96,7 +96,7 @@ describe("Prop decorator", () => {
         foo: string;
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "const props = defineProps<{
@@ -116,7 +116,7 @@ describe("Prop decorator", () => {
         foo: string;
       }
     `);
-    expect(() => convertAst(ast, program)).toThrowError(
+    expect(() => convertDefaultClassComponent(ast, program)).toThrowError(
       `[vue-property-decorator] Duplicate @Prop decorators for foo`,
     );
   });

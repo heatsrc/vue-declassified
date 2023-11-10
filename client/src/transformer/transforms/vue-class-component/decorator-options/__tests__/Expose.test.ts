@@ -1,4 +1,4 @@
-import { convertAst } from "@/convert.js";
+import { convertDefaultClassComponent } from "@/convert.js";
 import { getSingleFileProgram } from "@/parser.js";
 import { describe, expect, it } from "vitest";
 
@@ -13,7 +13,7 @@ describe("Emits", () => {
         c: number = 1;
       }
     `);
-    const result = convertAst(ast, program);
+    const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
       "import { ref } from \\"vue\\";
@@ -31,7 +31,7 @@ describe("Emits", () => {
       @Options({ expose: 'a' })
       export default class Foo { }
     `);
-    expect(() => convertAst(ast, program)).toThrowError(
+    expect(() => convertDefaultClassComponent(ast, program)).toThrowError(
       `[vue-class-component] expose option should be string[]`,
     );
   });
@@ -42,7 +42,7 @@ describe("Emits", () => {
       @Options({ expose: [a] })
       export default class Foo { }
     `);
-    expect(() => convertAst(ast, program)).toThrowError(
+    expect(() => convertDefaultClassComponent(ast, program)).toThrowError(
       `[vue-class-component] expose option should be string[]`,
     );
   });

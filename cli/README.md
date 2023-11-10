@@ -24,9 +24,25 @@ yarn global add @heatsrc/vuedc
 
 ## Usage
 
+### Converting a Vue Class Component to Script API
+
 ```bash
 vuedc -i MyComponent.vue -o MyOutput.vue
 ```
+
+When provided a Vue file Vuedc will convert a Vue Class Component to Script API and update the script body. Current Vuedc does not make changes in the template but does best effort to name variables the same as they were in the class to avoid needing to update. There are a few cases where this may fail, mainly when using `$ref`s with the same name as properties or accessors on the class, Vuedc will attempt to warn in the results.
+
+### Making Composable functions out of Vue Class Component Mixins
+
+```bash
+vuedc -i MyMixin.ts -y
+```
+
+When provided a `.ts` file Vuedc will make composable function analogues of any Vue Class Component Mixins found in the file and append them to the file.
+
+_Note_: Vuedc also leaves the Mixin in place as it is not certain the mixin may be used by other class based components.
+
+### `@heatsrc/vuedc --help`
 
 ```bash
 $ vuedc -h
