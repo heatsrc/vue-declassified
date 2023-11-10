@@ -68,6 +68,8 @@ npm install -g @heatsrc/vuedc
 yarn add -g @heatsrc/vuedc
 
 vuedc -i myVueComponent.vue -o myVueComponent.converted.vue
+# Or create composables out of VCC Mixins
+vuedc -i myMixin.ts
 ```
 
 or run directly with hot loading
@@ -130,20 +132,29 @@ export type VuedcOptions = {
 ```
 
 ```ts
-import { convertSfc } from "@heatsrc/vue-declassified";
+import { convertSfc, convertMixin } from "@heatsrc/vue-declassified";
 import {readFile, writeFile} from 'node:fs/promises';
-import { dirname } from 'node:path';
+import { dirname, extName } from 'node:path';
 
 const input = "./myVueComponent.vue";
 const output = "./myVueComponent.converted.vue";
 
 (async () => {
   const encoding = {encoding: 'utf8'};
+  const ext = extName(input);
   const inputFile = await readFile(input, encoding);
 
-  const result = await convertSfc(input);
-  // or with options
-  // const result = await convertSfc(input, {stopOnCollisions: true, basePath: dirname(input)});
+  const result: string | undefined;
+  if (extName === '.vue') {
+    result = await convertSfc(input);
+    // or with options
+    // result = await convertSfc(input, {stopOnCollisions: true, basePath: dirname(input)});
+  } else {
+    result = await convertMixin(input);
+    // or with options
+    // result = await convertMixin(input, {stopOnCollisions: true, basePath: dirname(input)});
+  }
+
 
   await writeFile(output, encoding);
 }());
