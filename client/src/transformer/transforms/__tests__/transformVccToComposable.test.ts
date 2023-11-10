@@ -28,6 +28,10 @@ describe("processPropertyAccessAndSort test", () => {
           this.$store.dispatch('eos');
         }
 
+        get laboriosam() {
+          return this.$store.getters;
+        }
+
         @Prop() b: number;
         foo: string = 'foo';
       }
@@ -37,6 +41,7 @@ describe("processPropertyAccessAndSort test", () => {
     expect(result).toMatchInlineSnapshot(`
       "import { Component, Vue, Prop, Emit, Watch } from \\"vue-property-decorator\\";
       import Foo from \\"./Foo\\";
+      import { ref, computed } from \\"vue\\";
       @Component()
       export class Foo extends Vue {
           @Watch('bar')
@@ -52,6 +57,9 @@ describe("processPropertyAccessAndSort test", () => {
               }
               this.$store.dispatch('eos');
           }
+          get laboriosam() {
+              return this.$store.getters;
+          }
           @Prop()
           b: number;
           foo: string = 'foo';
@@ -59,6 +67,9 @@ describe("processPropertyAccessAndSort test", () => {
 
       export function useFoo(router, store, emit, props) {
           const foo = ref<string>(\\"foo\\");
+          const laboriosam = computed(() => {
+              return store.getters;
+          });
           const bar = const () => {
               if (props.b > 0) {
                   emit('foo', foo.value);
@@ -72,7 +83,7 @@ describe("processPropertyAccessAndSort test", () => {
           };
           watch(bar, handleBarChange);
           
-          return { foo, bar, handleBarChange };
+          return { foo, laboriosam, bar, handleBarChange };
       }
       "
     `);

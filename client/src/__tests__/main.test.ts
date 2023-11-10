@@ -217,6 +217,7 @@ export class Foo {
       const result = await convertMixin(mixinString);
       expect(result).toMatchInlineSnapshot(`
         "import { Component, Emit } from \\"vue-property-decorator\\";
+        import { ref } from \\"vue\\";
         @Component
         export class Foo {
           foo = \\"hello world\\";

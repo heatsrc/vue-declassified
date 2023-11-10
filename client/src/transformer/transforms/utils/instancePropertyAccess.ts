@@ -16,7 +16,7 @@ import ts from "typescript";
  * are just imports from the main vue package now.
  */
 
-export const instancePropertyKeyMap = new Map<string, string | ts.PropertyAccessExpression>([
+const keyMap = [
   ["$attrs", "attrs"],
   ["$emit", "emit"],
   ["$nextTick", "nextTick"],
@@ -28,7 +28,11 @@ export const instancePropertyKeyMap = new Map<string, string | ts.PropertyAccess
   ["$slots", "slots"],
   ["$store", "store"],
   ["$watch", "watch"],
-]);
+] as const;
+const keyMapLookup = keyMap.map((k) => [k[1], k[0]] as const);
+
+export const instancePropertyKeyMap = new Map<string, string | ts.PropertyAccessExpression>(keyMap);
+export const instancePropertyKeyLookup = new Map<string, string>(keyMapLookup);
 
 export const instanceDependencies = new Map([
   ["$attrs", () => getConversion(VxResultKind.COMPOSABLE, "attrs", "useAttrs", "vue")],
