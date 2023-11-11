@@ -1,5 +1,12 @@
 ## [2.1.3](https://github.com/vuejs/repl/compare/v2.1.2...v2.1.3) (2023-06-22)
 
+## 1.0.13
+
+### Patch Changes
+
+- Updated dependencies [[`0e8d0dd`](https://github.com/heatsrc/vue-declassified/commit/0e8d0dd4c9c412c7191e242e5b7141d30d64d9d0)]:
+  - @heatsrc/vue-declassified@3.2.1
+
 ## 1.0.12
 
 ### Patch Changes

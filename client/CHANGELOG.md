@@ -1,5 +1,11 @@
 # @heatsrc/vue-declassified
 
+## 3.2.1
+
+### Patch Changes
+
+- [#26](https://github.com/heatsrc/vue-declassified/pull/26) [`0e8d0dd`](https://github.com/heatsrc/vue-declassified/commit/0e8d0dd4c9c412c7191e242e5b7141d30d64d9d0) Thanks [@jaredmcateer](https://github.com/jaredmcateer)! - Stip all method modifiers except async from method conversions
+
 ## 3.2.0
 
 ### Minor Changes
