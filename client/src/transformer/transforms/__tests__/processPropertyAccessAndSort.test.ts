@@ -35,7 +35,7 @@ describe("processPropertyAccessAndSort test", () => {
           \\"b\\": number;
       }>();
       const foo = ref<string>(\\"foo\\");
-      const bar = const () => {
+      const bar = () => {
           emit('foo', foo.value);
       };
       const handleBPropChange = (newVal: number) => {
