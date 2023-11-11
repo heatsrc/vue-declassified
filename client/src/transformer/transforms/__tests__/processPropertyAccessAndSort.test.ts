@@ -25,7 +25,7 @@ describe("processPropertyAccessAndSort test", () => {
     const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
-      "import { ref } from \\"vue\\";
+      "import { ref, watch } from \\"vue\\";
       const emit = defineEmits<{
           \\"foo\\": [
               _foo0: string

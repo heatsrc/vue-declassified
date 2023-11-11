@@ -1,4 +1,5 @@
 import { createIdentifier, getDecorators } from "@/helpers/tsHelpers.js";
+import { namedImports } from "@/helpers/utils.js";
 import { registerDecorator } from "@/registry.js";
 import { VxReferenceKind, VxResultKind, VxTransform } from "@/types.js";
 import ts from "typescript";
@@ -45,7 +46,7 @@ export const transformWatchDecorator: VxTransform<ts.MethodDeclaration> = (watch
       tag: `SortLast:90:Watch`,
       reference: VxReferenceKind.NONE,
       kind: VxResultKind.COMPOSITION,
-      imports: [],
+      imports: namedImports(["watch"]),
       outputVariables: [],
       nodes,
     },

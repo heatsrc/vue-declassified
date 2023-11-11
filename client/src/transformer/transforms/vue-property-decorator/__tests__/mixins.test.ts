@@ -21,7 +21,7 @@ describe("mixins test", () => {
     expect(result).toMatchInlineSnapshot(`
       "import MyOther, { useMyOther } from \\"./MyOther\\";
       import MySpecialMixin, { useMySpecial } from \\"./MySpecialMixin\\";
-      import { computed, onMounted } from \\"vue\\";
+      import { computed, onMounted, watch } from \\"vue\\";
       /* [VUEDC_TODO]: Check this is correct. */ const { foo, fetchData } = useMySpecial();
       /* [VUEDC_TODO]: Check this is correct. */ const { bar, baz } = useMyOther();
       const myFoo = computed(() => {
