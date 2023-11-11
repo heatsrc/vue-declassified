@@ -20,7 +20,7 @@ describe("processPropertyAccessAndSort test", () => {
           this.$router.push({ name: 'eveniet' });
         });
 
-        const bar() {
+        bar() {
           if (this.b > 0) {
             this.$emit('foo', this.foo);
           }
@@ -51,7 +51,7 @@ describe("processPropertyAccessAndSort test", () => {
               this.$router.push({ name: 'eveniet' });
           }
           ;
-          const bar() {
+          bar() {
               if (this.b > 0) {
                   this.$emit('foo', this.foo);
               }
@@ -70,7 +70,7 @@ describe("processPropertyAccessAndSort test", () => {
           const laboriosam = computed(() => {
               return store.getters;
           });
-          const bar = const () => {
+          const bar = () => {
               if (props.b > 0) {
                   emit('foo', foo.value);
               }

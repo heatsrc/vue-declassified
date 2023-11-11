@@ -79,7 +79,7 @@ export function createArrowFunction(
   multiline?: boolean,
 ) {
   const { body, parameters, type, typeParameters } = node;
-  const modifiers = ts.getModifiers(node);
+  const modifiers = ts.getModifiers(node)?.filter((m) => m.kind === ts.SyntaxKind.AsyncKeyword);
   const rocket = rocketToken();
   const fnBody = statements
     ? factory.createBlock(statements, multiline)
