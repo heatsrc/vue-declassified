@@ -17,7 +17,7 @@ describe("Watch decorator", () => {
     const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
-      "import { ref } from \\"vue\\";
+      "import { ref, watch } from \\"vue\\";
       const foo = ref(\\"bar\\");
       const bar = () => { };
       watch(foo, bar);
@@ -41,7 +41,7 @@ describe("Watch decorator", () => {
     const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
-      "import { ref } from \\"vue\\";
+      "import { ref, watch } from \\"vue\\";
       const foo = ref(\\"bar\\");
       const bar = ref(\\"qux\\");
       const baz = () => { };
@@ -65,7 +65,7 @@ describe("Watch decorator", () => {
     const result = convertDefaultClassComponent(ast, program);
 
     expect(result).toMatchInlineSnapshot(`
-      "import { ref } from \\"vue\\";
+      "import { ref, watch } from \\"vue\\";
       const foo = ref(\\"bar\\");
       const bar = () => { };
       watch(foo, bar, { immediate: true, deep: true });

@@ -41,7 +41,7 @@ describe("processPropertyAccessAndSort test", () => {
     expect(result).toMatchInlineSnapshot(`
       "import { Component, Vue, Prop, Emit, Watch } from \\"vue-property-decorator\\";
       import Foo from \\"./Foo\\";
-      import { ref, computed } from \\"vue\\";
+      import { ref, computed, watch } from \\"vue\\";
       @Component()
       export class Foo extends Vue {
           @Watch('bar')
