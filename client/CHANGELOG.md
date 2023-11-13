@@ -1,5 +1,11 @@
 # @heatsrc/vue-declassified
 
+## 3.2.2
+
+### Patch Changes
+
+- [#28](https://github.com/heatsrc/vue-declassified/pull/28) [`e689b10`](https://github.com/heatsrc/vue-declassified/commit/e689b1048f80a353be931f981caf33fc920d69e1) Thanks [@jaredmcateer](https://github.com/jaredmcateer)! - Add watch import when trasnformating @Watch
+
 ## 3.2.1
 
 ### Patch Changes
