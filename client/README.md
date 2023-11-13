@@ -75,11 +75,11 @@ vuedc -i myMixin.ts
 or run directly with hot loading
 
 ```console
-pnpm dlx vuedc -i myVueComponent.vue -o myVueComponent.converted.vue
+pnpm dlx @heatsrc/vuedc -i myVueComponent.vue -o myVueComponent.converted.vue
 # or
-npx vuedc -i myVueComponent.vue -o myVueComponent.converted.vue
+npx @heatsrc/vuedc -i myVueComponent.vue -o myVueComponent.converted.vue
 # or
-yarn dlx vuedc -i myVueComponent.vue -o myVueComponent.converted.vue
+yarn dlx @heatsrcvuedc -i myVueComponent.vue -o myVueComponent.converted.vue
 ```
 
 ### Programmatically
