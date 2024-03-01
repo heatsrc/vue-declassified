@@ -1,5 +1,11 @@
 # @heatsrc/vue-declassified
 
+## 3.2.3
+
+### Patch Changes
+
+- [#30](https://github.com/heatsrc/vue-declassified/pull/30) [`f567de2`](https://github.com/heatsrc/vue-declassified/commit/f567de2aecb8fd40c11de0c5f3c202343997fe05) Thanks [@dependabot](https://github.com/apps/dependabot)! - build(deps-dev): bump vite from 4.4.11 to 4.4.12
+
 ## 3.2.2
 
 ### Patch Changes
