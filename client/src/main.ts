@@ -80,6 +80,8 @@ export async function convertMixin(src: string, opts: Partial<VuedcOptions> = {}
  * @returns Converted Script Setup syntax
  */
 export async function convertScript(src: string, opts: Partial<VuedcOptions> = {}) {
+  resetRegistry();
+  
   let tsConfigPath = "";
   if (opts.basePath) {
     const configFile = ts.findConfigFile(opts.basePath, ts.sys.fileExists, "tsconfig.json");
@@ -110,8 +112,6 @@ export async function convertScript(src: string, opts: Partial<VuedcOptions> = {
     printWidth: 100,
     plugins: [parserTypescript, parserEsTree],
   });
-
-  resetRegistry();
 
   debug("Finished converting script");
   return formattedResult;
