@@ -116,7 +116,7 @@ export async function convertScript(src: string, opts: Partial<VuedcOptions> = {
   });
 
   resetRegistry();
-  
+
   debug("Finished converting script");
   return formattedResult;
 }
