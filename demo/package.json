@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.14",
   "description": "This is a modified copy of @vue/repl",
-  "packageManager": "pnpm@8.7.5",
+  "packageManager": "pnpm@9.9.0",
   "type": "module",
   "main": "dist/ssr-stub.js",
   "module": "dist/vue-repl.js",
