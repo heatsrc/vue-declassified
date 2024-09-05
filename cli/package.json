@@ -1,7 +1,7 @@
 {
   "name": "@heatsrc/vuedc",
   "description": "Transform Vue Class Components to Vue 3 script setup",
-  "version": "3.3.2",
+  "version": "3.3.3",
   "packageManager": "pnpm@9.9.0",
   "engines": {
     "node": ">= 18.18.0"
