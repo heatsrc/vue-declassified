@@ -10,6 +10,7 @@
   "scripts": {
     "test": "turbo test",
     "lint": "turbo lint",
+    "format": "turbo format",
     "build": "turbo build",
     "build:demo": "turbo build:demo",
     "dev": "turbo dev",

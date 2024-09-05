@@ -20,7 +20,8 @@
     "test:ui": "vitest --ui",
     "coverage": "vitest --coverage",
     "build": "rimraf dist/* && vite build",
-    "lint": "tsc --noEmit && prettier --check ./**/*.{ts,json,vue}"
+    "lint": "tsc --noEmit && prettier --check ./**/*.{ts,json,vue}",
+    "format": "prettier --write ./**/*.{ts,json,vue}"
   },
   "keywords": [
     "vue-declassified",
