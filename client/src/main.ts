@@ -99,7 +99,7 @@ export async function convertScript(src: string, opts: Partial<VuedcOptions> = {
     const collisionsWarning = getCollisionsWarning(false);
 
     resetRegistry();
-    
+
     throw new VuedcError(collisionsWarning);
   }
 
