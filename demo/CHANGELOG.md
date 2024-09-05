@@ -1,5 +1,16 @@
 ## [2.1.3](https://github.com/vuejs/repl/compare/v2.1.2...v2.1.3) (2023-06-22)
 
+## 1.0.15
+
+### Patch Changes
+
+- [#30](https://github.com/heatsrc/vue-declassified/pull/30) [`f567de2aecb8fd40c11de0c5f3c202343997fe05`](https://github.com/heatsrc/vue-declassified/commit/f567de2aecb8fd40c11de0c5f3c202343997fe05) Thanks [@dependabot](https://github.com/apps/dependabot)! - build(deps-dev): bump vite from 4.4.11 to 4.4.12
+
+- [#36](https://github.com/heatsrc/vue-declassified/pull/36) [`3b48917060a57b994d8085775d6237ff9640e1d7`](https://github.com/heatsrc/vue-declassified/commit/3b48917060a57b994d8085775d6237ff9640e1d7) Thanks [@dependabot](https://github.com/apps/dependabot)! - build(deps-dev): bump vite from 4.5.2 to 4.5.3
+
+- Updated dependencies [[`f567de2aecb8fd40c11de0c5f3c202343997fe05`](https://github.com/heatsrc/vue-declassified/commit/f567de2aecb8fd40c11de0c5f3c202343997fe05), [`3b48917060a57b994d8085775d6237ff9640e1d7`](https://github.com/heatsrc/vue-declassified/commit/3b48917060a57b994d8085775d6237ff9640e1d7), [`332ff521245daf4cc5aecdeaec404462f847ab0c`](https://github.com/heatsrc/vue-declassified/commit/332ff521245daf4cc5aecdeaec404462f847ab0c)]:
+  - @heatsrc/vue-declassified@3.2.3
+
 ## 1.0.14
 
 ### Patch Changes
@@ -147,9 +158,9 @@
 
   ```vue
   <script setup>
-  import { Repl } from "@vue/repl";
-  import Monaco from "@vue/repl/monaco-editor";
-  import "@vue/repl/style.css";
+  import { Repl } from '@vue/repl'
+  import Monaco from '@vue/repl/monaco-editor'
+  import '@vue/repl/style.css'
   </script>
 
   <template>
@@ -161,9 +172,9 @@
 
   ```vue
   <script setup>
-  import { Repl } from "@vue/repl";
-  import CodeMirror from "@vue/repl/codemirror-editor";
-  import "@vue/repl/style.css";
+  import { Repl } from '@vue/repl'
+  import CodeMirror from '@vue/repl/codemirror-editor'
+  import '@vue/repl/style.css'
   </script>
 
   <template>
