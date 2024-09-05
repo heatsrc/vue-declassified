@@ -80,7 +80,6 @@ export async function convertMixin(src: string, opts: Partial<VuedcOptions> = {}
  * @returns Converted Script Setup syntax
  */
 export async function convertScript(src: string, opts: Partial<VuedcOptions> = {}) {
-  resetRegistry();
   let tsConfigPath = "";
   if (opts.basePath) {
     const configFile = ts.findConfigFile(opts.basePath, ts.sys.fileExists, "tsconfig.json");
@@ -97,7 +96,11 @@ export async function convertScript(src: string, opts: Partial<VuedcOptions> = {
   }
 
   if (opts.stopOnCollisions && hasCollisions()) {
-    throw new VuedcError(getCollisionsWarning(false));
+    const collisionsWarning = getCollisionsWarning(false);
+
+    resetRegistry();
+    
+    throw new VuedcError(collisionsWarning);
   }
 
   let warnings = getCollisionsWarning();
@@ -112,6 +115,8 @@ export async function convertScript(src: string, opts: Partial<VuedcOptions> = {
     plugins: [parserTypescript, parserEsTree],
   });
 
+  resetRegistry();
+  
   debug("Finished converting script");
   return formattedResult;
 }
