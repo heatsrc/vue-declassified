@@ -96,7 +96,11 @@ export async function convertScript(src: string, opts: Partial<VuedcOptions> = {
   }
 
   if (opts.stopOnCollisions && hasCollisions()) {
-    throw new VuedcError(getCollisionsWarning(false));
+    const collisionsWarning = getCollisionsWarning(false);
+
+    resetRegistry();
+
+    throw new VuedcError(collisionsWarning);
   }
 
   let warnings = getCollisionsWarning();

@@ -27,7 +27,7 @@ jobs:
         uses: ./.github/actions/env-setup
         with:
           node-version: "18.18.0"
-          pnpm-version: "8.7.5"
+          pnpm-version: "9.9.0"
           os: ${{ runner.os }}
 
       - name: Lint code
@@ -43,7 +43,7 @@ jobs:
         uses: ./.github/actions/env-setup
         with:
           node-version: "18.18.0"
-          pnpm-version: "8.7.5"
+          pnpm-version: "9.9.0"
           os: ${{ runner.os }}
 
       - name: Unittests
@@ -64,7 +64,7 @@ jobs:
         uses: ./.github/actions/env-setup
         with:
           node-version: "18.18.0"
-          pnpm-version: "8.7.5"
+          pnpm-version: "9.9.0"
           os: ${{ runner.os }}
 
       - name: Build
