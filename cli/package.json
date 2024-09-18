@@ -17,6 +17,7 @@
     "vuedc": "dist/src/vuedc.js"
   },
   "scripts": {
+    "format": "prettier --write ./**/*.{ts,json,vue}",
     "lint": "npx tsc --noEmit && prettier --check **/*.ts",
     "build": "rimraf dist && npx tsc"
   },
